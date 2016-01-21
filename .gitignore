@@ -1,0 +1,7 @@
+libs/
+node_modules/
+typings/
+
+*.js
+config.json
+.DS_Store

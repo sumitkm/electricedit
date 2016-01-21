@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs" data-bind="foreach: tabs">
+  <li role="presentation" data-bind="css: { 'active' : active }, click: $parent.tabClicked.bind($data, $parents[0])">
+    <a data-bind="text: name"></a>
+  </li>
+</ul>

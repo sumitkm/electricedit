@@ -1,0 +1,36 @@
+                                                                                                              {
+  "name": "elecedit",
+  "description": "Electric Blog Editor",
+  "main": "app.js",
+  "authors": [
+    "Sumit Kumar Maitra"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Electric",
+    "Editor",
+    "ElecEdit",
+    "BlogEditor",
+    "ElectronJS",
+    "Electron"
+  ],
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "requirejs": "~2.1.22",
+    "crossroads": "~0.12.2",
+    "js-signals": "~1.0.0",
+    "knockout": "knockoutjs#~3.4.0",
+    "text": "~2.0.14",
+    "quill": "~0.20.1"
+  }
+}

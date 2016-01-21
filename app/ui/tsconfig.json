@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "AMD",
+        "target": "es5",
+        "noImplicitAny": false,
+        "sourceMap": false
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+
+// This tsconfig is used to transpile into AMD style modules amd-dependency
+// all code under UI is loaded via RequireJS in the browser, hence this side
+// of the code is the ipcRenderer side of things in ElectronJS
