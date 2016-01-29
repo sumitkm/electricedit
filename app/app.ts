@@ -1,4 +1,12 @@
+/// <reference path="../typings/tsd.d.ts"/>
 
+
+const electron = require('electron');
+var ipcmain = require('electron').ipcMain;
+// var ipcrenderer = require('electron').ipcRenderer;
+// var ipcdialog = require('electron').dialog;
+
+const servives = require("./services/events/files.js");
 
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
@@ -20,12 +28,12 @@ app.on('window-all-closed', () => {
 });
 
 // const ipcMain = require('electron').ipcMain;
-ipcMain.on('asynchronous-message', function(event, arg) {
+ipcmain.on('asynchronous-message', function(event, arg) {
   console.log(arg);  // prints "ping"
   event.sender.send('asynchronous-reply', 'Initialized asynchronous Interop');
 });
 
-ipcMain.on('synchronous-message', function(event, arg) {
+ipcmain.on('synchronous-message', function(event, arg) {
   console.log(arg);  // prints "ping"
   event.returnValue = 'Initialized synchronous Interop';
 });
@@ -44,7 +52,7 @@ app.on('ready', () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
-  ipcMain.on("save", (event, arg) => {
+  ipcmain.on("save", (event, arg) => {
     var files = new servives.Files(mainWindow);
     files.Save(arg);
   });

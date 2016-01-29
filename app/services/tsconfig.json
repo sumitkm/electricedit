@@ -1,3 +1,4 @@
+
 {
     "compilerOptions": {
         "module": "commonjs",
@@ -9,6 +10,3 @@
         "node_modules"
     ]
 }
-
-// This tsconfig is used to output CommonJS format that's used by Node
-// All code in Services folder is on the ipcMain side of the Electron Runtime
