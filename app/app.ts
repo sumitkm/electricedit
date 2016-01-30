@@ -1,12 +1,11 @@
 /// <reference path="../typings/tsd.d.ts"/>
 
-
 const electron = require('electron');
 var ipcmain = require('electron').ipcMain;
 // var ipcrenderer = require('electron').ipcRenderer;
 // var ipcdialog = require('electron').dialog;
 
-const servives = require("./services/events/files.js");
+const servives = require("./services/files/files.js");
 
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.

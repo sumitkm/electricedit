@@ -8,20 +8,8 @@
     "github-electron/github-electron.d.ts": {
       "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
     },
-    "requirejs/require.d.ts": {
-      "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
-    },
-    "knockout/knockout.d.ts": {
-      "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
-    },
     "node/node.d.ts": {
       "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
-    },
-    "quill/quill.d.ts": {
-      "commit": "5d0f2126c8dac8fce0ff020218aea06607213b0d"
-    },
-    "eventemitter2/eventemitter2.d.ts": {
-      "commit": "5d0f2126c8dac8fce0ff020218aea06607213b0d"
     }
   }
 }

@@ -1,5 +1,10 @@
 tsd install
-echo TypeScript definitions installed
+echo TypeScript definitions for services installed
+
+cd app/ui
+tsd install
+echo TypeScript definitions for UI installed
+cd ../..
 
 cd app
 npm install
@@ -9,13 +14,3 @@ bower install
 echo Bower dependencies installed
 
 cd ..
-
-echo ============================= IMPORTANT =============================
-echo Please modify the typings/node/node.d.ts file
-echo change the line number 56 from
-echo         declare var require: NodeRequire;
-echo to
-echo         declare var require: Require;
-echo This is a temporary hack to ensure front-end is generated as AMD Require
-echo and App backend is generated as commonjs
-echo ======================================================================

@@ -3,7 +3,8 @@
 // except for 'app' ones, which are in a sibling
 // directory.
 //
-/// <reference path="../../../typings/tsd.d.ts"/>
+/// <reference path="../typings/tsd.d.ts"/>
+/// <reference path="../interop.d.ts"/>
 
 requirejs.config(
   {

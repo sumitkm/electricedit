@@ -1,4 +1,4 @@
-/// <reference path="../../../interop.d.ts" />
+/// <reference path="../../interop.d.ts" />
 ///<amd-dependency path="text!./home-page.html" />
 ///<amd-dependency path="ui/components/quill-editor/quill-editor-params"/>
 

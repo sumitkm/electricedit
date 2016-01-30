@@ -1,6 +1,8 @@
-A simple HTML editor that aspires to be a world class XPlat blog editor soon!
+#Electric Edit
 
-Built on ElectronJS by Github!
+##A simple cross platform HTML editor that aspires to be a world class blog editor soon!
+
+Built using "Electron by Github"!
 
 **Getting started**
 
@@ -20,11 +22,9 @@ Built on ElectronJS by Github!
 
 `run`
 
-Note: After `build` please update the node.d.ts as mentioned in the note. This is
-a temporary hack till a better Environment is setup.
-
 Next item to be worked upon
 
-1. Environment cleanup
+<del>1. Environment cleanup</del>
 2. File Load from local
-3. OAuth integration
+3. Custom application and context menus
+4. OAuth integration
