@@ -34,6 +34,11 @@ export class viewModel {
     this.editor.on('text-change', (delta, source) => {
       this.markup(this.editor.getHTML());
     });
+
+    ipcRenderer.on('menu.file.opened', (event, data) => {
+        alert('Got data');
+        this.editor.setHTML(data);
+    });
   }
 
   private initTabs() {
@@ -41,7 +46,7 @@ export class viewModel {
   }
 
   public saveFile = () => {
-    ipcRenderer.send('save', this.markup());
+    ipcRenderer.send('menu.File.Save', this.markup());
   }
 
   public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {

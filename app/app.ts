@@ -55,11 +55,6 @@ currentApp.on('ready', () => {
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
 
-    ipcmain.on("save", (event, arg) => {
-        var files = new services.Files(mainWindow);
-        files.Save(arg);
-    });
-
     ipcmain.on("menu.File.New", (event, arg) => {
         var files = new services.Files(mainWindow);
         files.New();
@@ -67,7 +62,12 @@ currentApp.on('ready', () => {
 
     ipcmain.on("menu.File.Open", (event, arg) => {
         var files = new services.Files(mainWindow);
-        files.Open();
+        files.Open(event);
+    });
+
+    ipcmain.on("menu.File.Save", (event, arg) => {
+        var files = new services.Files(mainWindow);
+        files.Save(event);
     });
 
     ipcmain.on('menu.App.Quit', (event, arg) => {

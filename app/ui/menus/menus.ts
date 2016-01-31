@@ -17,8 +17,15 @@ export class menus
                         label: 'Open',
                         accelerator: 'CmdOrCtrl+O',
                         click: () => this.sendMessage("menu.File.Open")
-
-                    }
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: 'Save',
+                        accelerator: 'CmdOrCtrl+S',
+                        click: () => this.sendMessage("menu.File.Save")
+                    },
                 ]
             },
             {

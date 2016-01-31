@@ -8,20 +8,18 @@ var ko = <KnockoutStatic>require("knockout");
 var menuUi = require("ui/menus/menus");
 export var template = require("text!./home-page.html");
 
-export class viewModel
-{
-  title: KnockoutObservable<string> = ko.observable<string>("Electric Edit");
-  editorParams: any;
-  constructor()
-  {
-    this.editorParams = new QuillEditor.QuillEditorParams();
-    ipcRenderer.send('asynchronous-message',"Yahoo!");
-    var Menu = remote.Menu;
+export class viewModel {
 
-    var menus = new menuUi.menus();
-    var currentMenuTemplate = Menu.buildFromTemplate(menuUi.menuTemplate);
-    Menu.setApplicationMenu(currentMenuTemplate);
-  }
+    title: KnockoutObservable<string> = ko.observable<string>("Electric Edit");
+    editorParams: any;
 
+    constructor() {
+        this.editorParams = new QuillEditor.QuillEditorParams();
+        ipcRenderer.send('asynchronous-message', "Rendered loaded!");
+        var Menu = remote.Menu;
 
+        var menus = new menuUi.menus();
+        var currentMenuTemplate = Menu.buildFromTemplate(menuUi.menuTemplate);
+        Menu.setApplicationMenu(currentMenuTemplate);
+    }
 }

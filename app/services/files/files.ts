@@ -4,6 +4,7 @@
 export class Files {
     mainWindow: any;
     content: string;
+    currentEvent: GitHubElectron.IPCMainEvent;
 
     constructor(window: any) {
         this.mainWindow = window;
@@ -24,11 +25,12 @@ export class Files {
 
     }
 
-    public Open = () => {
+    public Open = (event: GitHubElectron.IPCMainEvent) => {
+        this.currentEvent = event;
         var dialog = require('electron').dialog;
         dialog.showOpenDialog(this.mainWindow,
             {
-                title: "Save File",
+                title: "Open File",
                 defaultPath: "/user/sumitkm/Documents",
                 filters: [
                     { name: 'All Files', extensions: ['*'] },
@@ -39,18 +41,24 @@ export class Files {
     }
 
     public New = () => {
-// TODO:
+        // TODO:
     }
 
     private OpenFile = (fileNames: Array<string>) => {
         var fs = require('fs');
-        if (fileNames.length > 0) {
-            fs.readFile(fileNames[0], (err, data) => {
-                if (err) throw err;
-                console.log(data);
+        if (fileNames != null && fileNames.length > 0) {
+            fs.readFile(fileNames[0], { encoding: 'utf8', flag: 'r' }, (err, data) => {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    console.log("File opened successfully!");
+                    this.currentEvent.sender.send('menu.file.opened', data);
+                }
             });
         }
     }
+
     private WriteToFile = (filename) => {
         var fs = require('fs');
         fs.writeFile(filename, this.content, (err) => {
