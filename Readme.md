@@ -5,6 +5,7 @@
 Built using "Electron by Github"!
 
 **Getting started**
+`npm install electron-prebuilt -g`
 
 `git clone https://github.com/sumitkm/electricedit`
 
@@ -22,9 +23,10 @@ Built using "Electron by Github"!
 
 `run`
 
-Next item to be worked upon
+Next items to be worked upon
 
-<del>1. Environment cleanup</del>
+1. <del>Environment cleanup</del>
 2. File Load from local
-3. Custom application and context menus
-4. OAuth integration
+3. <del>Custom application menus<del>
+4. Custom context menus
+5. OAuth integration
