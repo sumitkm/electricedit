@@ -65,9 +65,13 @@ currentApp.on('ready', () => {
         files.Open(event);
     });
 
-    ipcmain.on("menu.File.Save", (event, arg) => {
+    ipcmain.on("menu.File.OnSave", (event, arg) => {
+        event.sender.send("menu.File.Save");
+    });
+
+    ipcmain.on("app.File.Save", (event, arg) => {
         var files = new services.Files(mainWindow);
-        files.Save(event);
+        files.Save(event, arg);
     });
 
     ipcmain.on('menu.App.Quit', (event, arg) => {
@@ -83,7 +87,7 @@ currentApp.on('ready', () => {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         if (process.platform != 'darwin') {
-        mainWindow = null;
-    }
+            mainWindow = null;
+        }
     });
 });

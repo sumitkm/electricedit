@@ -8,57 +8,56 @@ export var Quill = require("quill");
 export var template = require("text!./quill-editor.html");
 
 export class viewModel {
-  private editor: QuillStatic;
-  //public tabs: Array<App.Ui.Components.TabStrip.Model> = [];
-  public markup: KnockoutObservable<string>;
+    private editor: QuillStatic;
+    //public tabs: Array<App.Ui.Components.TabStrip.Model> = [];
+    private file: KnockoutObservable<any> = ko.observable({ fileName: '', content: '' });
 
-  constructor(params: any) {
-    this.initTabs();
-    if (params.content != null) {
-      this.markup = params.content;
+    constructor(params: any) {
+        this.initTabs();
+
+        //amplify.subscribe(App.Ui.Components.TabStrip.Model.TabChangedEvent, this, this.tabChangedEvent);
+
+        this.editor = new Quill('#editor', {
+            modules:
+            {
+                "toolbar": { container: "#toolbar" }
+            },
+            theme: 'snow'
+        });
+
+        this.editor.on('text-change', (delta, source) => {
+            this.file().content = this.editor.getHTML();
+        });
+
+        ipcRenderer.on('menu.file.opened', (event, data) => {
+            this.file(data);
+            this.editor.setHTML(this.file().content);
+        });
+
+        ipcRenderer.on('menu.File.Save', (event, data) => {
+            this.saveFile();
+        });
     }
-    else {
-      this.markup = ko.observable("");
+
+    private initTabs() {
+        //this.tabs.push(new App.Ui.Components.TabStrip.Model( "HTML Preview", false ));
     }
-    //amplify.subscribe(App.Ui.Components.TabStrip.Model.TabChangedEvent, this, this.tabChangedEvent);
 
+    public saveFile = () => {
+        this.file().content = this.editor.getHTML();
+        ipcRenderer.send('app.File.Save', this.file());
+    }
 
-    this.editor = new Quill('#editor', {
-      modules:
-      {
-        "toolbar": { container: "#toolbar" }
-      },
-      theme: 'snow'
-    });
+    public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {
+        //data.active(!data.active());
+        this.file().content = this.editor.getHTML();
+    }
 
-    this.editor.on('text-change', (delta, source) => {
-      this.markup(this.editor.getHTML());
-    });
+    public getHtml = () => {
+        window.console.debug();
+    }
 
-    ipcRenderer.on('menu.file.opened', (event, data) => {
-        alert('Got data');
-        this.editor.setHTML(data);
-    });
-  }
-
-  private initTabs() {
-    //this.tabs.push(new App.Ui.Components.TabStrip.Model( "HTML Preview", false ));
-  }
-
-  public saveFile = () => {
-    ipcRenderer.send('menu.File.Save', this.markup());
-  }
-
-  public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {
-    //data.active(!data.active());
-    this.markup(this.editor.getHTML());
-  }
-
-  public getHtml = () => {
-    window.console.debug();
-  }
-
-  public dispose() {
-    //amplify.unsubscribe(App.Ui.Components.TabStrip.Model.TabChangedEvent, this.tabChangedEvent);
-  }
+    public dispose() {
+        //amplify.unsubscribe(App.Ui.Components.TabStrip.Model.TabChangedEvent, this.tabChangedEvent);
+    }
 }

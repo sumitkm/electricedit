@@ -10,12 +10,11 @@ export var template = require("text!./home-page.html");
 
 export class viewModel {
 
-    title: KnockoutObservable<string> = ko.observable<string>("Electric Edit");
     editorParams: any;
 
     constructor() {
         this.editorParams = new QuillEditor.QuillEditorParams();
-        ipcRenderer.send('asynchronous-message', "Rendered loaded!");
+        ipcRenderer.send('asynchronous-message', "Renderer loaded!");
         var Menu = remote.Menu;
 
         var menus = new menuUi.menus();

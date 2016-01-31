@@ -3,25 +3,32 @@
 
 export class Files {
     mainWindow: any;
-    content: string;
+    file: any;
     currentEvent: GitHubElectron.IPCMainEvent;
 
     constructor(window: any) {
         this.mainWindow = window;
     }
 
-    public Save = (content: string) => {
-        this.content = content;
-        var dialog = require('electron').dialog;
-        dialog.showSaveDialog(this.mainWindow,
-            {
-                title: "Save File",
-                defaultPath: "/user/sumitkm/Documents",
-                filters: [
-                    { name: 'All Files', extensions: ['*'] },
-                    { name: 'HTML', extensions: ['html', 'htm'] }
-                ]
-            }, this.WriteToFile);
+    public Save = (event: GitHubElectron.IPCMainEvent, content: any) => {
+        this.currentEvent = event;
+        this.file = content;
+        if (this.file.fileName == '') {
+            var dialog = require('electron').dialog;
+            dialog.showSaveDialog(this.mainWindow,
+                {
+                    title: "Save File",
+                    defaultPath: "/user/sumitkm/Documents",
+                    filters: [
+                        { name: 'All Files', extensions: ['*'] },
+                        { name: 'HTML', extensions: ['html', 'htm'] }
+                    ]
+                }, this.WriteToFile);
+        }
+        else
+        {
+            this.WriteToFile(this.file.fileName);
+        }
 
     }
 
@@ -53,20 +60,22 @@ export class Files {
                 }
                 else {
                     console.log("File opened successfully!");
-                    this.currentEvent.sender.send('menu.file.opened', data);
+                    this.currentEvent.sender.send('menu.file.opened', { fileName: fileNames[0], content: data });
                 }
             });
         }
     }
 
     private WriteToFile = (filename) => {
-        var fs = require('fs');
-        fs.writeFile(filename, this.content, (err) => {
-            if (err) {
-                return console.log(err);
-            }
+        if (filename != null) {
+            var fs = require('fs');
+            fs.writeFile(filename, this.file.content, (err) => {
+                if (err) {
+                    return console.log(err);
+                }
 
-            console.log("The file was saved!");
-        });
+                console.log("The file was saved!");
+            });
+        }
     }
 }

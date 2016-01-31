@@ -24,8 +24,21 @@ export class menus
                     {
                         label: 'Save',
                         accelerator: 'CmdOrCtrl+S',
-                        click: () => this.sendMessage("menu.File.Save")
+                        click: () => this.sendMessage("menu.File.OnSave")
                     },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: 'Exit',
+                        accelerator: (function() {
+                            if (process.platform == 'darwin')
+                                return 'Command+Q';
+                            else
+                                return 'Alt+F4';
+                        })(),
+                        click: () => this.sendMessage("menu.App.Quit")
+                    }
                 ]
             },
             {
@@ -110,7 +123,7 @@ export class menus
                 role: 'window',
                 submenu: [
                     {
-                        label: 'MinimizeTEST',
+                        label: 'Minimize',
                         accelerator: 'CmdOrCtrl+M',
                         role: 'minimize'
                     },
