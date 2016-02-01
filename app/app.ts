@@ -69,6 +69,10 @@ currentApp.on('ready', () => {
         event.sender.send("menu.File.Save");
     });
 
+    ipcmain.on("menu.View.OnSettings", (event, arg) => {
+        event.sender.send("menu.View.Settings");
+    });
+
     ipcmain.on("app.File.Save", (event, arg) => {
         var files = new services.Files(mainWindow);
         files.Save(event, arg);
@@ -86,8 +90,14 @@ currentApp.on('ready', () => {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        if (process.platform != 'darwin') {
+        //if (process.platform != 'darwin') {
             mainWindow = null;
-        }
+        //}
+        //TODO: this is a bodge. Mac Apps don't quit when you close the window.
+        // but until we can figure out how to handle ipc without any renderer
+        // we'll have to keep quitting when the window is closed.
+        // Not an issue in sane OSes like Linux ;-)
+
+        currentApp.quit();
     });
 });

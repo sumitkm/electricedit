@@ -1,4 +1,5 @@
 /// <reference path="../../interop.d.ts" />
+/// <reference path="../../typings/tsd.d.ts"/>
 ///<amd-dependency path="text!./home-page.html" />
 ///<amd-dependency path="ui/components/quill-editor/quill-editor-params"/>
 ///<amd-dependency path="ui/menus/menus"/>
@@ -20,5 +21,9 @@ export class viewModel {
         var menus = new menuUi.menus();
         var currentMenuTemplate = Menu.buildFromTemplate(menuUi.menuTemplate);
         Menu.setApplicationMenu(currentMenuTemplate);
+
+        ipcRenderer.on('menu.View.Settings', (event, data) => {
+            $('#settingsModal').modal('show');
+        });
     }
 }

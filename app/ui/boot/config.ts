@@ -11,6 +11,8 @@ export class Spa {
   public registerComponents() {
     this.registerComponent("home-page", "ui/pages/home-page/home-page")
     this.registerComponent("quill-editor", "ui/components/quill-editor/quill-editor");
+    this.registerComponent("settings-editor", "ui/components/settings-editor/settings-editor");
+
     this.registerComponent("tab-strip", "ui/components/tab-strip/tab-strip");
   }
 

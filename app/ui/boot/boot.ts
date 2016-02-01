@@ -22,14 +22,14 @@ requirejs.config(
     shim:
     {
       "bootstrap": { deps: ["jquery"] },
-      "jquery": { exports : "jQuery" }
+      "jquery": { exports : "$" }
     }
 });
 
 
 // Start loading the main app file. Put all of
 // your application logic in there.
-requirejs(["jquery", "knockout", "text", "ui/boot/config"], (jQuery, ko, text, config)=>
+requirejs(["jquery", "knockout", "text", "bootstrap", "ui/boot/config"], ($, ko, text, bootstrap, config)=>
 {
   var spaApp = new config.Spa();
 });

@@ -1,9 +1,7 @@
 export var menuTemplate: Array<any>;
 
-export class menus
-{
-    constructor()
-    {
+export class menus {
+    constructor() {
         menuTemplate = [
             {
                 label: 'File',
@@ -82,6 +80,10 @@ export class menus
             {
                 label: 'View',
                 submenu: [
+                    {
+                        label: 'Settings',
+                        click: () => this.sendMessage("menu.View.OnSettings")
+                    },
                     {
                         label: 'Reload',
                         accelerator: 'CmdOrCtrl+R',
@@ -202,8 +204,10 @@ export class menus
         }
     }
 
-    public sendMessage(id: string)
-    {
-        ipcRenderer.send(id);
+    public sendMessage(id: string) {
+        if (ipcRenderer != null) {
+            ipcRenderer.send(id);
+        }
+        return true;
     }
 }

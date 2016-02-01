@@ -1,19 +1,19 @@
 {
   "name": "elecedit",
   "version": "1.0.0",
-  "description": "Electric Blog Editor",
+  "description": "Electric Edit - The awesome blog editor",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sumitkm/elecedit.git"
+    "url": "git+https://github.com/sumitkm/electricedit.git"
   },
   "keywords": [
     "Electric",
     "Editor",
-    "ElecEdit",
+    "ElectricEdit",
     "BlogEditor",
     "ElectronJS",
     "Electron"
@@ -21,11 +21,12 @@
   "author": "Sumit Kumar Maitra",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sumitkm/elecedit/issues"
+    "url": "https://github.com/sumitkm/electricedit/issues"
   },
-  "homepage": "https://github.com/sumitkm/elecedit#readme",
+  "homepage": "https://github.com/sumitkm/electricedit#readme",
   "dependencies": {
-    "knockout": "^3.4.0"
+    "knockout": "^3.4.0",
+    "nconf": "^0.8.2"
   },
   "devDependencies": {
     "require": "^2.4.20"

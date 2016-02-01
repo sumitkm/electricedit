@@ -16,7 +16,7 @@ Built using "Electron by Github"!
 
 `chmod +x build`
 
-`chmod +x restore`
+`chmod +x run`
 
 `./restore`
 
