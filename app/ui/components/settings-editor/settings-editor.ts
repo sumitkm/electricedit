@@ -12,4 +12,9 @@ export class viewModel
     {
 
     }
+
+    saveChanges = (event, args) =>
+    {
+        ipcRenderer.send('settings.App.Save', this.dataSource().toJS());
+    }
 }

@@ -2,12 +2,14 @@
 
 var electr0n = require('electron');
 var ipcmain = require('electron').ipcMain;
+var nconf = require('nconf');
+var fs = require('fs');
 // var menus = require('./services/menus/menus.js');
 // var ipcrenderer = require('electron').ipcRenderer;
 // var ipcdialog = require('electron').dialog;
 
-const services = require("./services/files/files.js");
-
+const fileService = require("./services/files/files.js");
+const settingsService = require("./services/settings/settings.js");
 const currentApp = electr0n.app;  // Module to control application life.
 const BrowserWindow = electr0n.BrowserWindow;  // Module to create native browser window.
 
@@ -18,6 +20,9 @@ const BrowserWindow = electr0n.BrowserWindow;  // Module to create native browse
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
+var setting = new settingsService.settings();
+
+setting.load();
 
 // Quit when all windows are closed.
 currentApp.on('window-all-closed', () => {
@@ -56,12 +61,12 @@ currentApp.on('ready', () => {
     //mainWindow.webContents.openDevTools();
 
     ipcmain.on("menu.File.New", (event, arg) => {
-        var files = new services.Files(mainWindow);
+        var files = new fileService.Files(mainWindow);
         files.New();
     });
 
     ipcmain.on("menu.File.Open", (event, arg) => {
-        var files = new services.Files(mainWindow);
+        var files = new fileService.Files(mainWindow);
         files.Open(event);
     });
 
@@ -70,34 +75,45 @@ currentApp.on('ready', () => {
     });
 
     ipcmain.on("menu.View.OnSettings", (event, arg) => {
-        event.sender.send("menu.View.Settings");
+        event.sender.send("menu.View.Settings", nconf);
     });
 
     ipcmain.on("app.File.Save", (event, arg) => {
-        var files = new services.Files(mainWindow);
+        var files = new fileService.Files(mainWindow);
+        if (arg.fileName != '') {
+            console.log("Adding to nConf" + arg.fileName);
+            setting.set('lastOpenFile', arg.fileName );
+        }
         files.Save(event, arg);
     });
 
     ipcmain.on('menu.App.Quit', (event, arg) => {
-        if (mainWindow != null) {
-            mainWindow = null;
-        }
-        currentApp.quit();
+        quitApp();
     });
 
+    ipcmain.on('settings.App.Save', (event, arg) =>{
+        setting.saveSettings(arg);
+    })
     // Emitted when the window is closed.
     mainWindow.on('closed', () => {
+        quitApp();
+    });
+
+    var quitApp = () =>
+    {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         //if (process.platform != 'darwin') {
+        if (mainWindow != null) {
             mainWindow = null;
+        }
         //}
         //TODO: this is a bodge. Mac Apps don't quit when you close the window.
         // but until we can figure out how to handle ipc without any renderer
         // we'll have to keep quitting when the window is closed.
         // Not an issue in sane OSes like Linux ;-)
-
+        setting.save();
         currentApp.quit();
-    });
+    }
 });
