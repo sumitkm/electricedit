@@ -14,15 +14,24 @@ export class settings{
     public load()
     {
         nconf.file('./config.json');
-        nconf.load((data)=>{
-            this.currentSettings = data;
-            console.log(JSON.stringify(data));
+        nconf.load((data) =>
+        {
+            this.currentSettings.autoReopen = nconf.get('autoReopen');
+            this.currentSettings.lastOpenFile = nconf.get('lastOpenFile');
+            this.currentSettings.oAuth2Groups = nconf.get('oAuth2Groups');
+            console.log("loaded:" + JSON.stringify(this.currentSettings));
         });
     }
 
     public set(name: string, value: any)
     {
         nconf.set(name, value);
+        this.currentSettings[name] = value;
+    }
+
+    public get()
+    {
+        return this.currentSettings;
     }
 
     public saveSettings(settings: model.appSettings)
@@ -32,6 +41,7 @@ export class settings{
         nconf.set('oAuth2Groups', settings.oAuth2Groups);
         this.save();
     }
+
     public save()
     {
         nconf.save((err) => {

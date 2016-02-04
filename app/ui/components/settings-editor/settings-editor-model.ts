@@ -22,6 +22,14 @@ export class editorSettings
         }
         return outGroups;
     }
+
+    public static fromJS(settings: any) : editorSettings
+    {
+        var newSettings = new editorSettings();
+        newSettings.autoReopen(settings['autoReopen']);
+        newSettings.lastOpenFile(settings['lastOpenFile'])
+        return newSettings;
+    }
 }
 
 export class oAuth2Group {

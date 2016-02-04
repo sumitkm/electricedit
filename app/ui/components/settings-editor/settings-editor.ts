@@ -7,14 +7,24 @@ export var template = require("text!./settings-editor.html");
 
 export class viewModel
 {
+    id : KnockoutObservable<string> = ko.observable(new Date().getUTCMilliseconds().toString());
     dataSource : KnockoutObservable<vm.editorSettings> = ko.observable(new vm.editorSettings());
     constructor(params: any)
     {
-
+        if(params.settings != null && ko.isObservable(params.settings))
+        {
+            console.log("Got settings editor settings: " + JSON.stringify(ko.unwrap(params.settings)));
+            this.dataSource = params.settings;
+        }
+        if(params.id != null)
+        {
+            this.id(params.id);
+        }
     }
 
     saveChanges = (event, args) =>
     {
         ipcRenderer.send('settings.App.Save', this.dataSource().toJS());
+        $('#' + this.id()).modal('hide');
     }
 }

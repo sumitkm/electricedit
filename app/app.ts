@@ -9,7 +9,7 @@ var fs = require('fs');
 // var ipcdialog = require('electron').dialog;
 
 const fileService = require("./services/files/files.js");
-const settingsService = require("./services/settings/settings.js");
+const settingsSvc = require("./services/settings/settings.js");
 const currentApp = electr0n.app;  // Module to control application life.
 const BrowserWindow = electr0n.BrowserWindow;  // Module to create native browser window.
 
@@ -20,9 +20,9 @@ const BrowserWindow = electr0n.BrowserWindow;  // Module to create native browse
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
-var setting = new settingsService.settings();
+var settingsService = new settingsSvc.settings();
 
-setting.load();
+settingsService.load();
 
 // Quit when all windows are closed.
 currentApp.on('window-all-closed', () => {
@@ -45,6 +45,9 @@ ipcmain.on('synchronous-message', function(event, arg) {
 });
 
 
+    ipcmain.on('app.Settings.Load', (event, args) => {
+            event.sender.send('app.Settings.Loaded', settingsService.get());
+    });
 
 var selfie = this;
 // This method will be called when Electron has finished
@@ -70,6 +73,11 @@ currentApp.on('ready', () => {
         files.Open(event);
     });
 
+    ipcmain.on("app.File.Load", (event, arg) => {
+        var files = new fileService.Files(mainWindow);
+        files.Load(event, [arg]);
+    });
+
     ipcmain.on("menu.File.OnSave", (event, arg) => {
         event.sender.send("menu.File.Save");
     });
@@ -82,7 +90,7 @@ currentApp.on('ready', () => {
         var files = new fileService.Files(mainWindow);
         if (arg.fileName != '') {
             console.log("Adding to nConf" + arg.fileName);
-            setting.set('lastOpenFile', arg.fileName );
+            settingsService.set('lastOpenFile', arg.fileName );
         }
         files.Save(event, arg);
     });
@@ -92,12 +100,13 @@ currentApp.on('ready', () => {
     });
 
     ipcmain.on('settings.App.Save', (event, arg) =>{
-        setting.saveSettings(arg);
+        settingsService.saveSettings(arg);
     })
     // Emitted when the window is closed.
     mainWindow.on('closed', () => {
         quitApp();
     });
+
 
     var quitApp = () =>
     {
@@ -113,7 +122,7 @@ currentApp.on('ready', () => {
         // but until we can figure out how to handle ipc without any renderer
         // we'll have to keep quitting when the window is closed.
         // Not an issue in sane OSes like Linux ;-)
-        setting.save();
+        settingsService.save();
         currentApp.quit();
     }
 });

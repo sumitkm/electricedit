@@ -8,3 +8,4 @@ declare var remote: any;
 declare var process: any;
 declare var app: any;
 declare var __dirname: string;
+declare var $: JQueryStatic;

@@ -51,7 +51,8 @@ export class Files {
         // TODO:
     }
 
-    private OpenFile = (fileNames: Array<string>) => {
+    public Load = (event, fileNames: Array<string>) =>
+    {
         var fs = require('fs');
         if (fileNames != null && fileNames.length > 0) {
             fs.readFile(fileNames[0], { encoding: 'utf8', flag: 'r' }, (err, data) => {
@@ -60,10 +61,13 @@ export class Files {
                 }
                 else {
                     console.log("File opened successfully!");
-                    this.currentEvent.sender.send('menu.file.opened', { fileName: fileNames[0], content: data });
+                    event.sender.send('menu.file.opened', { fileName: fileNames[0], content: data });
                 }
             });
         }
+    }
+    private OpenFile = (fileNames: Array<string>) => {
+        this.Load(this.currentEvent, fileNames);
     }
 
     private WriteToFile = (filename) => {

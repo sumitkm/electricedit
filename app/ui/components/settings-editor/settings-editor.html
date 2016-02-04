@@ -1,4 +1,4 @@
-<div id="settingsModal" class="modal fade" tabindex="-1" role="dialog">
+<div data-bind="attr: { id: id }" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" style="width:100%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -22,7 +22,7 @@
                     <div class="form-group">
                         <label for="lastOpenFile" class="col-sm-2 control-label">Last open file:</label>
                         <div class="col-sm-10">
-                            <input type="email" disabled="disabled" class=" form-control" id="lastOpenFile" placeholder="Last open file">
+                            <label data-bind="text: dataSource().lastOpenFile" class=" form-control" id="lastOpenFile">
                         </div>
                     </div>
                 </div>
