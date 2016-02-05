@@ -5,7 +5,6 @@
 ///<amd-dependency path="ui/menus/menus"/>
 ///<amd-dependency path="ui/components/settings-editor/settings-editor-model"/>
 
-
 var editorSettings = require("ui/components/settings-editor/settings-editor-model").editorSettings;
 var QuillEditor = require("ui/components/quill-editor/quill-editor-params");
 import ko = require("knockout");
@@ -17,7 +16,7 @@ export var template = require("text!./home-page.html");
 export class viewModel {
 
     editorParams: any;
-
+    currentFile: KnockoutObservable<any> = ko.observable({ fileName: '', content: '' });
     settingsEditorModel = ko.observable<any>();
     constructor() {
         this.editorParams = new QuillEditor.QuillEditorParams();
@@ -39,6 +38,11 @@ export class viewModel {
 
         ipcRenderer.on('menu.View.Settings', (event, data) => {
             $('#settings').modal('show');
+        });
+
+        ipcRenderer.on('menu.file.opened', (event, data) => {
+            console.log('home-page:' + data.fileName);
+            this.currentFile(data);
         });
     }
 }

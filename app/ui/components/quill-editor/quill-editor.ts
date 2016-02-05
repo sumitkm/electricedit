@@ -2,20 +2,25 @@
 /// <amd-dependency path="quill" />
 /// <amd-dependency path="knockout" />
 
-//import * as ko from "knockout";
 var ko = <KnockoutStatic>require("knockout");
 export var Quill = require("quill");
 export var template = require("text!./quill-editor.html");
 
 export class viewModel {
     private editor: QuillStatic;
-    //public tabs: Array<App.Ui.Components.TabStrip.Model> = [];
     private file: KnockoutObservable<any> = ko.observable({ fileName: '', content: '' });
+    subscriptions = [];
 
     constructor(params: any) {
         this.initTabs();
-
-        //amplify.subscribe(App.Ui.Components.TabStrip.Model.TabChangedEvent, this, this.tabChangedEvent);
+        if (params.file != null) {
+            console.log('File loaded');
+            this.file = params.file;
+        }
+        this.subscriptions.push(this.file.subscribe((newValue) => {
+            console.log('file changed');
+            this.editor.setHTML(this.file().content);
+        }));
 
         this.editor = new Quill('#editor', {
             modules:
@@ -29,14 +34,10 @@ export class viewModel {
             this.file().content = this.editor.getHTML();
         });
 
-        ipcRenderer.on('menu.file.opened', (event, data) => {
-            this.file(data);
-            this.editor.setHTML(this.file().content);
-        });
-
         ipcRenderer.on('menu.File.Save', (event, data) => {
             this.saveFile();
         });
+        this.editor.setHTML(this.file().content);
     }
 
     private initTabs() {
@@ -58,6 +59,9 @@ export class viewModel {
     }
 
     public dispose() {
+        for (let i = 0; i < this.subscriptions.length; i++) {
+            this.subscriptions[i].dispose();
+        }
         //amplify.unsubscribe(App.Ui.Components.TabStrip.Model.TabChangedEvent, this.tabChangedEvent);
     }
 }
