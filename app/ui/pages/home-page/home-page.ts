@@ -14,7 +14,6 @@ var Menu = remote.Menu;
 export var template = require("text!./home-page.html");
 
 export class viewModel {
-
     editorParams: any;
     currentFile: KnockoutObservable<any> = ko.observable({ fileName: '', content: '' });
     settingsEditorModel = ko.observable<any>();
@@ -42,6 +41,7 @@ export class viewModel {
 
         ipcRenderer.on('menu.file.opened', (event, data) => {
             console.log('home-page:' + data.fileName);
+            this.settingsEditorModel().lastOpenFile(data.fileName);
             this.currentFile(data);
         });
     }

@@ -50,7 +50,6 @@ export class viewModel {
     }
 
     public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {
-        //data.active(!data.active());
         this.file().content = this.editor.getHTML();
     }
 
@@ -62,6 +61,5 @@ export class viewModel {
         for (let i = 0; i < this.subscriptions.length; i++) {
             this.subscriptions[i].dispose();
         }
-        //amplify.unsubscribe(App.Ui.Components.TabStrip.Model.TabChangedEvent, this.tabChangedEvent);
     }
 }

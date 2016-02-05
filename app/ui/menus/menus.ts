@@ -85,6 +85,9 @@ export class menus {
                         click: () => this.sendMessage("menu.View.OnSettings")
                     },
                     {
+                        type: 'separator'
+                    },
+                    {
                         label: 'Reload',
                         accelerator: 'CmdOrCtrl+R',
                         click: function(item, focusedWindow) {

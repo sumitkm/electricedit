@@ -10,6 +10,7 @@ export class editorSettings
     {
         return  {
             autoReopen : this.autoReopen(),
+            lastOpenFile : this.lastOpenFile(),
             oAuth2Groups : this.mapAuth2GroupsJS(this.oAuth2Groups())
         };
     }
@@ -28,6 +29,7 @@ export class editorSettings
         var newSettings = new editorSettings();
         newSettings.autoReopen(settings['autoReopen']);
         newSettings.lastOpenFile(settings['lastOpenFile'])
+        newSettings.oAuth2Groups(settings['oAuth2Groups'])
         return newSettings;
     }
 }
