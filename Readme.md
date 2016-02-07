@@ -32,6 +32,10 @@ Next items to be worked upon
 3. <del>Custom application menus</del>
 4. <del>UX - Ctrl+S save</del>
 5. <del>UX - Custom styling: Toolbar stays on top always; proper scrolling of editor area </del>
-5. Correct default folders in each environment
-6. OAuth integration
-7. Custom context menus
+6. <del>OAuth integration</del>
+7. Post to WordPress
+8. WordPress 'Code' formatting support
+9. WordPress themes integration
+10. Multiple WordPress accounts
+11. Correct default folders in each environment
+12. Custom context menus

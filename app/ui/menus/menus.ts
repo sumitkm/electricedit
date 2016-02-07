@@ -5,6 +5,7 @@ export class menus {
         menuTemplate = [
             {
                 label: 'File',
+                accelerator: 'Alt+F',
                 submenu: [
                     {
                         label: 'New',
@@ -83,6 +84,13 @@ export class menus {
                     {
                         label: 'Settings',
                         click: () => this.sendMessage("menu.View.OnSettings")
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: 'Connect to WordPress',
+                        click: () => this.sendMessage("menu.View.ConnectWordPress")
                     },
                     {
                         type: 'separator'
