@@ -1,7 +1,7 @@
 /// <reference path="../../interop.ts"/>
 /// <reference path="../../../typings/tsd.d.ts"/>
 
-export class Files {
+class Files {
     mainWindow: any;
     file: any;
     currentEvent: GitHubElectron.IPCMainEvent;
@@ -83,3 +83,5 @@ export class Files {
         }
     }
 }
+
+export = Files;

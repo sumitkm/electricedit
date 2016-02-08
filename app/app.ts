@@ -1,4 +1,8 @@
 /// <reference path="../typings/tsd.d.ts"/>
+/// <reference path="./services/settings/settings" />
+import settingsService = require("./services/settings/settings");
+import eventHandler = require('./event-handler');
+import oAuth2 = require("./services/oauth2/oauth2");
 
 var objectAssign = require('object-assign');
 
@@ -9,21 +13,17 @@ export class app {
     currentApp = this.electron.app;  // Module to control application life.
     BrowserWindow = this.electron.BrowserWindow;  // Module to create native browser window.
 
-    events = require('./event-handler.js');
-    fileService = require("./services/files/files.js");
-    settingsSvc = require("./services/settings/settings.js");
-    auth = require("./services/oauth2/oauth2.js");
 
     // Keep a global reference of the window object, if you don't, the window will
     // be closed automatically when the JavaScript object is garbage collected.
     mainWindow = null;
-    settingsService = new this.settingsSvc.settings();
-    eventHandler = new this.events.eventHandler();
+    settingsService = new settingsService();
+    eventHandler = new eventHandler();
 
     constructor() {
         // Report crashes to our server.
         //electron.crashReporter.start({ companyName: "KalliopeXplorer"});
-        console.log(this.auth.oAuth2);
+        console.log(oAuth2);
 
         this.settingsService.load();
 
@@ -54,7 +54,6 @@ export class app {
         this.ipcMain.on('menu.View.ConnectWordPress', (event, arg) => {
             var appSettings = this.settingsService.currentSettings;
 
-            var authenticator = new this.auth.oAuth2();
             const windowParams = {
                 alwaysOnTop: true,
                 autoHideMenuBar: true,
@@ -71,7 +70,7 @@ export class app {
 
             const options = {};
 
-            const myAuthenticator = new this.auth.oAuth2(config, windowParams);
+            const myAuthenticator = new oAuth2(config, windowParams);
 
             myAuthenticator.getAccessToken(options)
             .then(token => {

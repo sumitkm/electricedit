@@ -1,22 +1,23 @@
-export class eventHandler
+import Files = require("./services/files/files");
+import settings = require("./services/settings/settings");
+
+class eventHandler
 {
     private ipcMain : GitHubElectron.IPCMain = require('electron').ipcMain;
-    private fileService = require("./services/files/files.js");
-    private settingsService = require("./services/settings/settings.js").settings;
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
-    currentSettingsSvc: any;
+    currentSettingsSvc: settings;
     currentFiles: any;
 
     constructor()
     {
-        this.currentSettingsSvc = new this.settingsService()
+        this.currentSettingsSvc = new settings();
     }
 
     public attach = (mainWindow: GitHubElectron.BrowserWindow)=>
     {
         this.currentWindow = mainWindow;
-        this.currentFiles = new this.fileService.Files(mainWindow);
+        this.currentFiles = new Files(mainWindow);
 
         this.ipcMain.on("menu.File.New", (event, arg) => {
             this.currentFiles.New();
@@ -57,3 +58,5 @@ export class eventHandler
         this.currentSettingsSvc = null;
     }
 }
+
+export = eventHandler;

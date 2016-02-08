@@ -1,5 +1,4 @@
 // TypeScript version of electron-oauth2 from https://github.com/mawie81/electron-oauth2/blob/master/index.js
-
 const Promise = require('pinkie-promise');
 const fetch = require('node-fetch');
 const objectAssign = require('object-assign');
@@ -7,7 +6,7 @@ const electron = require('electron');
 const queryString = require('querystring');
 const BrowserWindow = electron.BrowserWindow;
 
-export class oAuth2 {
+class oAuth2 {
 
     currentConfig: any;
     currentWindowParams: any;
@@ -114,3 +113,5 @@ export class oAuth2 {
         });
     }
 }
+
+export = oAuth2;
