@@ -12,5 +12,4 @@ module wordpress.api.posts
         }
     }
 }
-
 export = wordpress.api.posts;

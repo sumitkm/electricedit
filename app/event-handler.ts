@@ -1,8 +1,11 @@
 import Files = require("./services/files/files");
 import settings = require("./services/settings/settings");
+require("./services/wordpress/api/base");
+import wpPosts = require("./services/wordpress/api/posts");
 
 class eventHandler
 {
+    private postsQuery = new wpPosts.createNewPost("","");
     private ipcMain : GitHubElectron.IPCMain = require('electron').ipcMain;
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
