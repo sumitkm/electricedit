@@ -1,3 +1,5 @@
+/// <reference path="../../model/currentFile.ts" />
+
 /// <amd-dependency path="text!./quill-editor.html"/>
 /// <amd-dependency path="quill" />
 /// <amd-dependency path="knockout" />
@@ -32,21 +34,16 @@ export class viewModel {
 
         this.editor.on('text-change', (delta, source) => {
             this.file().content = this.editor.getHTML();
+            this.file().modified = true;
+            
         });
 
-        ipcRenderer.on('menu.File.Save', (event, data) => {
-            this.saveFile();
-        });
+
         this.editor.setHTML(this.file().content);
     }
 
     private initTabs() {
         //this.tabs.push(new App.Ui.Components.TabStrip.Model( "HTML Preview", false ));
-    }
-
-    public saveFile = () => {
-        this.file().content = this.editor.getHTML();
-        ipcRenderer.send('app.File.Save', this.file());
     }
 
     public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {
@@ -55,6 +52,11 @@ export class viewModel {
 
     public getHtml = () => {
         window.console.debug();
+    }
+
+    public saveFile = () => {
+        console.log("SAVING: " + this.file().content);
+        ipcRenderer.send('app.File.Save', this.file());
     }
 
     public dispose() {

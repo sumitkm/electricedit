@@ -10,7 +10,7 @@ export class menus {
                     {
                         label: 'New',
                         accelerator: 'CmdOrCtrl+N',
-                        click: () => this.sendMessage("menu.File.New")
+                        click: () => this.sendMessage("menu.File.OnNew")
                     },
                     {
                         label: 'Open',

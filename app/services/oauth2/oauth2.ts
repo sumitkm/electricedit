@@ -109,7 +109,7 @@ class oAuth2 {
         return this.tokenRequest({
             refresh_token: refreshToken,
             grant_type: 'refresh_token',
-            redirect_uri: 'https://github.com/sumitkm/electricedit'
+            redirect_uri: this.currentConfig.redirectUrl
         });
     }
 }

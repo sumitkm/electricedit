@@ -5,6 +5,7 @@ class Files {
     mainWindow: any;
     file: any;
     currentEvent: GitHubElectron.IPCMainEvent;
+    fileCreated: boolean = false;
 
     constructor(window: any) {
         this.mainWindow = window;
@@ -14,6 +15,7 @@ class Files {
         this.currentEvent = event;
         this.file = content;
         if (this.file.fileName == '') {
+            this.fileCreated = true;
             var dialog = require('electron').dialog;
             dialog.showSaveDialog(this.mainWindow,
                 {
@@ -71,13 +73,20 @@ class Files {
     }
 
     private WriteToFile = (filename) => {
-        if (filename != null) {
+        if (filename != null)
+        {
             var fs = require('fs');
-            fs.writeFile(filename, this.file.content, (err) => {
-                if (err) {
+            this.file.filename = filename;
+            fs.writeFile(filename, this.file.content, (err) =>
+            {
+                if (err)
+                {
                     return console.log(err);
                 }
-
+                if(this.fileCreated == true)
+                {
+                    this.currentEvent.sender.send('app.File.Created', this.file);
+                }
                 console.log("The file was saved!");
             });
         }

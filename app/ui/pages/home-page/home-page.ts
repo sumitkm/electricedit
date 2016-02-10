@@ -1,5 +1,7 @@
 /// <reference path="../../interop.d.ts" />
 /// <reference path="../../typings/tsd.d.ts"/>
+/// <reference path="../../model/currentFile.ts" />
+
 ///<amd-dependency path="text!./home-page.html" />
 ///<amd-dependency path="ui/components/quill-editor/quill-editor-params"/>
 ///<amd-dependency path="ui/menus/menus"/>
@@ -8,21 +10,26 @@
 var editorSettings = require("ui/components/settings-editor/settings-editor-model").editorSettings;
 var QuillEditor = require("ui/components/quill-editor/quill-editor-params");
 import ko = require("knockout");
+import CurrentFile = require("../../model/currentFile");
 var menuUi = require("ui/menus/menus");
 var Menu = remote.Menu;
 
 export var template = require("text!./home-page.html");
 
-export class viewModel {
+export class viewModel
+{
     editorParams: any;
-    currentFile: KnockoutObservable<any> = ko.observable({ fileName: '', content: '' });
+    currentFile: KnockoutObservable<CurrentFile> = ko.observable({ fileName: '', content: '', modified: false });
     settingsEditorModel = ko.observable<any>();
-    constructor() {
+
+    constructor()
+    {
         this.editorParams = new QuillEditor.QuillEditorParams();
 
-        ipcRenderer.on('app.Settings.Loaded', (event, data) => {
+        ipcRenderer.on('app.Settings.Loaded', (event, data) =>
+        {
             this.settingsEditorModel(editorSettings.fromJS(data));
-            if(this.settingsEditorModel().autoReopen()==true)
+            if (this.settingsEditorModel().autoReopen() == true)
             {
                 ipcRenderer.send('app.File.Load', this.settingsEditorModel().lastOpenFile());
             }
@@ -35,14 +42,43 @@ export class viewModel {
         var currentMenuTemplate = Menu.buildFromTemplate(menuUi.menuTemplate);
         Menu.setApplicationMenu(currentMenuTemplate);
 
-        ipcRenderer.on('menu.View.Settings', (event, data) => {
+        ipcRenderer.on('menu.View.Settings', (event, data) =>
+        {
             $('#settings').modal('show');
         });
 
-        ipcRenderer.on('menu.file.opened', (event, data) => {
+        ipcRenderer.on('menu.file.opened', (event, data) =>
+        {
             console.log('home-page:' + data.fileName);
             this.settingsEditorModel().lastOpenFile(data.fileName);
             this.currentFile(data);
         });
+
+        ipcRenderer.on('menu.File.Save', (event, data) =>
+        {
+            if (this.currentFile().modified) {
+                this.saveFile();
+                this.currentFile().modified = false;
+            }
+        });
+
+        ipcRenderer.on('menu.File.New', (event, data) =>
+        {
+            if (this.currentFile().modified) {
+                // Ask if they want to save or discard
+            }
+            this.currentFile({ fileName: '', content: '', modified: true });
+        });
+
+        ipcRenderer.on('app.File.Created', (event, data) =>
+        {
+            console.log('File created' + data.filename)
+            this.currentFile().fileName = data.filename;
+        });
+    }
+
+    public saveFile = () =>
+    {
+        ipcRenderer.send('app.File.Save', this.currentFile());
     }
 }
