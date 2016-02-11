@@ -64,10 +64,8 @@ export class viewModel
 
         ipcRenderer.on('menu.File.New', (event, data) =>
         {
-            if (this.currentFile().modified) {
-                // Ask if they want to save or discard
-            }
-            this.currentFile({ fileName: '', content: '', modified: true });
+
+                this.currentFile({ fileName: '', content: '', modified: true });
         });
 
         ipcRenderer.on('app.File.Created', (event, data) =>

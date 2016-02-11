@@ -10,7 +10,7 @@ class eventHandler
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
     currentSettingsSvc: settings;
-    currentFiles: any;
+    currentFiles: Files;
 
     constructor()
     {
@@ -23,9 +23,7 @@ class eventHandler
         this.currentFiles = new Files(mainWindow);
 
         this.ipcMain.on("menu.File.OnNew", (event, arg) => {
-            this.currentFiles.New();
-            event.sender.send("menu.File.New");
-
+            this.currentFiles.New(event, arg);
         });
 
         this.ipcMain.on("menu.File.Open", (event, arg) => {

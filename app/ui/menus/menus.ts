@@ -25,6 +25,12 @@ export class menus {
                         accelerator: 'CmdOrCtrl+S',
                         click: () => this.sendMessage("menu.File.OnSave")
                     },
+                    ,
+                    {
+                        label: 'Save As...',
+                        accelerator: 'CmdOrCtrl+Shift+S',
+                        click: () => this.sendMessage("menu.File.OnSaveAs")
+                    },
                     {
                         type: 'separator'
                     },

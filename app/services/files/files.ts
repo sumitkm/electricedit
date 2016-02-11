@@ -49,8 +49,26 @@ class Files {
             }, this.OpenFile);
     }
 
-    public New = () => {
-        // TODO:
+    public New = (event: GitHubElectron.IPCMainEvent, content: any) => {
+        this.currentEvent = event;
+        var dialog = require('electron').dialog;
+        dialog.showMessageBox(null,
+            {
+                title: 'Save changes?',
+                message: 'Save changes to current file?',
+                type: 'question',
+                buttons: ['Discard', 'Save', 'Cancel'] }, (index: number)=>
+                {
+                    console.log('Button Index: '+ index);
+                    if(index == 0)
+                    {
+                        event.sender.send("menu.File.New");
+                    }
+                    else if(index == 1)
+                    {
+                        event.sender.send("menu.File.Save");
+                    }
+                });
     }
 
     public Load = (event, fileNames: Array<string>) =>
