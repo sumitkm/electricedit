@@ -62,10 +62,14 @@ export class viewModel
             }
         });
 
-        ipcRenderer.on('menu.File.New', (event, data) =>
+        ipcRenderer.on('menu.File.OnNew', (event, data) =>
         {
+            ipcRenderer.send("app.File.New", this.currentFile());
+        });
 
-                this.currentFile({ fileName: '', content: '', modified: true });
+        ipcRenderer.on('menu.File.Newed', (event, data)=>
+        {
+            this.currentFile({ fileName: '', content: '', modified: true });
         });
 
         ipcRenderer.on('app.File.Created', (event, data) =>

@@ -52,23 +52,31 @@ class Files {
     public New = (event: GitHubElectron.IPCMainEvent, content: any) => {
         this.currentEvent = event;
         var dialog = require('electron').dialog;
+        if(content.modified==true)
+        {
         dialog.showMessageBox(null,
             {
                 title: 'Save changes?',
                 message: 'Save changes to current file?',
                 type: 'question',
-                buttons: ['Discard', 'Save', 'Cancel'] }, (index: number)=>
+                buttons: ['Cancel', 'Save', 'Discard'] }, (index: number)=>
                 {
                     console.log('Button Index: '+ index);
-                    if(index == 0)
+                    if(index == 2)
                     {
-                        event.sender.send("menu.File.New");
+                        event.sender.send("menu.File.Newed");
                     }
                     else if(index == 1)
                     {
-                        event.sender.send("menu.File.Save");
+                        this.Save(event, content);
+                        event.sender.send("menu.File.Newed");
                     }
                 });
+            }
+            else
+            {
+                event.sender.send("menu.File.Newed");
+            }
     }
 
     public Load = (event, fileNames: Array<string>) =>

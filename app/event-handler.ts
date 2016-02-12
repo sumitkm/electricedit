@@ -23,6 +23,11 @@ class eventHandler
         this.currentFiles = new Files(mainWindow);
 
         this.ipcMain.on("menu.File.OnNew", (event, arg) => {
+            event.sender.send("menu.File.OnNew");
+        });
+
+        this.ipcMain.on("app.File.New", (event, arg) =>
+        {
             this.currentFiles.New(event, arg);
         });
 
