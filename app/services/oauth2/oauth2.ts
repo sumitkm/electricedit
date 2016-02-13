@@ -25,16 +25,7 @@ class oAuth2 {
             scope: 'global'
         };
 
-        // if (opts.scope) {
-        //     urlParams.scope = opts.scope;
-        // }
-        //
-        // if (opts.accessType) {
-        //     urlParams.access_type = opts.accessType;
-        // }
-
         var url = this.currentConfig.authorizationUrl + '?' + queryString.stringify(urlParams);
-        console.log("First Request:" + url);
 
         return new Promise((resolve, reject) => {
             const authWindow = new BrowserWindow(this.currentWindowParams || { 'use-content-size': true });
@@ -54,14 +45,13 @@ class oAuth2 {
 
                     if (error) {
                         reject(error);
-                        console.log("FAILURE:" + JSON.stringify(error));
+                        console.log("oAuth2 : FAILURE:" + JSON.stringify(error, null, 4));
 
                         authWindow.removeAllListeners('closed');
                         authWindow.destroy();
                     } else if (code) {
                         resolve(code);
-                        console.log("SUCCESS:" + JSON.stringify(code));
-                        //TODO: Save the code to config for the correct oAuth2Group
+                        console.log("oAuth2 : SUCCESS:" + JSON.stringify(code, null, 4));
                         authWindow.removeAllListeners('closed');
                         authWindow.destroy();
                     }
@@ -105,13 +95,16 @@ class oAuth2 {
         });
     }
 
-    public refreshToken = (refreshToken) => {
-        return this.tokenRequest({
-            refresh_token: refreshToken,
-            grant_type: 'refresh_token',
-            redirect_uri: this.currentConfig.redirectUrl
-        });
-    }
+    //
+    // WordPress doesn't support grant_type: 'refresh_token'
+    //
+    // public refreshToken = (refreshToken) => {
+    //     return this.tokenRequest({
+    //         refresh_token: refreshToken,
+    //         grant_type: 'refresh_token',
+    //         redirect_uri: this.currentConfig.redirectUrl
+    //     });
+    // }
 }
 
 export = oAuth2;

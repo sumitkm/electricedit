@@ -19,7 +19,6 @@ class settings{
             this.currentSettings.autoReopen = nconf.get('autoReopen');
             this.currentSettings.lastOpenFile = nconf.get('lastOpenFile');
             this.currentSettings.oAuth2Groups = nconf.get('oAuth2Groups');
-            console.log("loaded:" + JSON.stringify(this.currentSettings));
         });
     }
 

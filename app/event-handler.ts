@@ -49,7 +49,6 @@ class eventHandler
 
         this.ipcMain.on("app.File.Save", (event, arg) => {
             if (arg.fileName != '') {
-                console.log("Adding to nConf:" + arg.fileName);
                 this.currentSettingsSvc.set('lastOpenFile', arg.fileName );
             }
             this.currentFiles.Save(event, arg);

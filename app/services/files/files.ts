@@ -61,7 +61,6 @@ class Files {
                 type: 'question',
                 buttons: ['Cancel', 'Save', 'Discard'] }, (index: number)=>
                 {
-                    console.log('Button Index: '+ index);
                     if(index == 2)
                     {
                         event.sender.send("menu.File.Newed");
@@ -107,13 +106,14 @@ class Files {
             {
                 if (err)
                 {
-                    return console.log(err);
+                    console.log(err);
+                    return err;
                 }
                 if(this.fileCreated == true)
                 {
                     this.currentEvent.sender.send('app.File.Created', this.file);
                 }
-                console.log("The file was saved!");
+                console.log("File saved successfully!");
             });
         }
     }

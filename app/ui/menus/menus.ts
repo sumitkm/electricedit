@@ -99,6 +99,10 @@ export class menus {
                         click: () => this.sendMessage("menu.View.ConnectWordPress")
                     },
                     {
+                        label: 'Get my site (temporary)',
+                        click: () => this.sendMessage("menu.View.GetMySites")
+                    },
+                    {
                         type: 'separator'
                     },
                     {
@@ -216,8 +220,7 @@ export class menus {
                 {
                     label: 'Bring All to Front',
                     role: 'front'
-                }
-                );
+                });
         }
     }
 

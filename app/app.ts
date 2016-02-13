@@ -3,6 +3,7 @@
 import settingsService = require("./services/settings/settings");
 import eventHandler = require('./event-handler');
 import oAuth2 = require("./services/oauth2/oauth2");
+import settingsModel = require("./services/settings/model/appSettings");
 
 var objectAssign = require('object-assign');
 
@@ -19,12 +20,11 @@ export class app {
     mainWindow = null;
     settingsService = new settingsService();
     eventHandler = new eventHandler();
+    currentAppSettings: settingsModel.appSettings;
 
     constructor() {
         // Report crashes to our server.
         //electron.crashReporter.start({ companyName: "KalliopeXplorer"});
-        console.log(oAuth2);
-
         this.settingsService.load();
 
         this.ipcMain.on('app.Settings.Load', (event, args) => {
@@ -52,7 +52,7 @@ export class app {
         //mainWindow.webContents.openDevTools();
 
         this.ipcMain.on('menu.View.ConnectWordPress', (event, arg) => {
-            var appSettings = this.settingsService.currentSettings;
+            this.currentAppSettings = this.settingsService.currentSettings;
 
             const windowParams = {
                 alwaysOnTop: true,
@@ -60,12 +60,12 @@ export class app {
                 nodeIntegration: false
             };
             var config = {
-                clientId: appSettings.oAuth2Groups[0].oAuthClientId,
-                clientSecret:  appSettings.oAuth2Groups[0].clientSecret,
-                authorizationUrl: appSettings.oAuth2Groups[0].baseUrl + '/' + appSettings.oAuth2Groups[0].authorizeUrl,
-                tokenUrl:  appSettings.oAuth2Groups[0].baseUrl + '/' +  appSettings.oAuth2Groups[0].tokenUrl,
+                clientId: this.currentAppSettings.oAuth2Groups[0].oAuthClientId,
+                clientSecret:  this.currentAppSettings.oAuth2Groups[0].oAuthClientSecret,
+                authorizationUrl: this.currentAppSettings.oAuth2Groups[0].baseUrl + '/' + this.currentAppSettings.oAuth2Groups[0].authorizeUrl,
+                tokenUrl:  this.currentAppSettings.oAuth2Groups[0].baseUrl + '/' +  this.currentAppSettings.oAuth2Groups[0].tokenUrl,
                 useBasicAuthorizationHeader: false,
-                redirectUrl: appSettings.oAuth2Groups[0].redirectUrl
+                redirectUrl: this.currentAppSettings.oAuth2Groups[0].redirectUrl
             };
 
             const options = {};
@@ -74,9 +74,16 @@ export class app {
 
             myAuthenticator.getAccessToken(options)
             .then(token => {
-                objectAssign(appSettings.oAuth2Groups[0].clientSecret, { token });
-                this.settingsService.save();
-                console.log("token: " + JSON.stringify(token));
+                try
+                {
+                    console.log("SUCCESS: accessToken retrieved");
+                    this.currentAppSettings.oAuth2Groups[0].clientSecret = token;
+                    this.settingsService.save();
+                }
+                catch(err)
+                {
+                    console.log("ERROR: Failed to retrieve accessToken", err);
+                }
             });
 
         });

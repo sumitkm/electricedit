@@ -74,7 +74,7 @@ export class viewModel
 
         ipcRenderer.on('app.File.Created', (event, data) =>
         {
-            console.log('File created' + data.filename)
+            console.log('File created: ' + data.filename)
             this.currentFile().fileName = data.filename;
         });
     }

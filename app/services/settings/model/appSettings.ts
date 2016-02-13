@@ -7,6 +7,7 @@ module model {
 
     export class oAuth2Group {
         public groupName: string = "";
+        public accessToken: string = "";
         public oAuthClientId: string = "";
         public oAuthClientSecret: string = "";
         public redirectUrl: string = "";
@@ -14,7 +15,8 @@ module model {
         public tokenUrl: string = "";
         public authorizeUrl: string = "";
         public authenticateUrl: string = "";
-        public clientSecret: any = {};
+        public sites: Array<string> = [];
+        public clientSecret: any;
     }
 }
 export = model;
