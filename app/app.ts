@@ -85,7 +85,6 @@ export class app {
                     console.log("ERROR: Failed to retrieve accessToken", err);
                 }
             });
-
         });
 
         // Emitted when the window is closed.

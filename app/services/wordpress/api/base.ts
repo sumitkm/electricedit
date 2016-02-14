@@ -1,7 +1,7 @@
 module wordpress.api.base
 {
     const queryString = require('querystring');
-    const fetch = require('require-fetch');
+    const fetch = require('node-fetch');
 
     export class query<Q, R, S>
     {
@@ -17,21 +17,30 @@ module wordpress.api.base
             this.requestType = requestType;
             this.header  = <any>{
                 'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'authorization': 'Bearer '+ this.apiKey
+                'Content-Type': 'application/x-www-form-urlencoded',                
+                'Authorization': 'Bearer '+ this.apiKey
             };
         }
 
-        public execute(query: Q, request: R): S
+        public execute(query: Q, request: R, callback: (S) => void)
         {
-            return fetch(this.url, {
-                method: 'POST',
-                headers: this.header,
-                body: queryString.stringify(request)
-            }).then(res => {
-                console.log(JSON.stringify(res, null, 3));
-                return res.json();
-            });
+            try
+            {
+                return fetch(this.url, {
+                    method: this.requestType,
+                    headers: this.header,
+                    body: queryString.stringify(request)
+                }).then(res => {
+                    return res.json();
+                }).then((json: S) =>{
+                    callback(json);
+                });
+            }
+            catch(err)
+            {
+                console.log("FAILED: " + err);
+            }
+            return null;
         }
     }
 }

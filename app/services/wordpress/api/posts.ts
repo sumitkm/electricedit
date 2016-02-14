@@ -7,7 +7,7 @@ module wordpress.api.posts
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/sites/$site/posts/new";
         constructor(apiKey: string, siteId: string)
         {
-            super(apiKey, createNewPost.endPoint);
+            super(apiKey, "POST", createNewPost.endPoint);
             this.url.replace('$site', siteId)
         }
     }
