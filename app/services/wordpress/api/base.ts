@@ -17,12 +17,12 @@ module wordpress.api.base
             this.requestType = requestType;
             this.header  = <any>{
                 'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',                
+                'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Bearer '+ this.apiKey
             };
         }
 
-        public execute(query: Q, request: R, callback: (S) => void)
+        public execute(query: Q, request: R, callback: (S)=>void)
         {
             try
             {
@@ -32,7 +32,7 @@ module wordpress.api.base
                     body: queryString.stringify(request)
                 }).then(res => {
                     return res.json();
-                }).then((json: S) =>{
+                }).then((json: Array<S>) =>{
                     callback(json);
                 });
             }
