@@ -2,8 +2,10 @@ import base = require('./base');
 import wmq = require('../model/query/postNew');
 import wmr = require('../model/request/postNew');
 import wms = require('../model/response/newPost');
+const fetch = require('node-fetch');
+const queryString = require('querystring');
 
-module wordpress.api.posts
+export module wordpress.api.posts
 {
     export class createNewPost extends base.query<any, any, any>
     {
@@ -11,13 +13,15 @@ module wordpress.api.posts
         constructor(apiKey: string, siteId: string)
         {
             super(apiKey, "POST", createNewPost.endPoint);
-            this.url.replace('$site', siteId)
+            super.setUrl(createNewPost.endPoint.replace('$site', siteId));
         }
 
-        execute(query: wmq.wordpress.model.posts.postCreate, request: any, callback: (json: Array<wms.wordpress.model.response.newPost>)=> void)
+        execute(
+            query: wmq.wordpress.model.query.postNew,
+            request: any,
+            callback: (json: Array<wms.wordpress.model.response.newPost>)=> void)
         {
-
+            super.execute(query, request, callback);
         }
     }
 }
-export = wordpress.api.posts;

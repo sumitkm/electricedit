@@ -77,6 +77,7 @@ export class app {
                 try
                 {
                     console.log("SUCCESS: accessToken retrieved");
+                    this.currentAppSettings.oAuth2Groups[0].accessToken = token.access_token;
                     this.currentAppSettings.oAuth2Groups[0].clientSecret = token;
                     this.settingsService.save();
                 }

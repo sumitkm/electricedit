@@ -1,6 +1,7 @@
 export module wordpress.model.query
 {
-    export class mySites{
+    export class mySites
+    {
          http_envelope: boolean;
          pretty: boolean;
          meta: string;

@@ -18,14 +18,20 @@ module wordpress.api.base
             this.header  = <any>{
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Bearer '+ this.apiKey
+                'Authorization': 'Bearer ' + this.apiKey
             };
+        }
+
+        public setUrl(url: string)
+        {
+            this.url = url;
         }
 
         public execute(query: Q, request: R, callback: (S)=>void)
         {
             try
             {
+                console.log(this.url);
                 return fetch(this.url, {
                     method: this.requestType,
                     headers: this.header,

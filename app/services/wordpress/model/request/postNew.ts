@@ -2,11 +2,31 @@ export module wordpress.model.request
 {
     export class postNew
     {
-        ID: number;
-        name: string;
-        description: string;
-        url: string;
-        visible: boolean;
-        is_private: boolean;
+        date: string;
+        title: string;
+        content: string;
+        excerpt: string;
+        slug: string;
+        author: string;
+        publicize: boolean;
+        publicize_message: string;
+        status: string;
+        sticky: boolean;
+        password: string;
+        parent: number;
+        type: string;
+        categories: Array<string>;
+        tags: Array<string>;
+        format: string;
+        featured_image: string;
+        media: any;
+        media_urls: Array<string>;
+        media_attrs: Array<string>;
+        metadata: Array<any>;
+        discussion: any;
+        likes_enabled: boolean;
+        sharing_enabled: boolean;
+        menu_order: number;
+        page_template: string;
     }
 }

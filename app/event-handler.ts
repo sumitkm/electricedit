@@ -5,32 +5,31 @@ import settings = require("./services/settings/settings");
 import wpSites = require("./services/wordpress/api/sites");
 import wpPosts = require("./services/wordpress/api/posts");
 import wmq = require('./services/wordpress/model/query/mySites');
+import wmp = require('./services/wordpress/model/query/postNew');
+import wmr = require('./services/wordpress/model/request/postNew');
 import model = require("./services/settings/model/appSettings");
 import settingsModel = require("./services/settings/model/appSettings");
 import settingsService = require("./services/settings/settings");
 
-class eventHandler
-{
-    private postsQuery = new wpPosts.createNewPost("","");
-    private ipcMain : GitHubElectron.IPCMain = require('electron').ipcMain;
+class eventHandler {
+    private postsQuery;
+    private ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
     currentSettingsSvc: settings;
     wpSitesService: wpSites.wordpress.api.sites.getMySites;
+    wpPostsService: wpPosts.wordpress.api.posts.createNewPost;
     currentFiles: files;
     currentSettings = new model.appSettings();
     currentAppSettings: settingsModel.appSettings;
     settingsService = new settingsService();
 
-
-    constructor()
-    {
+    constructor() {
         this.currentSettingsSvc = new settings();
         this.settingsService.load();
     }
 
-    public attach = (mainWindow: GitHubElectron.BrowserWindow)=>
-    {
+    public attach = (mainWindow: GitHubElectron.BrowserWindow) => {
         this.currentWindow = mainWindow;
         this.currentFiles = new files(mainWindow);
 
@@ -38,8 +37,7 @@ class eventHandler
             event.sender.send("menu.File.OnNew");
         });
 
-        this.ipcMain.on("app.File.New", (event, arg) =>
-        {
+        this.ipcMain.on("app.File.New", (event, arg) => {
             this.currentFiles.New(event, arg);
         });
 
@@ -61,31 +59,49 @@ class eventHandler
 
         this.ipcMain.on("app.File.Save", (event, arg) => {
             if (arg.fileName != '') {
-                this.currentSettingsSvc.set('lastOpenFile', arg.fileName );
+                this.currentSettingsSvc.set('lastOpenFile', arg.fileName);
             }
             this.currentFiles.Save(event, arg);
         });
 
-        this.ipcMain.on('settings.App.Save', (event, arg) =>{
+        this.ipcMain.on('settings.App.Save', (event, arg) => {
             this.currentSettingsSvc.saveSettings(arg);
         })
 
-        this.ipcMain.on("menu.View.GetMySites", (event, arg) =>
-        {
+        this.ipcMain.on("menu.View.GetMySites", (event, arg) => {
             this.currentAppSettings = this.settingsService.currentSettings;
+            console.log("accessToken: " + this.currentAppSettings.oAuth2Groups[0].accessToken);
             this.wpSitesService = new wpSites.wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
             var query = new wmq.wordpress.model.query.mySites();
             query.pretty = true;
             query.site_visibility = "all";
             query.fields = "ID,name,description,url,visible,is_private";
+            var site = new Array<any>();
             this.wpSitesService.execute(query, null, (json) => {
-                console.log("GET MY SITES: " + JSON.stringify(json));
+                //console.log("GET MY SITES: " + JSON.stringify(json, null, 3));
+                console.log("JSON Array  : " + json.length)
+                site = json;
+
+                this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
+                    (this.currentAppSettings.oAuth2Groups[0].accessToken, site[0]);
+
+                console.log("Site ID: " + site[1].ID);
+                this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
+                    (this.currentAppSettings.oAuth2Groups[0].accessToken, site[1].ID);
+
+                var postQuery = new wmp.wordpress.model.query.postNew();
+                postQuery.pretty = true;
+                var postNew = new wmr.wordpress.model.request.postNew();
+                postNew.title = "Test post";
+                postNew.content = "<h2> Test post <h2>";
+                this.wpPostsService.execute(postQuery, postNew, (data) => {
+                    console.log("GET MY SITES: " + JSON.stringify(data, null, 3));
+                });
             });
         });
     }
 
-    public detach()
-    {
+    public detach() {
         this.currentFiles = null;
         this.currentSettingsSvc = null;
     }

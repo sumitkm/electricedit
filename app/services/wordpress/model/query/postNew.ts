@@ -1,6 +1,6 @@
-export module wordpress.model.posts
+export module wordpress.model.query
 {
-    export class postCreate
+    export class postNew
     {
          http_envelope: boolean;
          pretty: boolean;
@@ -8,6 +8,5 @@ export module wordpress.model.posts
          fields: string;
          callback : string;
          context : string;
-         site_visibility: string;
     }
 }
