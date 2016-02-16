@@ -12,7 +12,7 @@ export class Spa {
     this.registerComponent("home-page", "ui/pages/home-page/home-page")
     this.registerComponent("quill-editor", "ui/components/quill-editor/quill-editor");
     this.registerComponent("settings-editor", "ui/components/settings-editor/settings-editor");
-
+    this.registerComponent("post-blog", "ui/components/post-blog/post-blog");
     this.registerComponent("tab-strip", "ui/components/tab-strip/tab-strip");
   }
 

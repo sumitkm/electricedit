@@ -7,10 +7,11 @@
 var ko = <KnockoutStatic>require("knockout");
 export var Quill = require("quill");
 export var template = require("text!./quill-editor.html");
+import CurrentFile = require("../../model/currentFile");
 
 export class viewModel {
     private editor: QuillStatic;
-    private file: KnockoutObservable<any> = ko.observable({ fileName: '', content: '' });
+    private file: KnockoutObservable<CurrentFile> = ko.observable<CurrentFile>({ fileName: '', content: '', modified: false });
     subscriptions = [];
 
     constructor(params: any) {
@@ -35,7 +36,7 @@ export class viewModel {
         this.editor.on('text-change', (delta, source) => {
             this.file().content = this.editor.getHTML();
             this.file().modified = true;
-            
+
         });
 
 
