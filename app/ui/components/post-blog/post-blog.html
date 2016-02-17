@@ -1,2 +1,25 @@
-<select data-bind="options: select">
-</select>
+<div data-bind="attr: { id: id }" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Post to blog</h4>
+            </div>
+            <div class="modal-body">
+                <select data-bind="options: mySites, optionsText: 'name', optionsValue: 'ID', value: selectedSiteId">
+
+                </select>
+                <input type="text" data-bind="textInput: title" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bind="click: publish">Publish</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

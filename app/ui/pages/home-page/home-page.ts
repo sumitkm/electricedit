@@ -6,6 +6,7 @@
 ///<amd-dependency path="ui/components/quill-editor/quill-editor-params"/>
 ///<amd-dependency path="ui/menus/menus"/>
 ///<amd-dependency path="ui/components/settings-editor/settings-editor-model"/>
+import MySite = require("../../model/mySite");
 
 var editorSettings = require("ui/components/settings-editor/settings-editor-model").editorSettings;
 var QuillEditor = require("ui/components/quill-editor/quill-editor-params");
@@ -21,6 +22,7 @@ export class viewModel
     editorParams: any;
     currentFile: KnockoutObservable<CurrentFile> = ko.observable({ fileName: '', content: '', modified: false });
     settingsEditorModel = ko.observable<any>();
+    mySites: KnockoutObservableArray<MySite> = ko.observableArray<MySite>([]);
 
     constructor()
     {
@@ -76,6 +78,13 @@ export class viewModel
         {
             console.log('File created: ' + data.filename)
             this.currentFile().fileName = data.filename;
+        });
+
+        ipcRenderer.on('app.View.ShowPostBlog', (event, data)=>
+        {
+            ko.utils.arrayPushAll<MySite>(this.mySites, data);
+            console.log(JSON.stringify(data, null, 2));
+            $('#postBlog').modal('show');
         });
     }
 

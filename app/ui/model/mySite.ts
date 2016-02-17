@@ -1,7 +1,8 @@
 interface MySite
 {
     ID: string;
-    content?: string;
-    modified: boolean;
+    name: string;
+    description: string;
+    url: string;
 }
 export = MySite;

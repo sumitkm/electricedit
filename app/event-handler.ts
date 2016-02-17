@@ -76,28 +76,34 @@ class eventHandler {
             query.pretty = true;
             query.site_visibility = "all";
             query.fields = "ID,name,description,url,visible,is_private";
-            var site = new Array<any>();
+            var sites = new Array<any>();
             this.wpSitesService.execute(query, null, (json) => {
                 //console.log("GET MY SITES: " + JSON.stringify(json, null, 3));
                 console.log("JSON Array  : " + json.length)
-                site = json;
-
-                this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
-                    (this.currentAppSettings.oAuth2Groups[0].accessToken, site[0]);
-
-                console.log("Site ID: " + site[1].ID);
-                this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
-                    (this.currentAppSettings.oAuth2Groups[0].accessToken, site[1].ID);
-
-                var postQuery = new wmp.wordpress.model.query.postNew();
-                postQuery.pretty = true;
-                var postNew = new wmr.wordpress.model.request.postNew();
-                postNew.title = "Test post";
-                postNew.content = "<h2> Test post <h2>";
-                this.wpPostsService.execute(postQuery, postNew, (data) => {
-                    console.log("GET MY SITES: " + JSON.stringify(data, null, 3));
-                });
+                sites = json;
+                event.sender.send("app.View.ShowPostBlog", sites);
             });
+        });
+
+        this.ipcMain.on("app.View.PostBlog", (event, arg)=>
+        {
+            var selectedSiteId = arg.selectedSiteId;
+            this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
+                (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
+
+            console.log("Site ID: " + selectedSiteId);
+            this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
+                (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
+
+            var postQuery = new wmp.wordpress.model.query.postNew();
+            postQuery.pretty = true;
+            var postNew = new wmr.wordpress.model.request.postNew();
+            postNew.title = arg.title;
+            postNew.content = arg.content;
+            this.wpPostsService.execute(postQuery, postNew, (data) => {
+                console.log("POST TO BLOG: " + JSON.stringify(data, null, 3));
+            });
+
         });
     }
 
