@@ -7,7 +7,10 @@ const queryString = require('querystring');
 
 export module wordpress.api.posts
 {
-    export class createNewPost extends base.query<any, any, any>
+    export class createNewPost extends
+        base.query<wmq.wordpress.model.query.postNew,
+            wmr.wordpress.model.request.postNew,
+            wms.wordpress.model.response.newPost>
     {
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/sites/$site/posts/new";
         constructor(apiKey: string, siteId: string)
@@ -22,6 +25,18 @@ export module wordpress.api.posts
             callback: (json: Array<wms.wordpress.model.response.newPost>)=> void)
         {
             super.execute(query, request, callback);
+        }
+    }
+
+    export class getAllPosts extends
+        base.query<wmq.wordpress.model.query.postNew,
+                wmr.wordpress.model.request.postNew,
+                wms.wordpress.model.response.newPost>
+    {
+        static endPoint = "https://public-api.wordpress.com/rest/v1.1/me/posts";
+        constructor(apiKey: string)
+        {
+            super(apiKey, "GET", getAllPosts.endPoint);
         }
     }
 }

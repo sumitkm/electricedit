@@ -86,6 +86,7 @@ export class viewModel
             console.log(JSON.stringify(data, null, 2));
             $('#postBlog').modal('show');
         });
+
     }
 
     public saveFile = () =>

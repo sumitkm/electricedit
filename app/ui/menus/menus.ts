@@ -95,11 +95,11 @@ export class menus {
                         type: 'separator'
                     },
                     {
-                        label: 'Connect to WordPress',
+                        label: 'Connect to WordPress...',
                         click: () => this.sendMessage("menu.View.ConnectWordPress")
                     },
                     {
-                        label: 'Get my site (temporary)',
+                        label: 'Post to Blog...',
                         click: () => this.sendMessage("menu.View.GetMySites")
                     },
                     {

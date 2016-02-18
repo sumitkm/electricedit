@@ -5,7 +5,8 @@ import settings = require("./services/settings/settings");
 import wpSites = require("./services/wordpress/api/sites");
 import wpPosts = require("./services/wordpress/api/posts");
 import wmq = require('./services/wordpress/model/query/mySites');
-import wmp = require('./services/wordpress/model/query/postNew');
+import wmpm = require('./services/wordpress/model/query/postNew');
+import wmmp = require('./services/wordpress/model/query/myPosts');
 import wmr = require('./services/wordpress/model/request/postNew');
 import model = require("./services/settings/model/appSettings");
 import settingsModel = require("./services/settings/model/appSettings");
@@ -17,8 +18,9 @@ class eventHandler {
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
     currentSettingsSvc: settings;
-    wpSitesService: wpSites.wordpress.api.sites.getMySites;
-    wpPostsService: wpPosts.wordpress.api.posts.createNewPost;
+    wpGetMySitesSvc: wpSites.wordpress.api.sites.getMySites;
+    wpCreatePostSvc: wpPosts.wordpress.api.posts.createNewPost;
+    wpGetAllPostsSvc: wpPosts.wordpress.api.posts.getAllPosts;
     currentFiles: files;
     currentSettings = new model.appSettings();
     currentAppSettings: settingsModel.appSettings;
@@ -71,40 +73,58 @@ class eventHandler {
         this.ipcMain.on("menu.View.GetMySites", (event, arg) => {
             this.currentAppSettings = this.settingsService.currentSettings;
             console.log("accessToken: " + this.currentAppSettings.oAuth2Groups[0].accessToken);
-            this.wpSitesService = new wpSites.wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
+            this.wpGetMySitesSvc = new wpSites.wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
             var query = new wmq.wordpress.model.query.mySites();
             query.pretty = true;
             query.site_visibility = "all";
             query.fields = "ID,name,description,url,visible,is_private";
             var sites = new Array<any>();
-            this.wpSitesService.execute(query, null, (json) => {
+            this.wpGetMySitesSvc.execute(query, null, (json) => {
                 //console.log("GET MY SITES: " + JSON.stringify(json, null, 3));
                 console.log("JSON Array  : " + json.length)
                 sites = json;
                 event.sender.send("app.View.ShowPostBlog", sites);
+            });
+
+
+            var postNew = new wmmp.wordpress.model.query.myPosts();
+            postNew.pretty = true;
+            this.wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(
+              this.currentAppSettings.oAuth2Groups[0].accessToken);
+            this.wpGetAllPostsSvc.execute(postNew, null, (data) =>
+            {
+                console.log("RECENT POSTS: " + data.length);
+                event.sender.send("app.view.myPosts", data);
             });
         });
 
         this.ipcMain.on("app.View.PostBlog", (event, arg)=>
         {
             var selectedSiteId = arg.selectedSiteId;
-            this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
+            this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
                 (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
 
             console.log("Site ID: " + selectedSiteId);
-            this.wpPostsService = new wpPosts.wordpress.api.posts.createNewPost
+            this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
                 (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
 
-            var postQuery = new wmp.wordpress.model.query.postNew();
+            var postQuery = new wmpm.wordpress.model.query.postNew();
             postQuery.pretty = true;
             var postNew = new wmr.wordpress.model.request.postNew();
             postNew.title = arg.title;
             postNew.content = arg.content;
-            this.wpPostsService.execute(postQuery, postNew, (data) => {
-                console.log("POST TO BLOG: " + JSON.stringify(data, null, 3));
+            this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
+                console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
             });
 
         });
+
+        this.ipcMain.on("app.View.GetRecentPosts", (event, arg) =>
+        {
+
+
+        });
+
     }
 
     public detach() {
