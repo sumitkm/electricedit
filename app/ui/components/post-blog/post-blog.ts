@@ -12,23 +12,19 @@ export class viewModel {
     mySites: KnockoutObservableArray<MySite>;
     title: KnockoutObservable<string> = ko.observable<string>();
     slug: KnockoutObservable<string> = ko.observable<string>();
-    recentPosts: KnockoutObservableArray<any> = ko.observableArray<any>([]);
+    myRecentPosts: KnockoutObservableArray<any>;
     selectedPostId: KnockoutObservable<string> = ko.observable<string>("");
-    
+
     constructor(params) {
         this.id(params.id);
         this.mySites = params.mySites;
-        console.log("Length: " + this.mySites().length);
         this.currentFile = params.file;
+        this.myRecentPosts = params.myRecentPosts;
         ipcRenderer.send("app.View.GetRecentPosts");
-
-        ipcRenderer.on("app.view.myPosts", (data) => {
-            ko.utils.arrayPushAll<any>(this.recentPosts, data);
-        });
     }
 
     publish = () => {
         console.log("site id:" + this.selectedSiteId());
-        ipcRenderer.send("app.View.PostBlog", { selectedSiteId: this.selectedSiteId(), content: this.currentFile().content, title: this.title() });
+        ipcRenderer.send("app.View.PostBlog", { selectedSiteId: this.selectedSiteId(), selectedPostId: this.selectedPostId(), content: this.currentFile().content, title: this.title() });
     }
 }

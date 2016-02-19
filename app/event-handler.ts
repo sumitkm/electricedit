@@ -20,6 +20,7 @@ class eventHandler {
     currentSettingsSvc: settings;
     wpGetMySitesSvc: wpSites.wordpress.api.sites.getMySites;
     wpCreatePostSvc: wpPosts.wordpress.api.posts.createNewPost;
+    wpUpdatePostSvc: wpPosts.wordpress.api.posts.updatePost;
     wpGetAllPostsSvc: wpPosts.wordpress.api.posts.getAllPosts;
     currentFiles: files;
     currentSettings = new model.appSettings();
@@ -89,39 +90,54 @@ class eventHandler {
 
             var postNew = new wmmp.wordpress.model.query.myPosts();
             postNew.pretty = true;
-            this.wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(
-              this.currentAppSettings.oAuth2Groups[0].accessToken);
+            this.wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(this.currentAppSettings.oAuth2Groups[0].accessToken);
             this.wpGetAllPostsSvc.execute(postNew, null, (data) =>
             {
-                console.log("RECENT POSTS: " + data.length);
-                event.sender.send("app.view.myPosts", data);
+                console.log("RECENT POSTS: " + data.posts.length);
+                event.sender.send("app.view.myPosts", data.posts);
             });
         });
 
         this.ipcMain.on("app.View.PostBlog", (event, arg)=>
         {
             var selectedSiteId = arg.selectedSiteId;
-            this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
-                (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
-
             console.log("Site ID: " + selectedSiteId);
-            this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
-                (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
 
-            var postQuery = new wmpm.wordpress.model.query.postNew();
-            postQuery.pretty = true;
-            var postNew = new wmr.wordpress.model.request.postNew();
-            postNew.title = arg.title;
-            postNew.content = arg.content;
-            this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
-                console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
-            });
+            if(arg.selectedPostId != '')
+            {
+                this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.updatePost
+                    (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId, arg.selectedPostId);
 
+                console.log("UPDATING POST: " + arg.selectedPostId);
+                var postQuery = new wmpm.wordpress.model.query.postNew();
+                postQuery.pretty = true;
+                var postUpdate = new wmr.wordpress.model.request.postNew();
+                postUpdate.title = arg.title;
+                postUpdate.content = arg.content;
+                this.wpCreatePostSvc.execute(postQuery, postUpdate, (data) => {
+                    console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
+                    event.sender.send("app.View.UpdatedSuccessfully");
+                });
+            }
+            else
+            {
+                this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
+                    (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
+
+                var postQuery = new wmpm.wordpress.model.query.postNew();
+                postQuery.pretty = true;
+                var postNew = new wmr.wordpress.model.request.postNew();
+                postNew.title = arg.title;
+                postNew.content = arg.content;
+                this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
+                    console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
+                    event.sender.send("app.View.PostedSuccessfully");
+                });
+            }
         });
 
         this.ipcMain.on("app.View.GetRecentPosts", (event, arg) =>
         {
-
 
         });
 

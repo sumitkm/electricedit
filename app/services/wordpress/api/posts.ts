@@ -39,4 +39,15 @@ export module wordpress.api.posts
             super(apiKey, "GET", getAllPosts.endPoint);
         }
     }
+
+    export class updatePost extends
+        base.query<any, any, any>
+    {
+        static endPoint = "https://public-api.wordpress.com/rest/v1.1/sites/$site/posts/$post_ID";
+        constructor(apiKey: string, siteId: string, postId: string)
+        {
+            super(apiKey, "POST", updatePost.endPoint);
+            super.setUrl(updatePost.endPoint.replace("$site", siteId).replace("$post_ID", postId));
+        }
+    }
 }

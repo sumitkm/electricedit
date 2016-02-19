@@ -7,6 +7,7 @@
 ///<amd-dependency path="ui/menus/menus"/>
 ///<amd-dependency path="ui/components/settings-editor/settings-editor-model"/>
 import MySite = require("../../model/mySite");
+import MyPost = require("../../model/myPost");
 
 var editorSettings = require("ui/components/settings-editor/settings-editor-model").editorSettings;
 var QuillEditor = require("ui/components/quill-editor/quill-editor-params");
@@ -23,7 +24,7 @@ export class viewModel
     currentFile: KnockoutObservable<CurrentFile> = ko.observable({ fileName: '', content: '', modified: false });
     settingsEditorModel = ko.observable<any>();
     mySites: KnockoutObservableArray<MySite> = ko.observableArray<MySite>([]);
-
+    myRecentPosts: KnockoutObservableArray<MyPost> = ko.observableArray<MyPost>([]);
     constructor()
     {
         this.editorParams = new QuillEditor.QuillEditorParams();
@@ -83,10 +84,13 @@ export class viewModel
         ipcRenderer.on('app.View.ShowPostBlog', (event, data)=>
         {
             ko.utils.arrayPushAll<MySite>(this.mySites, data);
-            console.log(JSON.stringify(data, null, 2));
             $('#postBlog').modal('show');
         });
 
+        ipcRenderer.on("app.view.myPosts", (event, data) => {
+            this.myRecentPosts.removeAll();
+            ko.utils.arrayPushAll<MyPost>(this.myRecentPosts, data);
+        });
     }
 
     public saveFile = () =>
