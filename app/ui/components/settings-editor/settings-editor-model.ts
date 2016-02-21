@@ -17,7 +17,7 @@ export class editorSettings {
         var outGroups = [];
         if (groups != null) {
             for (let i = 0; i < groups.length; i++) {
-                outGroups.push(groups[i].toJS());
+                outGroups.push(ko.toJS(groups[i]));
             }
         }
         return outGroups;

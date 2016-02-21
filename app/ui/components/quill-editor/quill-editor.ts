@@ -11,7 +11,7 @@ import CurrentFile = require("../../model/currentFile");
 
 export class viewModel {
     private editor: QuillStatic;
-    private file: KnockoutObservable<CurrentFile> = ko.observable<CurrentFile>({ fileName: '', content: '', modified: false });
+    private file: KnockoutObservable<CurrentFile>;// = ko.observable<CurrentFile>({ fileName: '', content: '', modified: false });
     subscriptions = [];
 
     constructor(params: any) {
@@ -22,7 +22,7 @@ export class viewModel {
         }
         this.subscriptions.push(this.file.subscribe((newValue) => {
             console.log('file changed');
-            this.editor.setHTML(this.file().content);
+            this.editor.setHTML(this.file().content());
         }));
 
         this.editor = new Quill('#editor', {
@@ -34,13 +34,13 @@ export class viewModel {
         });
 
         this.editor.on('text-change', (delta, source) => {
-            this.file().content = this.editor.getHTML();
-            this.file().modified = true;
+            this.file().content (this.editor.getHTML());
+            this.file().modified (true);
 
         });
 
 
-        this.editor.setHTML(this.file().content);
+        this.editor.setHTML(this.file().content());
     }
 
     private initTabs() {
@@ -48,7 +48,7 @@ export class viewModel {
     }
 
     public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {
-        this.file().content = this.editor.getHTML();
+        this.file().content(this.editor.getHTML());
     }
 
     public getHtml = () => {

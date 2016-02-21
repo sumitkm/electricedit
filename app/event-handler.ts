@@ -103,7 +103,7 @@ class eventHandler {
             var selectedSiteId = arg.selectedSiteId;
             console.log("Site ID: " + selectedSiteId);
 
-            if(arg.selectedPostId != '')
+            if(arg.selectedPostId!=null && arg.selectedPostId != '')
             {
                 this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.updatePost
                     (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId, arg.selectedPostId);
@@ -131,7 +131,7 @@ class eventHandler {
                 postNew.content = arg.content;
                 this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
                     console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
-                    event.sender.send("app.View.PostedSuccessfully");
+                    event.sender.send("app.View.PostedSuccessfully", data);
                 });
             }
         });

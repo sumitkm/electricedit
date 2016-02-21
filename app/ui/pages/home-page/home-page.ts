@@ -21,7 +21,16 @@ export var template = require("text!./home-page.html");
 export class viewModel
 {
     editorParams: any;
-    currentFile: KnockoutObservable<CurrentFile> = ko.observable({ fileName: '', content: '', modified: false });
+    currentFile: KnockoutObservable<CurrentFile> = ko.observable(
+        {
+            fileName: ko.observable(''),
+            content: ko.observable(''),
+            modified: ko.observable(false),
+            title: ko.observable(''),
+            postId: ko.observable(''),
+            siteId: ko.observable(''),
+            urlSlug: ko.observable('')
+        });
     settingsEditorModel = ko.observable<any>();
     mySites: KnockoutObservableArray<MySite> = ko.observableArray<MySite>([]);
     myRecentPosts: KnockoutObservableArray<MyPost> = ko.observableArray<MyPost>([]);
@@ -54,25 +63,41 @@ export class viewModel
         {
             console.log('home-page:' + data.fileName);
             this.settingsEditorModel().lastOpenFile(data.fileName);
-            this.currentFile(data);
+            var newFile =
+            {
+                fileName : ko.observable(data.fileName),
+                content : ko.observable(data.content),
+                title : ko.observable(data.title),
+                postId : ko.observable(data.postId),
+                siteId : ko.observable(data.siteId),
+                urlSlug : ko.observable(data.urlSlug),
+                modified : ko.observable(false)
+            };
+            this.currentFile(newFile);
         });
 
         ipcRenderer.on('menu.File.Save', (event, data) =>
         {
-            if (this.currentFile().modified) {
+            if (this.currentFile().modified)
+            {
                 this.saveFile();
-                this.currentFile().modified = false;
+                this.currentFile().modified(false);
             }
         });
 
         ipcRenderer.on('menu.File.OnNew', (event, data) =>
         {
-            ipcRenderer.send("app.File.New", this.currentFile());
+            ipcRenderer.send("app.File.New", ko.toJS(this.currentFile));
         });
 
         ipcRenderer.on('menu.File.Newed', (event, data)=>
         {
-            this.currentFile({ fileName: '', content: '', modified: true });
+            this.currentFile().fileName('');
+            this.currentFile().content('');
+            this.currentFile().title('');
+            this.currentFile().postId('');
+            this.currentFile().siteId('');
+            this.currentFile().urlSlug('');
         });
 
         ipcRenderer.on('app.File.Created', (event, data) =>
@@ -91,10 +116,27 @@ export class viewModel
             this.myRecentPosts.removeAll();
             ko.utils.arrayPushAll<MyPost>(this.myRecentPosts, data);
         });
+
+        ipcRenderer.on("app.View.PostedSuccessfully", (event, data)=>
+        {
+            this.currentFile().postId(data.ID);
+            this.currentFile().siteId(data.site_ID);
+            $('#postBlog').modal('hide');
+
+        });
+
+        ipcRenderer.on("app.View.UpdatedSuccessfully", (event, data)=>
+        {
+            this.currentFile().postId(data.ID);
+            this.currentFile().siteId(data.site_ID);
+            $('#postBlog').modal('hide');
+
+        });
     }
 
     public saveFile = () =>
     {
-        ipcRenderer.send('app.File.Save', this.currentFile());
+        console.log(ko.toJS(this.currentFile));
+        ipcRenderer.send('app.File.Save', ko.toJS(this.currentFile));
     }
 }

@@ -33,7 +33,7 @@ Usability
 3. Custom application menus &#10003;  
 4. UX - Ctrl+S save &#10003;  
 5. UX - Custom styling: Toolbar stays on top always; proper scrolling of editor area &#10003;  
-6. Recently made Posts list for easy edit  
+6. Recently made Posts list for easy edit &#10003;  
 7. Auto Save  
 8. Warn before Exit/New/Open  
 9. Save As  
@@ -48,7 +48,7 @@ Functionality
 	c. Save access token to config &#10003;    
 	d. Use access token to get Sites List &#10003;    
 	e. Use access token to create POST on site from site list &#10003;    
-	f. Use access token to Update Posts on site    
+	f. Use access token to Update Posts on site &#10003;    
 	g. Use access token to Save as Draft    
 	h. Use access token to create Tags    
 	i. User access token to create Categories    
