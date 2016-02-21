@@ -122,7 +122,7 @@ export class viewModel
             this.currentFile().postId(data.ID);
             this.currentFile().siteId(data.site_ID);
             $('#postBlog').modal('hide');
-
+            this.saveFile();
         });
 
         ipcRenderer.on("app.View.UpdatedSuccessfully", (event, data)=>
@@ -130,8 +130,9 @@ export class viewModel
             this.currentFile().postId(data.ID);
             this.currentFile().siteId(data.site_ID);
             $('#postBlog').modal('hide');
-
+            this.saveFile();
         });
+
     }
 
     public saveFile = () =>

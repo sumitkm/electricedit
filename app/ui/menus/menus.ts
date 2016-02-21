@@ -75,7 +75,8 @@ export class menus {
                     {
                         label: 'Paste',
                         accelerator: 'CmdOrCtrl+V',
-                        role: 'paste'
+                        //role: 'paste',
+                        click: () =>  this.sendMessage("paste")
                     },
                     {
                         label: 'Select All',

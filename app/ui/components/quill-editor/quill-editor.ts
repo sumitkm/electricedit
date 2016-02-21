@@ -39,6 +39,19 @@ export class viewModel {
 
         });
 
+        ipcRenderer.on("paste.image", (event, data)=>
+        {
+            console.log(data);
+            var range = this.editor.getSelection();
+            this.editor.insertEmbed(range.start, 'image', data);
+        });
+
+        ipcRenderer.on("paste.html", (event, data)=>
+        {
+            console.log(data);
+            var range = this.editor.getSelection();
+            this.editor.updateContents({ ops: [ { retain: range.end }, { insert: data }]});
+        });
 
         this.editor.setHTML(this.file().content());
     }

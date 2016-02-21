@@ -116,7 +116,7 @@ class eventHandler {
                 postUpdate.content = arg.content;
                 this.wpCreatePostSvc.execute(postQuery, postUpdate, (data) => {
                     console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
-                    event.sender.send("app.View.UpdatedSuccessfully");
+                    event.sender.send("app.View.UpdatedSuccessfully", data);
                 });
             }
             else
@@ -140,6 +140,24 @@ class eventHandler {
         {
 
         });
+
+        this.ipcMain.on("paste", (event, arg) =>
+        {
+            var clipboard = require('clipboard');
+            var image = clipboard.readImage();
+            if(image.isEmpty())
+            {
+                var value = clipboard.readText();
+                event.sender.send("paste.html", value);
+            }
+            else
+            {
+                console.log("clipboard type: " + typeof(image));
+                console.log("clipboard: " + image.toDataURL());
+                event.sender.send("paste.image", image.toDataURL());
+            }
+        });
+
 
     }
 
