@@ -73,7 +73,6 @@ class eventHandler {
 
         this.ipcMain.on("menu.View.GetMySites", (event, arg) => {
             this.currentAppSettings = this.settingsService.currentSettings;
-            console.log("accessToken: " + this.currentAppSettings.oAuth2Groups[0].accessToken);
             this.wpGetMySitesSvc = new wpSites.wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
             var query = new wmq.wordpress.model.query.mySites();
             query.pretty = true;
@@ -81,8 +80,7 @@ class eventHandler {
             query.fields = "ID,name,description,url,visible,is_private";
             var sites = new Array<any>();
             this.wpGetMySitesSvc.execute(query, null, (json) => {
-                //console.log("GET MY SITES: " + JSON.stringify(json, null, 3));
-                console.log("JSON Array  : " + json.length)
+                console.log("My Sites (count) : " + json.length)
                 sites = json;
                 event.sender.send("app.View.ShowPostBlog", sites);
             });
@@ -93,7 +91,7 @@ class eventHandler {
             this.wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(this.currentAppSettings.oAuth2Groups[0].accessToken);
             this.wpGetAllPostsSvc.execute(postNew, null, (data) =>
             {
-                console.log("RECENT POSTS: " + data.posts.length);
+                console.log("Recent Posts (count): " + data.posts.length);
                 event.sender.send("app.view.myPosts", data.posts);
             });
         });
@@ -108,14 +106,14 @@ class eventHandler {
                 this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.updatePost
                     (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId, arg.selectedPostId);
 
-                console.log("UPDATING POST: " + arg.selectedPostId);
+                console.log("Updating post (ID): " + arg.selectedPostId);
                 var postQuery = new wmpm.wordpress.model.query.postNew();
                 postQuery.pretty = true;
                 var postUpdate = new wmr.wordpress.model.request.postNew();
                 postUpdate.title = arg.title;
                 postUpdate.content = arg.content;
                 this.wpCreatePostSvc.execute(postQuery, postUpdate, (data) => {
-                    console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
+                    console.log("Updated post successfully.");
                     event.sender.send("app.View.UpdatedSuccessfully", data);
                 });
             }
@@ -130,16 +128,16 @@ class eventHandler {
                 postNew.title = arg.title;
                 postNew.content = arg.content;
                 this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
-                    console.log("POSTED TO BLOG: " + JSON.stringify(data, null, 3));
+                    console.log("Created post successfully.");
                     event.sender.send("app.View.PostedSuccessfully", data);
                 });
             }
         });
 
-        this.ipcMain.on("app.View.GetRecentPosts", (event, arg) =>
-        {
-
-        });
+        // this.ipcMain.on("app.View.GetRecentPosts", (event, arg) =>
+        // {
+        //
+        // });
 
         this.ipcMain.on("paste", (event, arg) =>
         {
@@ -147,18 +145,17 @@ class eventHandler {
             var image = clipboard.readImage();
             if(image.isEmpty())
             {
+                console.log("Clipboard Type Text.");
+
                 var value = clipboard.readText();
                 event.sender.send("paste.html", value);
             }
             else
             {
-                console.log("clipboard type: " + typeof(image));
-                console.log("clipboard: " + image.toDataURL());
+                console.log("Clipboard Type Image.");
                 event.sender.send("paste.image", image.toDataURL());
             }
         });
-
-
     }
 
     public detach() {

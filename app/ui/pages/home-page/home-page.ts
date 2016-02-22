@@ -61,7 +61,6 @@ export class viewModel
 
         ipcRenderer.on('menu.file.opened', (event, data) =>
         {
-            console.log('home-page:' + data.fileName);
             this.settingsEditorModel().lastOpenFile(data.fileName);
             var newFile =
             {
@@ -137,7 +136,6 @@ export class viewModel
 
     public saveFile = () =>
     {
-        console.log(ko.toJS(this.currentFile));
         ipcRenderer.send('app.File.Save', ko.toJS(this.currentFile));
     }
 }

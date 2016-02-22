@@ -13,7 +13,6 @@ export class viewModel
     {
         if(params.settings != null && ko.isObservable(params.settings))
         {
-            console.log("Got settings editor settings: " + JSON.stringify(ko.unwrap(params.settings)));
             this.dataSource = params.settings;
         }
         if(params.id != null)
