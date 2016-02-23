@@ -14,6 +14,7 @@ export class Spa {
     this.registerComponent("settings-editor", "ui/components/settings-editor/settings-editor");
     this.registerComponent("post-blog", "ui/components/post-blog/post-blog");
     this.registerComponent("tab-strip", "ui/components/tab-strip/tab-strip");
+    this.registerComponent("save-attachments", "ui/components/save-attachments/save-attachments");
   }
 
   public registerComponent(name: string, location: string) {

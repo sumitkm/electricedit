@@ -34,6 +34,8 @@ export class viewModel
     settingsEditorModel = ko.observable<any>();
     mySites: KnockoutObservableArray<MySite> = ko.observableArray<MySite>([]);
     myRecentPosts: KnockoutObservableArray<MyPost> = ko.observableArray<MyPost>([]);
+    imageData: KnockoutObservable<string> = ko.observable("");
+
     constructor()
     {
         this.editorParams = new QuillEditor.QuillEditorParams();
@@ -131,6 +133,17 @@ export class viewModel
             $('#postBlog').modal('hide');
             this.saveFile();
         });
+
+        ipcRenderer.on("paste.image", (event, data)=>
+        {
+            console.log(data);
+            if(data!=null)
+            {
+                $('#saveAttachments').modal('show');
+                this.imageData(data);
+            }
+        });
+
 
     }
 

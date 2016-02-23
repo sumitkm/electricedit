@@ -16,10 +16,12 @@ export class viewModel {
 
     constructor(params: any) {
         this.initTabs();
+
         if (params.file != null) {
             console.log('File loaded');
             this.file = params.file;
         }
+
         this.subscriptions.push(this.file.subscribe((newValue) => {
             console.log('file changed');
             this.editor.setHTML(this.file().content());
@@ -39,11 +41,6 @@ export class viewModel {
 
         });
 
-        ipcRenderer.on("paste.image", (event, data)=>
-        {
-            var range = this.editor.getSelection();
-            this.editor.insertEmbed(range.start, 'image', data);
-        });
 
         ipcRenderer.on("paste.html", (event, data)=>
         {
