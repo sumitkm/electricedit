@@ -38,11 +38,17 @@ Usability
 8. Warn before Exit/New/Open  
 9. Save As  
 10. Recently opened files list  
+11. Save copy pasted images as attachments
 
 Functionality  
 1. Configuration Settings &#10003;  
 2. Configuration Settings editor &#10003;  
-3. Integrate with Wordpress    
+3. Insert code snippets gracefully  
+4. Save image embeds  
+6. Save images and videos as attachments to local file  
+7. Correct default folders in each environment  
+8. Custom context menus  
+9. Integrate with Wordpress    
 	a. Log in to WordPress using oAuth &#10003;      
 	b. Retrieve access token &#10003;     
 	c. Save access token to config &#10003;    
@@ -54,9 +60,6 @@ Functionality
 	i. User access token to create Categories    
 	j. Download site theme    
 	k. Show preview using site theme.  
-4. Insert code snippets gracefully  
-5. Save image embeds  
-6. WordPress themes integration  
-7. Multiple WordPress accounts  
-8. Correct default folders in each environment  
-9. Custom context menus  
+	l. WordPress themes integration.  
+	m. Multiple WordPress accounts.   
+	n. Upload attachments to WordPress and link them back to posts correctly.
