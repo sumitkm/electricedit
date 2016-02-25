@@ -22,7 +22,9 @@ class Files {
                 title: "Save File",
                 defaultPath: "/user/sumitkm/Documents",
                 filters: [
-                    { name: 'Electric edit file', extensions: ['eejson'] }
+                    { name: 'Electric edit file', extensions: ['eejson'] },
+                    { name: 'Portable network graphics (.png)', extensions: [ 'png' ] },
+                    { name: 'JPEG (.jpg)', extensions: [ 'jpg', 'jpeg' ] }
                 ]
             }, this.WriteToFile);
         }
@@ -99,25 +101,57 @@ class Files {
         this.Load(this.currentEvent, fileNames);
     }
 
-    private WriteToFile = (filename) => {
+    private WriteToFile = (filename: string) => {
         if (filename != null)
         {
             var fs = require('fs');
-            this.file.filename = filename;
-            fs.writeFile(filename, JSON.stringify(this.file), (err) =>
+            this.file.fileName = filename;
+            if(filename.lastIndexOf('.eejson') > 0)
             {
-                if (err)
+                fs.writeFile(filename, JSON.stringify(this.file), (err) =>
                 {
-                    console.log(err);
-                    return err;
-                }
-                if(this.fileCreated == true)
+                    if (err)
+                    {
+                        console.log(err);
+                        return err;
+                    }
+                    if(this.fileCreated == true)
+                    {
+                        this.currentEvent.sender.send('app.File.Created', this.file);
+                    }
+                    console.log("File saved successfully!");
+                });
+            }
+            else
+            {
+                var response = this.convertBase64Image(this.file.content);
+                fs.writeFile(filename, response.data, (err) =>
                 {
-                    this.currentEvent.sender.send('app.File.Created', this.file);
-                }
-                console.log("File saved successfully!");
-            });
+                    if(err)
+                    {
+                        console.log(err);
+                        return err;
+                    }
+                    else
+                    {
+                        this.currentEvent.sender.send('app.File.Attachment.Created', this.file);
+                    }
+                });
+            }
         }
+    }
+
+    private convertBase64Image = (datastring: string) =>
+    {
+        let matches = datastring.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+        let response = { type: '', data: null };
+        if(matches.length !== 3)
+        {
+            throw new Error('Invalid input string');
+        }
+        response.type = matches[1];
+        response.data = new Buffer(matches[2], 'base64');
+        return response;
     }
 }
 

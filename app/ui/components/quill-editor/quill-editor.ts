@@ -48,6 +48,12 @@ export class viewModel {
             this.editor.updateContents({ ops: [ { retain: range.end }, { insert: data }]});
         });
 
+        ipcRenderer.on('app.File.Attachment.Created', (event, data) => {
+            console.log(JSON.stringify(data));
+            var sel = this.editor.getSelection();
+
+            this.editor.insertEmbed(0, "image", data.fileName);
+        });
         this.editor.setHTML(this.file().content());
     }
 

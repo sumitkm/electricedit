@@ -10,6 +10,16 @@ export class viewModel
     imageData: KnockoutObservable<string> = ko.observable("");
     destinationFileName: KnockoutObservable<string> = ko.observable("");
     altText: KnockoutObservable<string> = ko.observable("");
+    currentFile: KnockoutObservable<CurrentFile> = ko.observable(
+        {
+            fileName: ko.observable(''),
+            content: ko.observable(''),
+            modified: ko.observable(false),
+            title: ko.observable(''),
+            postId: ko.observable(''),
+            siteId: ko.observable(''),
+            urlSlug: ko.observable('')
+        });
 
     constructor(params)
     {
@@ -17,13 +27,12 @@ export class viewModel
         {
             this.id(params.id);
         }
-        this.imageData = params.imageData;
-
-
+        this.currentFile().content = params.imageData;
     }
 
     save = () =>
     {
-
+        console.log(ko.toJS(this.currentFile));
+        ipcRenderer.send('app.File.Save', ko.toJS(this.currentFile));
     }
 }

@@ -139,10 +139,12 @@ export class viewModel
             console.log(data);
             if(data!=null)
             {
-                $('#saveAttachments').modal('show');
                 this.imageData(data);
+                $('#saveAttachments').modal('show');
             }
         });
+
+
 
 
     }
@@ -150,5 +152,7 @@ export class viewModel
     public saveFile = () =>
     {
         ipcRenderer.send('app.File.Save', ko.toJS(this.currentFile));
+        $('#saveAttachments').modal('hide');
+
     }
 }
