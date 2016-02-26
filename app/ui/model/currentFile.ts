@@ -1,4 +1,4 @@
-interface CurrentFile
+interface currentFile
 {
     fileName: KnockoutObservable<string>;
     content?: KnockoutObservable<string>;
@@ -7,5 +7,6 @@ interface CurrentFile
     siteId?: KnockoutObservable<string>;
     urlSlug?: KnockoutObservable<string>;
     modified: KnockoutObservable<boolean>;
+    type?: KnockoutObservable<string>;
 }
-export = CurrentFile;
+export = currentFile;

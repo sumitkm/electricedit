@@ -1,6 +1,6 @@
 /// <amd-dependency path="text!./save-attachments.html" />
 
-import CurrentFile = require("../../model/currentFile");
+import currentFile = require("../../model/currentFile");
 import ko  = require("knockout");
 export var template = require("text!./save-attachments.html");
 
@@ -10,7 +10,7 @@ export class viewModel
     imageData: KnockoutObservable<string> = ko.observable("");
     destinationFileName: KnockoutObservable<string> = ko.observable("");
     altText: KnockoutObservable<string> = ko.observable("");
-    currentFile: KnockoutObservable<CurrentFile> = ko.observable(
+    currentFile: KnockoutObservable<currentFile> = ko.observable(
         {
             fileName: ko.observable(''),
             content: ko.observable(''),
@@ -18,7 +18,8 @@ export class viewModel
             title: ko.observable(''),
             postId: ko.observable(''),
             siteId: ko.observable(''),
-            urlSlug: ko.observable('')
+            urlSlug: ko.observable(''),
+            type: ko.observable('')
         });
 
     constructor(params)

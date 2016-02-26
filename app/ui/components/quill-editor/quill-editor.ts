@@ -11,6 +11,7 @@ import CurrentFile = require("../../model/currentFile");
 
 export class viewModel {
     private editor: QuillStatic;
+    private currentLocation: KnockoutObservable<number> = ko.observable<number>(0);
     private file: KnockoutObservable<CurrentFile>;// = ko.observable<CurrentFile>({ fileName: '', content: '', modified: false });
     subscriptions = [];
 
@@ -23,7 +24,6 @@ export class viewModel {
         }
 
         this.subscriptions.push(this.file.subscribe((newValue) => {
-            console.log('file changed');
             this.editor.setHTML(this.file().content());
         }));
 
@@ -35,30 +35,35 @@ export class viewModel {
             theme: 'snow'
         });
 
-        this.editor.on('text-change', (delta, source) => {
-            this.file().content (this.editor.getHTML());
-            this.file().modified (true);
+        this.editor.on('text-change', this.textChanged);
+        ipcRenderer.on("paste.html", this.onPasteHtml);
+        ipcRenderer.on('app.File.Attachment.Created', this.onAttachmentCreated);
 
-        });
-
-
-        ipcRenderer.on("paste.html", (event, data)=>
-        {
-            var range = this.editor.getSelection();
-            this.editor.updateContents({ ops: [ { retain: range.end }, { insert: data }]});
-        });
-
-        ipcRenderer.on('app.File.Attachment.Created', (event, data) => {
-            console.log(JSON.stringify(data));
-            var sel = this.editor.getSelection();
-
-            this.editor.insertEmbed(0, "image", data.fileName);
-        });
         this.editor.setHTML(this.file().content());
     }
 
     private initTabs() {
         //this.tabs.push(new App.Ui.Components.TabStrip.Model( "HTML Preview", false ));
+    }
+
+    private textChanged = (delta, source) =>
+    {
+        this.file().content (this.editor.getHTML());
+        this.file().modified (true);
+        var range = this.editor.getSelection();
+        this.currentLocation(range.end);
+    }
+
+    private onPasteHtml = (event, data)=>
+    {
+        var range = this.editor.getSelection();
+        this.editor.updateContents({ ops: [ { retain: range.end }, { insert: data }]});
+    }
+
+    private onAttachmentCreated = (event, data) =>
+    {
+        console.log(JSON.stringify(data));
+        this.editor.insertEmbed(this.currentLocation(), "image", data.fileName);
     }
 
     public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {

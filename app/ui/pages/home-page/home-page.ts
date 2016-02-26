@@ -143,10 +143,6 @@ export class viewModel
                 $('#saveAttachments').modal('show');
             }
         });
-
-
-
-
     }
 
     public saveFile = () =>
