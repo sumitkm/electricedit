@@ -8,5 +8,7 @@ interface currentFile
     urlSlug?: KnockoutObservable<string>;
     modified: KnockoutObservable<boolean>;
     type?: KnockoutObservable<string>;
+    media? : KnockoutObservableArray<string>;
+    media_attrs?: KnockoutObservable<any>;
 }
 export = currentFile;

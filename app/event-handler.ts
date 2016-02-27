@@ -112,6 +112,7 @@ class eventHandler {
                 var postUpdate = new wmr.wordpress.model.request.postNew();
                 postUpdate.title = arg.title;
                 postUpdate.content = arg.content;
+                postUpdate.media = arg.media;
                 this.wpCreatePostSvc.execute(postQuery, postUpdate, (data) => {
                     console.log("Updated post successfully.");
                     event.sender.send("app.View.UpdatedSuccessfully", data);
@@ -127,8 +128,9 @@ class eventHandler {
                 var postNew = new wmr.wordpress.model.request.postNew();
                 postNew.title = arg.title;
                 postNew.content = arg.content;
+                postNew.media = arg.media;
                 this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
-                    console.log("Created post successfully.");
+                    console.log("Created post successfully." + JSON.stringify(data));
                     event.sender.send("app.View.PostedSuccessfully", data);
                 });
             }

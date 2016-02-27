@@ -19,9 +19,9 @@ export module wordpress.model.request
         tags: Array<string>;
         format: string;
         featured_image: string;
-        media: any;
+        media: Array<string>;
         media_urls: Array<string>;
-        media_attrs: Array<string>;
+        media_attrs: Array<any>;
         metadata: Array<any>;
         discussion: any;
         likes_enabled: boolean;

@@ -1,9 +1,11 @@
 /// <reference path="../../interop.ts"/>
 /// <reference path="../../../typings/tsd.d.ts"/>
 
+import eeJson = require("./eeJson");
+
 class Files {
     mainWindow: any;
-    file: any;
+    file: eeJson;
     currentEvent: GitHubElectron.IPCMainEvent;
     fileCreated: boolean = false;
 
@@ -11,7 +13,7 @@ class Files {
         this.mainWindow = window;
     }
 
-    public Save = (event: GitHubElectron.IPCMainEvent, content: any) => {
+    public Save = (event: GitHubElectron.IPCMainEvent, content: eeJson) => {
         this.currentEvent = event;
         this.file = content;
         if (this.file.fileName == '') {

@@ -7,12 +7,12 @@
 var ko = <KnockoutStatic>require("knockout");
 export var Quill = require("quill");
 export var template = require("text!./quill-editor.html");
-import CurrentFile = require("../../model/currentFile");
+import currentFile = require("../../model/currentFile");
 
 export class viewModel {
     private editor: QuillStatic;
     private currentLocation: KnockoutObservable<number> = ko.observable<number>(0);
-    private file: KnockoutObservable<CurrentFile>;// = ko.observable<CurrentFile>({ fileName: '', content: '', modified: false });
+    private file: KnockoutObservable<currentFile>;// = ko.observable<CurrentFile>({ fileName: '', content: '', modified: false });
     subscriptions = [];
 
     constructor(params: any) {
@@ -63,6 +63,7 @@ export class viewModel {
     private onAttachmentCreated = (event, data) =>
     {
         console.log(JSON.stringify(data));
+        this.file().media().push(data.fileName);
         this.editor.insertEmbed(this.currentLocation(), "image", data.fileName);
     }
 

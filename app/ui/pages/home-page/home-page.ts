@@ -10,18 +10,18 @@ import MySite = require("../../model/mySite");
 import MyPost = require("../../model/myPost");
 
 var editorSettings = require("ui/components/settings-editor/settings-editor-model").editorSettings;
-var QuillEditor = require("ui/components/quill-editor/quill-editor-params");
+var quillEditor = require("ui/components/quill-editor/quill-editor-params");
 import ko = require("knockout");
-import CurrentFile = require("../../model/currentFile");
+import currentFile = require("../../model/currentFile");
 var menuUi = require("ui/menus/menus");
-var Menu = remote.Menu;
+var menu = remote.Menu;
 
 export var template = require("text!./home-page.html");
 
 export class viewModel
 {
     editorParams: any;
-    currentFile: KnockoutObservable<CurrentFile> = ko.observable(
+    currentFile: KnockoutObservable<currentFile> = ko.observable<currentFile>(
         {
             fileName: ko.observable(''),
             content: ko.observable(''),
@@ -29,7 +29,9 @@ export class viewModel
             title: ko.observable(''),
             postId: ko.observable(''),
             siteId: ko.observable(''),
-            urlSlug: ko.observable('')
+            urlSlug: ko.observable(''),
+            media: ko.observableArray([]),
+            media_attrs: ko.observableArray([])
         });
     settingsEditorModel = ko.observable<any>();
     mySites: KnockoutObservableArray<MySite> = ko.observableArray<MySite>([]);
@@ -38,7 +40,7 @@ export class viewModel
 
     constructor()
     {
-        this.editorParams = new QuillEditor.QuillEditorParams();
+        this.editorParams = new quillEditor.QuillEditorParams();
 
         ipcRenderer.on('app.Settings.Loaded', (event, data) =>
         {
@@ -53,8 +55,8 @@ export class viewModel
         ipcRenderer.send('asynchronous-message', "Renderer loaded!");
 
         var menus = new menuUi.menus();
-        var currentMenuTemplate = Menu.buildFromTemplate(menuUi.menuTemplate);
-        Menu.setApplicationMenu(currentMenuTemplate);
+        var currentMenuTemplate = menu.buildFromTemplate(menuUi.menuTemplate);
+        menu.setApplicationMenu(currentMenuTemplate);
 
         ipcRenderer.on('menu.View.Settings', (event, data) =>
         {
@@ -64,7 +66,7 @@ export class viewModel
         ipcRenderer.on('menu.file.opened', (event, data) =>
         {
             this.settingsEditorModel().lastOpenFile(data.fileName);
-            var newFile =
+            var newFile : currentFile =
             {
                 fileName : ko.observable(data.fileName),
                 content : ko.observable(data.content),
@@ -72,7 +74,9 @@ export class viewModel
                 postId : ko.observable(data.postId),
                 siteId : ko.observable(data.siteId),
                 urlSlug : ko.observable(data.urlSlug),
-                modified : ko.observable(false)
+                modified : ko.observable(false),
+                media: ko.observableArray([]),
+                media_attrs : ko.observableArray([])
             };
             this.currentFile(newFile);
         });
@@ -149,6 +153,5 @@ export class viewModel
     {
         ipcRenderer.send('app.File.Save', ko.toJS(this.currentFile));
         $('#saveAttachments').modal('hide');
-
     }
 }
