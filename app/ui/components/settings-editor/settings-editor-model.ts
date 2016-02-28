@@ -34,6 +34,7 @@ export class editorSettings {
 
 export class oAuth2Group {
     public groupName: KnockoutObservable<string> = ko.observable("");
+    public accessToken: KnockoutObservable<string> = ko.observable("");
     public oAuthClientId: KnockoutObservable<string> = ko.observable("");
     public oAuthClientSecret: KnockoutObservable<string> = ko.observable("");
     public redirectUrl: KnockoutObservable<string> = ko.observable("");

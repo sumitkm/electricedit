@@ -45,7 +45,7 @@ export class viewModel
         ipcRenderer.on('app.Settings.Loaded', (event, data) =>
         {
             this.settingsEditorModel(editorSettings.fromJS(data));
-            if (this.settingsEditorModel().autoReopen() == true)
+            if (this.settingsEditorModel().autoReopen() == true && this.settingsEditorModel().lastOpenFile() != "")
             {
                 ipcRenderer.send('app.File.Load', this.settingsEditorModel().lastOpenFile());
             }
@@ -78,6 +78,9 @@ export class viewModel
                 media: ko.observableArray([]),
                 media_attrs : ko.observableArray([])
             };
+            console.log("EEJSON LOADED: \r\n" + JSON.stringify(data));
+            ko.utils.arrayPushAll<string>(newFile.media, data.media);
+            ko.utils.arrayPushAll<string>(newFile.media_attrs, data.media_attrs);
             this.currentFile(newFile);
         });
 

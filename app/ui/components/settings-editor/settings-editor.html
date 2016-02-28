@@ -25,6 +25,67 @@
                             <label data-bind="text: dataSource().lastOpenFile" class="form-control" id="lastOpenFile">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div style="text-align: center">
+                            <button class="btn btn-primary btn-lg" data-bind="click: addWordpressAccount">Add Wordpress account</button>
+                        </div>
+                    </div>
+                    <!-- ko foreach: dataSource().oAuth2Groups -->
+                    <div class="form-group">
+                        <label for="groupName" class="col-sm-2 control-label">Group Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.groupName" class="form-control" id="groupName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">Access Token:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.accessToken" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">OAuth Client Id:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.oAuthClientId" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">OAuth Client Secret:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.oAuthClientSecret" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">OAuth Redirect URL:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.redirectUrl" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">Base URL:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.baseUrl" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">Token URL:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.tokenUrl" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">Authorize URL:</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.authorizeUrl" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastOpenFile" class="col-sm-2 control-label">Authentication URL :</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="textInput: $data.authenticateUrl" class="form-control" id="lastOpenFile" />
+                        </div>
+                    </div>
+                    <!-- /ko -->
                 </div>
             </div>
             <div class="modal-footer">

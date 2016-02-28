@@ -1,0 +1,17 @@
+{
+    "autoReopen": true,
+    "lastOpenFile": "",
+    "oAuth2Groups": [
+        {
+            "accessToken": "",
+            "baseUrl": "https://public-api.wordpress.com/",
+            "authenticateUrl": "oauth2/authenticate",
+            "authorizeUrl": "oauth2/authorize",
+            "tokenUrl": "oauth2/token",
+            "groupName": "WordPress",
+            "oAuthClientId": "",
+            "oAuthClientSecret": "",
+            "redirectUrl": ""
+        }
+    ]
+}

@@ -26,4 +26,18 @@ export class viewModel
         ipcRenderer.send('settings.App.Save', this.dataSource().toJS());
         $('#' + this.id()).modal('hide');
     }
+    addWordpressAccount = () =>
+    {
+        var newWpAccount = new vm.oAuth2Group();
+        newWpAccount.groupName = ko.observable("Wordpress");
+        newWpAccount.accessToken = ko.observable("");
+        newWpAccount.oAuthClientId = ko.observable("");
+        newWpAccount.oAuthClientSecret = ko.observable("");
+        newWpAccount.redirectUrl = ko.observable("https://github.com/sumitkm/electricedit");
+        newWpAccount.baseUrl = ko.observable("https://public-api.wordpress.com/");
+        newWpAccount.tokenUrl = ko.observable("oauth2/token");
+        newWpAccount.authorizeUrl = ko.observable("oauth2/authorize");
+        newWpAccount.authenticateUrl = ko.observable("oauth2/authenticate");
+        this.dataSource().oAuth2Groups.push(newWpAccount);
+    }
 }

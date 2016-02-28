@@ -1,7 +1,7 @@
 /// <reference path="../../interop.ts"/>
 /// <reference path="../../../typings/tsd.d.ts"/>
 
-import eeJson = require("./eeJson");
+import eeJson = require("./model/eeJson");
 
 class Files {
     mainWindow: any;

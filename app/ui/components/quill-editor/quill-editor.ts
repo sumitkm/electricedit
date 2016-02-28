@@ -51,7 +51,12 @@ export class viewModel {
         this.file().content (this.editor.getHTML());
         this.file().modified (true);
         var range = this.editor.getSelection();
-        this.currentLocation(range.end);
+        var position = this.editor.getLength();
+        if(range !=null)
+        {
+            position = range.end;
+        }
+        this.currentLocation(position);
     }
 
     private onPasteHtml = (event, data)=>

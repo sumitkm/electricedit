@@ -15,7 +15,6 @@ module model {
         public tokenUrl: string = "";
         public authorizeUrl: string = "";
         public authenticateUrl: string = "";
-        public sites: Array<string> = [];
         public clientSecret: any;
     }
 }

@@ -130,13 +130,10 @@
         </div>
     </div>
 </nav>
-
+<div class="title-bar">
+    <input type="text" class="title-input" id="inputTitle" placeholder="Title" data-bind="textInput: file().title" />
+</div>
 <div class="canvas">
-    <div class="form">
-        <div class="form-group" data-bind="if: file!=null">
-            <input type="text" class="form-control" id="inputTitle" placeholder="Title" data-bind="textInput: file().title" />
-        </div>
-    </div>
     <div id="editor">
     </div>
 </div>

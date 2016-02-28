@@ -13,13 +13,20 @@ class settings{
 
     public load()
     {
-        nconf.file('./config.json');
-        nconf.load((data) =>
+        try
         {
-            this.currentSettings.autoReopen = nconf.get('autoReopen');
-            this.currentSettings.lastOpenFile = nconf.get('lastOpenFile');
-            this.currentSettings.oAuth2Groups = nconf.get('oAuth2Groups');
-        });
+            nconf.file('./config.json');
+            nconf.load((data) =>
+            {
+                this.currentSettings.autoReopen = nconf.get('autoReopen');
+                this.currentSettings.lastOpenFile = nconf.get('lastOpenFile');
+                this.currentSettings.oAuth2Groups = nconf.get('oAuth2Groups');
+            });
+        }
+        catch(error)
+        {
+            console.log(error);
+        }
     }
 
     public set(name: string, value: any)

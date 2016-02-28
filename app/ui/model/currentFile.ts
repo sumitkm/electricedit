@@ -9,6 +9,6 @@ interface currentFile
     modified: KnockoutObservable<boolean>;
     type?: KnockoutObservable<string>;
     media? : KnockoutObservableArray<string>;
-    media_attrs?: KnockoutObservable<any>;
+    media_attrs?: KnockoutObservableArray<any>;
 }
 export = currentFile;
