@@ -85,8 +85,11 @@ export class viewModel {
     }
 
     public dispose() {
-        for (let i = 0; i < this.subscriptions.length; i++) {
-            this.subscriptions[i].dispose();
+        if(this.subscriptions!=null)
+        {
+            for (let i = 0; i < this.subscriptions.length; i++) {
+                this.subscriptions[i].dispose();
+            }
         }
     }
 }

@@ -147,7 +147,7 @@ class Files {
     {
         let matches = datastring.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
         let response = { type: '', data: null };
-        if(matches.length !== 3)
+        if(matches!=null && matches.length !== 3)
         {
             throw new Error('Invalid input string');
         }

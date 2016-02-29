@@ -79,8 +79,14 @@ export class viewModel
                 media_attrs : ko.observableArray([])
             };
             console.log("EEJSON LOADED: \r\n" + JSON.stringify(data));
-            ko.utils.arrayPushAll<string>(newFile.media, data.media);
-            ko.utils.arrayPushAll<string>(newFile.media_attrs, data.media_attrs);
+            if(data.media!=null)
+            {
+                ko.utils.arrayPushAll<string>(newFile.media, data.media);
+            }
+            if(data.media_attrs!=null)
+            {
+                ko.utils.arrayPushAll<string>(newFile.media_attrs, data.media_attrs);
+            }
             this.currentFile(newFile);
         });
 

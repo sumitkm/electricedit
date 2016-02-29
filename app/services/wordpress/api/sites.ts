@@ -6,7 +6,10 @@ const queryString = require('querystring');
 
 export module wordpress.api.sites
 {
-    export class getMySites extends base.query<wmq.wordpress.model.query.mySites, any, Array<wmr.wordpress.model.response.mySite>>
+    export class getMySites extends base.query<
+        wmq.wordpress.model.query.mySites,
+        any,
+        Array<wmr.wordpress.model.response.mySite>>
     {
         static endPoint: string = "https://public-api.wordpress.com/rest/v1.1/me/sites";
 
