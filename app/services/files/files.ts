@@ -81,6 +81,26 @@ class Files {
         }
     }
 
+    public NewFileName = (event: GitHubElectron.IPCMainEvent) =>
+    {
+        this.currentEvent = event;
+
+        var dialog = require('electron').dialog;
+        dialog.showSaveDialog(this.mainWindow,
+        {
+            title: "Save File",
+            defaultPath: "/user/sumitkm/Documents",
+            filters: [
+                { name: 'Portable network graphics (.png)', extensions: [ 'png' ] },
+                { name: 'JPEG (.jpg)', extensions: [ 'jpg', 'jpeg' ] }
+            ]
+        }, (newFileName: string) =>
+        {
+            console.log("New File Name: " + newFileName);
+            this.currentEvent.sender.send('attachment.set.fileName', newFileName);
+        });
+    }
+
     public Load = (event, fileNames: Array<string>) =>
     {
         var fs = require('fs');

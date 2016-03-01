@@ -7,5 +7,6 @@ class attachmentFile
     title: KnockoutObservable<string>= ko.observable<string>("");
     width: KnockoutObservable<string>= ko.observable<string>("");
     height: KnockoutObservable<string>= ko.observable<string>("");
+    rawContent: KnockoutObservable<any> = ko.observable<any>("");
 }
 export = attachmentFile;

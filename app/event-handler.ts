@@ -158,6 +158,11 @@ class eventHandler {
                 event.sender.send("paste.image", image.toDataURL());
             }
         });
+
+        this.ipcMain.on("attachment.get.fileName", (event, arg)=>
+        {
+            this.currentFiles.NewFileName(event);
+        });
     }
 
     public detach() {
