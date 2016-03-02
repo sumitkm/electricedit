@@ -5,3 +5,4 @@ typings/
 *.js
 config.json
 .DS_Store
+temp*

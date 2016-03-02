@@ -1,4 +1,4 @@
-        import ko = require("knockout");
+import ko = require("knockout");
 
 class attachmentFile
 {

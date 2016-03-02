@@ -1,11 +1,14 @@
 /// <reference path="../../interop.ts"/>
 /// <reference path="../../../typings/tsd.d.ts"/>
 
+var Jimp = require("jimp");
 import eeJson = require("./model/eeJson");
+import attachmentFile = require("./model/attachmentFile");
 
 class Files {
     mainWindow: any;
     file: eeJson;
+    attachment: attachmentFile;
     currentEvent: GitHubElectron.IPCMainEvent;
     fileCreated: boolean = false;
 
@@ -146,8 +149,10 @@ class Files {
             }
             else
             {
-                var response = this.convertBase64Image(this.file.content);
-                fs.writeFile(filename, response.data, (err) =>
+                this.attachment = <any>this.file;
+                var response = this.convertBase64Image(this.attachment.rawContent);
+
+                fs.writeFile("temp", response.data, (err) =>
                 {
                     if(err)
                     {
@@ -156,7 +161,33 @@ class Files {
                     }
                     else
                     {
-                        this.currentEvent.sender.send('app.File.Attachment.Created', this.file);
+                        Jimp.read("temp", (err, lenna)  => {
+                            if (err)
+                            {
+                                console.error("JIMP ERROR: ", err);
+                                throw err;
+                            }
+                            let scaleX = parseFloat(this.attachment.width);
+                            console.log("JIMP READ: scaleX - " + scaleX);
+
+                            if(scaleX >= 1)
+                            {
+                                lenna.resize("temp",
+                                    parseInt(this.attachment.width),
+                                    parseInt(this.attachment.height))
+                                     .quality(90)
+                                     .write(this.file.fileName);
+                                 this.currentEvent.sender.send('app.File.Attachment.Created', this.file);
+                             }
+                             else
+                             {
+                                 console.log("Scale: " + scaleX);
+                                 lenna.scale(scaleX)
+                                      .quality(90)
+                                      .write(this.file.fileName);
+                                 this.currentEvent.sender.send('app.File.Attachment.Created', this.file);
+                             }
+                        });
                     }
                 });
             }
