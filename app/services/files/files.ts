@@ -172,7 +172,7 @@ class Files {
 
                             if(scaleX >= 1)
                             {
-                                lenna.resize("temp",
+                                lenna.resize(
                                     parseInt(this.attachment.width),
                                     parseInt(this.attachment.height))
                                      .quality(90)

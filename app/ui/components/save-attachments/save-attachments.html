@@ -44,7 +44,9 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Preview</label>
                         <div class="col-sm-9" stlye="max-height:100px; overflow-y:auto">
-                            <img data-bind="attr : { src: currentFile().rawContent }" style="max-width:100%"/>
+                            <img id="previewImage"
+                                data-bind="attr : { src: currentFile().rawContent }"
+                                style="max-width:100%"/>
                         </select>
                         </div>
                     </div>
