@@ -169,7 +169,7 @@ class Files {
                             }
                             let scaleX = parseFloat(this.attachment.width);
                             console.log("JIMP READ: scaleX - " + scaleX);
-
+                            
                             if(scaleX >= 1)
                             {
                                 lenna.resize(
