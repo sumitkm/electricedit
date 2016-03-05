@@ -5,16 +5,14 @@ import wms = require('../model/response/newPost');
 const fetch = require('node-fetch');
 const queryString = require('querystring');
 
-export module wordpress.api.posts
-{
+export module wordpress.api.posts {
     export class createNewPost extends
         base.query<wmq.wordpress.model.query.postNew,
-            wmr.wordpress.model.request.postNew,
-            wms.wordpress.model.response.newPost>
+        wmr.wordpress.model.request.postNew,
+        wms.wordpress.model.response.newPost>
     {
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/sites/$site/posts/new";
-        constructor(apiKey: string, siteId: string)
-        {
+        constructor(apiKey: string, siteId: string) {
             super(apiKey, "POST", createNewPost.endPoint);
             super.setUrl(createNewPost.endPoint.replace('$site', siteId));
         }
@@ -22,16 +20,15 @@ export module wordpress.api.posts
         execute(
             query: wmq.wordpress.model.query.postNew,
             request: any,
-            callback: (json: Array<wms.wordpress.model.response.newPost>)=> void)
-        {
+            callback: (json: Array<wms.wordpress.model.response.newPost>) => void) {
             super.execute(query, request, callback);
         }
     }
 
     export class getAllPosts extends
         base.query<wmq.wordpress.model.query.postNew,
-                wmr.wordpress.model.request.postNew,
-                wms.wordpress.model.response.newPost>
+        wmr.wordpress.model.request.postNew,
+        wms.wordpress.model.response.newPost>
     {
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/me/posts";
         constructor(apiKey: string)
@@ -48,6 +45,65 @@ export module wordpress.api.posts
         {
             super(apiKey, "POST", updatePost.endPoint);
             super.setUrl(updatePost.endPoint.replace("$site", siteId).replace("$post_ID", postId));
+        }
+
+        execute(query: any, request: any, callback: (json: any) => void) {
+            console.log(this.url);
+            this.squarePants(query, request, callback);
+        }
+
+        squarePants = (query: any, request: any, callback: (json: any) => void) => {
+            var https = require('https');
+            const querystring = require('querystring');
+            for(var i=0; i<request.media.length; i++)
+            {
+                try
+                {
+
+                }
+                catch(err)
+                {
+
+                }
+            }
+
+            var postData = querystring.stringify(request);
+
+            var options = {
+                hostname: 'public-api.wordpress.com',
+                port: 443,
+                path: '/rest/v1.1/sites/107021760/posts/9',
+                method: 'POST',
+                headers: this.header
+            };
+
+            var req = https.request(options, (res) =>
+            {
+                console.log('STATUS:' + res.statusCode);
+                console.log('HEADERS:' + JSON.stringify(res.headers));
+                var responseData = [];
+                res.setEncoding('utf8');
+                res.on('data', (chunk) => {
+                    responseData.push(chunk);
+                });
+                res.on('end', () =>
+                {
+                    console.log('RESPONSE BODY (RAW):' + responseData);
+                    console.log('RESPONSE BODY (END):' + JSON.stringify(responseData, null, 2));
+
+                    console.log('No more data in response.')
+                    callback(responseData);
+                })
+            });
+
+            req.on('error', (e) =>
+            {
+                console.log('problem with request:' + e.message);
+            });
+
+            // write data to request body
+            req.write(postData);
+            req.end();
         }
     }
 }
