@@ -40,80 +40,52 @@ export module wordpress.api.posts {
         base.query<any, any, any>
     {
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/sites/$site/posts/$post_ID";
+        mediaUrl: string = "https://public-api.wordpress.com/rest/v1.1/sites/$site/media/new";
         constructor(apiKey: string, siteId: string, postId: string) {
             super(apiKey, "POST", updatePost.endPoint);
+            this.mediaUrl = this.mediaUrl.replace("$site", siteId);
             super.setUrl(updatePost.endPoint.replace("$site", siteId).replace("$post_ID", postId));
         }
 
         execute(query: any, request: any, callback: (json: any) => void) {
             console.log(this.url);
-            this.roundPants(query, request, callback);
+            this.uploadMedia(query, request, callback);
         }
 
-        squarePants = (query: any, request: any, callback: (json: any) => void) => {
-            var https = require('https');
-            var querystring = require('querystring');
-            var postData = querystring.stringify(request);
-
-            var options = {
-                hostname: 'public-api.wordpress.com',
-                port: 443,
-                path: '/rest/v1.1/sites/107021760/posts/9',
-                method: 'POST',
-                headers: this.header
-            };
-
-            var req = https.request(options, (res) => {
-                console.log('STATUS:' + res.statusCode);
-                console.log('HEADERS:' + JSON.stringify(res.headers));
-                var responseData = [];
-                res.setEncoding('utf8');
-                res.on('data', (chunk) => {
-                    responseData.push(chunk);
-                });
-                res.on('end', () => {
-                    console.log('RESPONSE BODY (RAW):' + responseData);
-                    console.log('No more data in response.')
-                    callback(responseData);
-                })
-            });
-
-            req.on('error', (e) => {
-                console.log('problem with request:' + e.message);
-            });
-
-            // write data to request body
-            req.write(postData);
-            req.end();
-        }
-
-        roundPants = (query: any, req: any, callback: (json: any) => void) =>
+        uploadMedia = (query: any, req: any, callback: (json: any) => void) =>
         {
             var FormData = require('form-data');
             var fs = require('fs');
             var request = require('request');
-            var formData = {
-              'media[]': fs.createReadStream(req.media[0]),
-              'attrs[0][caption]' : 'Blah',
-              'attrs[1][title]' : 'Blah Blah'
-            };
+            var formData = {};
+
+
+            for (let i = 0; i < req.media.length; i++) {
+                formData['media[' + i + ']'] = fs.createReadStream(req.media[i]);
+                formData['attrs[' + i + '][caption]'] = "Leaves",
+                formData['attrs[' + i + '][title]'] = "Leaves"
+            }
+
             request.post(
                 {
-                    url:'https://public-api.wordpress.com/rest/v1.1/sites/107021760/media/new',
-                    hostname: 'public-api.wordpress.com',
-                    port: 443,
-                    path: '/rest/v1.1/sites/107021760/posts/9',
+                    url: this.mediaUrl,
                     method: 'POST',
                     headers: this.header,
                     formData: formData
                 },
-                function optionalCallback(err, httpResponse, body)
+                (err, httpResponse, body) =>
                 {
                     if (err)
                     {
                         return console.error('upload failed:', err);
                     }
-                    console.log('Upload successful!  Server responded with:', body);
+                    console.log('Media uploaded successfully!  Server responded with:', body);
+                    var media = JSON.parse(body).media;
+                    for (let i = 0; i < media.length; i++)
+                    {                        
+                        req.content = req.content.replace(req.media[i], media[i].URL);
+                    }
+                    super.execute(query, req, callback);
                 }
             );
         }

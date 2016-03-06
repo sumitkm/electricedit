@@ -22,10 +22,15 @@ class Files {
         if (this.file.fileName == '') {
             this.fileCreated = true;
             var dialog = require('electron').dialog;
+            var defaultPath = "/usr";
+            if(process.platform == 'darwin')
+            {
+                defaultPath = "/user"
+            }
             dialog.showSaveDialog(this.mainWindow,
             {
                 title: "Save File",
-                defaultPath: "/user/sumitkm/Documents",
+                defaultPath: defaultPath,
                 filters: [
                     { name: 'Electric edit file', extensions: ['eejson'] },
                     { name: 'Portable network graphics (.png)', extensions: [ 'png' ] },
@@ -149,7 +154,7 @@ class Files {
             }
             else
             {
-                this.attachment = <any>this.file;
+                this.attachment = <attachmentFile>this.file;
                 var response = this.convertBase64Image(this.attachment.rawContent);
 
                 fs.writeFile("temp", response.data, (err) =>
@@ -169,7 +174,7 @@ class Files {
                             }
                             let scaleX = parseFloat(this.attachment.width);
                             console.log("JIMP READ: scaleX - " + scaleX);
-                            
+
                             if(scaleX >= 1)
                             {
                                 lenna.resize(
@@ -177,7 +182,6 @@ class Files {
                                     parseInt(this.attachment.height))
                                      .quality(90)
                                      .write(this.file.fileName);
-                                 this.currentEvent.sender.send('app.File.Attachment.Created', this.file);
                              }
                              else
                              {
@@ -185,8 +189,8 @@ class Files {
                                  lenna.scale(scaleX)
                                       .quality(90)
                                       .write(this.file.fileName);
-                                 this.currentEvent.sender.send('app.File.Attachment.Created', this.file);
                              }
+                             this.currentEvent.sender.send('app.File.Attachment.Created', this.file);
                         });
                     }
                 });

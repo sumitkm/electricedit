@@ -12,7 +12,7 @@ import currentFile = require("../../model/currentFile");
 export class viewModel {
     private editor: QuillStatic;
     private currentLocation: KnockoutObservable<number> = ko.observable<number>(0);
-    private file: KnockoutObservable<currentFile>;// = ko.observable<CurrentFile>({ fileName: '', content: '', modified: false });
+    private file: KnockoutObservable<currentFile> = ko.observable<currentFile>(new currentFile());
     subscriptions = [];
 
     constructor(params: any) {

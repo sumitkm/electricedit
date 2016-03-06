@@ -52,6 +52,10 @@ class eventHandler {
             this.currentFiles.Load(event, [arg]);
         });
 
+        this.ipcMain.on("attachment.image.Save", (event, arg) => {
+            this.currentFiles.Save(event, arg);
+        });
+
         this.ipcMain.on("menu.File.OnSave", (event, arg) => {
             event.sender.send("menu.File.Save");
         });
@@ -130,7 +134,7 @@ class eventHandler {
                 var postNew = new wmr.wordpress.model.request.postNew();
                 postNew.title = arg.title;
                 postNew.content = arg.content;
-                postNew.media = [];//arg.media;
+                postNew.media = arg.media;
 
                 this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
                     console.log("Created post successfully." + JSON.stringify(data));

@@ -1,8 +1,8 @@
-class attachmentFile
+import eeJson = require('./eeJson');
+class attachmentFile extends eeJson
 {
-    fileName = "";
-    alt: string = "";
-    title: string= "";
+    title: string = "";
+    caption: string= "";
     width: string= "";
     height: string= "";
     rawContent: any = "";

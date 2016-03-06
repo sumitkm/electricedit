@@ -1,4 +1,4 @@
-class eeJson
+class eeJson 
 {
     fileName: string;
     content: string = "";

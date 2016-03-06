@@ -91,7 +91,7 @@ export class viewModel
     save = () =>
     {
         console.log(ko.toJS(this.currentFile));
-        ipcRenderer.send('app.File.Save', ko.toJS(this.currentFile));
+        ipcRenderer.send('attachment.image.Save', ko.toJS(this.currentFile));
     }
 
     dispose()
