@@ -31,8 +31,7 @@ export module wordpress.api.posts {
         wms.wordpress.model.response.newPost>
     {
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/me/posts";
-        constructor(apiKey: string)
-        {
+        constructor(apiKey: string) {
             super(apiKey, "GET", getAllPosts.endPoint);
         }
     }
@@ -41,32 +40,19 @@ export module wordpress.api.posts {
         base.query<any, any, any>
     {
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/sites/$site/posts/$post_ID";
-        constructor(apiKey: string, siteId: string, postId: string)
-        {
+        constructor(apiKey: string, siteId: string, postId: string) {
             super(apiKey, "POST", updatePost.endPoint);
             super.setUrl(updatePost.endPoint.replace("$site", siteId).replace("$post_ID", postId));
         }
 
         execute(query: any, request: any, callback: (json: any) => void) {
             console.log(this.url);
-            this.squarePants(query, request, callback);
+            this.roundPants(query, request, callback);
         }
 
         squarePants = (query: any, request: any, callback: (json: any) => void) => {
             var https = require('https');
-            const querystring = require('querystring');
-            for(var i=0; i<request.media.length; i++)
-            {
-                try
-                {
-
-                }
-                catch(err)
-                {
-
-                }
-            }
-
+            var querystring = require('querystring');
             var postData = querystring.stringify(request);
 
             var options = {
@@ -77,8 +63,7 @@ export module wordpress.api.posts {
                 headers: this.header
             };
 
-            var req = https.request(options, (res) =>
-            {
+            var req = https.request(options, (res) => {
                 console.log('STATUS:' + res.statusCode);
                 console.log('HEADERS:' + JSON.stringify(res.headers));
                 var responseData = [];
@@ -86,24 +71,51 @@ export module wordpress.api.posts {
                 res.on('data', (chunk) => {
                     responseData.push(chunk);
                 });
-                res.on('end', () =>
-                {
+                res.on('end', () => {
                     console.log('RESPONSE BODY (RAW):' + responseData);
-                    console.log('RESPONSE BODY (END):' + JSON.stringify(responseData, null, 2));
-
                     console.log('No more data in response.')
                     callback(responseData);
                 })
             });
 
-            req.on('error', (e) =>
-            {
+            req.on('error', (e) => {
                 console.log('problem with request:' + e.message);
             });
 
             // write data to request body
             req.write(postData);
             req.end();
+        }
+
+        roundPants = (query: any, req: any, callback: (json: any) => void) =>
+        {
+            var FormData = require('form-data');
+            var fs = require('fs');
+            var request = require('request');
+            var formData = {
+              'media[]': fs.createReadStream(req.media[0]),
+              'attrs[0][caption]' : 'Blah',
+              'attrs[1][title]' : 'Blah Blah'
+            };
+            request.post(
+                {
+                    url:'https://public-api.wordpress.com/rest/v1.1/sites/107021760/media/new',
+                    hostname: 'public-api.wordpress.com',
+                    port: 443,
+                    path: '/rest/v1.1/sites/107021760/posts/9',
+                    method: 'POST',
+                    headers: this.header,
+                    formData: formData
+                },
+                function optionalCallback(err, httpResponse, body)
+                {
+                    if (err)
+                    {
+                        return console.error('upload failed:', err);
+                    }
+                    console.log('Upload successful!  Server responded with:', body);
+                }
+            );
         }
     }
 }

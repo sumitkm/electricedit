@@ -19,7 +19,7 @@ export module wordpress.model.request
         tags: Array<string>;
         format: string;
         featured_image: string;
-        media: Array<string>;
+        media: Array<any>;
         media_urls: Array<string>;
         media_attrs: Array<any>;
         metadata: Array<any>;

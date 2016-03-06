@@ -17,7 +17,7 @@ module wordpress.api.base
             this.requestType = requestType;
             this.header  = <any>{
                 'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'multipart/form-data',//'application/x-www-form-urlencoded',
                 'Authorization': 'Bearer ' + this.apiKey
             };
         }

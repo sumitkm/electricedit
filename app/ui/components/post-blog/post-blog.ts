@@ -36,6 +36,12 @@ export class viewModel {
         console.log("site id:" + this.selectedSiteId());
         this.currentFile().siteId(this.selectedSiteId());
         this.currentFile().postId(this.selectedPostId());
-        ipcRenderer.send("app.View.PostBlog", { selectedSiteId: this.selectedSiteId(), selectedPostId: this.selectedPostId(), content: this.currentFile().content(), title: this.currentFile().title() });
+        ipcRenderer.send("app.View.PostBlog", {
+            selectedSiteId: this.selectedSiteId(),
+            selectedPostId: this.selectedPostId(),
+            content: this.currentFile().content(),
+            title: this.currentFile().title(),
+            media: this.currentFile().media()
+        });
     }
 }

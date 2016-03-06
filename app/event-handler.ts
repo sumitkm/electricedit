@@ -106,13 +106,15 @@ class eventHandler {
                 this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.updatePost
                     (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId, arg.selectedPostId);
 
-                console.log("Updating post (ID): " + arg.selectedPostId);
+                console.log("Updating post (ID): " + JSON.stringify(arg,null,3));//.selectedPostId);
+
                 var postQuery = new wmpm.wordpress.model.query.postNew();
                 postQuery.pretty = true;
                 var postUpdate = new wmr.wordpress.model.request.postNew();
                 postUpdate.title = arg.title;
                 postUpdate.content = arg.content;
                 postUpdate.media = arg.media;
+
                 this.wpCreatePostSvc.execute(postQuery, postUpdate, (data) => {
                     console.log("Updated post successfully.");
                     event.sender.send("app.View.UpdatedSuccessfully", data);
@@ -128,7 +130,8 @@ class eventHandler {
                 var postNew = new wmr.wordpress.model.request.postNew();
                 postNew.title = arg.title;
                 postNew.content = arg.content;
-                postNew.media = arg.media;
+                postNew.media = [];//arg.media;
+
                 this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
                     console.log("Created post successfully." + JSON.stringify(data));
                     event.sender.send("app.View.PostedSuccessfully", data);

@@ -81,10 +81,14 @@ export class viewModel
             console.log("EEJSON LOADED: \r\n" + JSON.stringify(data));
             if(data.media!=null)
             {
+                console.log("EEJSON MEDIA: \r\n" + JSON.stringify(data.media));
+
                 ko.utils.arrayPushAll<string>(newFile.media, data.media);
             }
             if(data.media_attrs!=null)
             {
+                console.log("EEJSON ATTR: \r\n" + JSON.stringify(data.media_attrs));
+
                 ko.utils.arrayPushAll<string>(newFile.media_attrs, data.media_attrs);
             }
             this.currentFile(newFile);
