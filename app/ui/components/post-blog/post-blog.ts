@@ -1,16 +1,16 @@
 /// <amd-dependency path="text!./post-blog.html"/>
 
 export var template = require("text!./post-blog.html");
-import CurrentFile = require("../../model/currentFile");
+import eeJson = require("../../model/eeJson");
+import attachmentFile = require("../../model/attachmentFile");
 import MySite = require("../../model/mySite");
 import ko = require("knockout");
 
 export class viewModel {
     id: KnockoutObservable<string> = ko.observable<string>("");
     selectedSiteId: KnockoutObservable<string> = ko.observable<string>("");
-    currentFile: KnockoutObservable<CurrentFile> = ko.observable<CurrentFile>();
+    eeJsonVm: KnockoutObservable<eeJson> = ko.observable<eeJson>();
     mySites: KnockoutObservableArray<MySite>;
-    //title: KnockoutObservable<string> = ko.observable<string>();
     slug: KnockoutObservable<string> = ko.observable<string>();
     myRecentPosts: KnockoutObservableArray<any>;
     selectedPostId: KnockoutObservable<string> = ko.observable<string>("");
@@ -21,7 +21,7 @@ export class viewModel {
     constructor(params) {
         this.id(params.id);
         this.mySites = params.mySites;
-        this.currentFile = params.file;
+        this.eeJsonVm = params.file;
         this.myRecentPosts = params.myRecentPosts;
         this.subscriptions.push(this.selectedSiteId.subscribe((newValue)=>
         {
@@ -34,14 +34,14 @@ export class viewModel {
 
     publish = () => {
         console.log("site id:" + this.selectedSiteId());
-        this.currentFile().siteId(this.selectedSiteId());
-        this.currentFile().postId(this.selectedPostId());
+        this.eeJsonVm().siteId(this.selectedSiteId());
+        this.eeJsonVm().postId(this.selectedPostId());
         ipcRenderer.send("app.View.PostBlog", {
             selectedSiteId: this.selectedSiteId(),
             selectedPostId: this.selectedPostId(),
-            content: this.currentFile().content(),
-            title: this.currentFile().title(),
-            media: this.currentFile().media()
+            content: this.eeJsonVm().content(),
+            title: this.eeJsonVm().title(),
+            media: this.eeJsonVm().media()
         });
     }
 }

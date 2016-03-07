@@ -1,6 +1,6 @@
 /// <reference path="../../interop.d.ts" />
 /// <reference path="../../typings/tsd.d.ts"/>
-/// <reference path="../../model/currentFile.ts" />
+/// <reference path="../../model/eeJson.ts" />
 
 ///<amd-dependency path="text!./home-page.html" />
 ///<amd-dependency path="ui/components/quill-editor/quill-editor-params"/>
@@ -12,7 +12,7 @@ import MyPost = require("../../model/myPost");
 var editorSettings = require("ui/components/settings-editor/settings-editor-model").editorSettings;
 var quillEditor = require("ui/components/quill-editor/quill-editor-params");
 import ko = require("knockout");
-import currentFile = require("../../model/currentFile");
+import eeJson = require("../../model/eeJson");
 var menuUi = require("ui/menus/menus");
 var menu = remote.Menu;
 
@@ -21,18 +21,7 @@ export var template = require("text!./home-page.html");
 export class viewModel
 {
     editorParams: any;
-    currentFile: KnockoutObservable<currentFile> = ko.observable<currentFile>(
-        {
-            fileName: ko.observable(''),
-            content: ko.observable(''),
-            modified: ko.observable(false),
-            title: ko.observable(''),
-            postId: ko.observable(''),
-            siteId: ko.observable(''),
-            urlSlug: ko.observable(''),
-            media: ko.observableArray([]),
-            media_attrs: ko.observableArray([])
-        });
+    eeJsonVm: KnockoutObservable<eeJson> = ko.observable<eeJson>(new eeJson());
     settingsEditorModel = ko.observable<any>();
     mySites: KnockoutObservableArray<MySite> = ko.observableArray<MySite>([]);
     myRecentPosts: KnockoutObservableArray<MyPost> = ko.observableArray<MyPost>([]);
@@ -66,62 +55,39 @@ export class viewModel
         ipcRenderer.on('menu.file.opened', (event, data) =>
         {
             this.settingsEditorModel().lastOpenFile(data.fileName);
-            var newFile : currentFile =
-            {
-                fileName : ko.observable(data.fileName),
-                content : ko.observable(data.content),
-                title : ko.observable(data.title),
-                postId : ko.observable(data.postId),
-                siteId : ko.observable(data.siteId),
-                urlSlug : ko.observable(data.urlSlug),
-                modified : ko.observable(false),
-                media: ko.observableArray([]),
-                media_attrs : ko.observableArray([])
-            };
+            this.eeJsonVm(eeJson.fromJS(data));
             console.log("EEJSON LOADED: \r\n" + JSON.stringify(data));
-            if(data.media!=null)
-            {
-                console.log("EEJSON MEDIA: \r\n" + JSON.stringify(data.media));
-
-                ko.utils.arrayPushAll<string>(newFile.media, data.media);
-            }
-            if(data.media_attrs!=null)
-            {
-                console.log("EEJSON ATTR: \r\n" + JSON.stringify(data.media_attrs));
-
-                ko.utils.arrayPushAll<string>(newFile.media_attrs, data.media_attrs);
-            }
-            this.currentFile(newFile);
+            // this.eeJsonVm(newFile);
         });
 
         ipcRenderer.on('menu.File.Save', (event, data) =>
         {
-            if (this.currentFile().modified)
+            if (this.eeJsonVm().modified)
             {
                 this.saveFile();
-                this.currentFile().modified(false);
+                this.eeJsonVm().modified(false);
             }
         });
 
         ipcRenderer.on('menu.File.OnNew', (event, data) =>
         {
-            ipcRenderer.send("app.File.New", ko.toJS(this.currentFile));
+            ipcRenderer.send("app.File.New", ko.toJS(this.eeJsonVm));
         });
 
         ipcRenderer.on('menu.File.Newed', (event, data)=>
         {
-            this.currentFile().fileName('');
-            this.currentFile().content('');
-            this.currentFile().title('');
-            this.currentFile().postId('');
-            this.currentFile().siteId('');
-            this.currentFile().urlSlug('');
+            this.eeJsonVm().fileName('');
+            this.eeJsonVm().content('');
+            this.eeJsonVm().title('');
+            this.eeJsonVm().postId('');
+            this.eeJsonVm().siteId('');
+            this.eeJsonVm().urlSlug('');
         });
 
         ipcRenderer.on('app.File.Created', (event, data) =>
         {
             console.log('File created: ' + data.filename)
-            this.currentFile().fileName = data.filename;
+            this.eeJsonVm().fileName = data.filename;
         });
 
         ipcRenderer.on('app.View.ShowPostBlog', (event, data)=>
@@ -137,16 +103,16 @@ export class viewModel
 
         ipcRenderer.on("app.View.PostedSuccessfully", (event, data)=>
         {
-            this.currentFile().postId(data.ID);
-            this.currentFile().siteId(data.site_ID);
+            this.eeJsonVm().postId(data.ID);
+            this.eeJsonVm().siteId(data.site_ID);
             $('#postBlog').modal('hide');
             this.saveFile();
         });
 
         ipcRenderer.on("app.View.UpdatedSuccessfully", (event, data)=>
         {
-            this.currentFile().postId(data.ID);
-            this.currentFile().siteId(data.site_ID);
+            this.eeJsonVm().postId(data.ID);
+            this.eeJsonVm().siteId(data.site_ID);
             $('#postBlog').modal('hide');
             this.saveFile();
         });
@@ -164,7 +130,7 @@ export class viewModel
 
     public saveFile = () =>
     {
-        ipcRenderer.send('app.File.Save', ko.toJS(this.currentFile));
+        ipcRenderer.send('app.File.Save', ko.toJS(this.eeJsonVm));
         $('#saveAttachments').modal('hide');
     }
 }

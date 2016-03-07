@@ -1,13 +1,13 @@
 
-<quill-editor params="file: currentFile"></quill-editor>
+<quill-editor params="file: eeJsonVm"></quill-editor>
 
 <settings-editor params="id:'settings',
     settings: settingsEditorModel">
 </settings-editor>
 
 <post-blog params="id: 'postBlog',
-    file: currentFile,
+    file: eeJsonVm,
     mySites: mySites,
     myRecentPosts: myRecentPosts"></post-blog>
 
-<save-attachments params="id: 'saveAttachments', file: currentFile, imageData: imageData"></save-attachments>
+<save-attachments params="id: 'saveAttachments', file: eeJsonVm, imageData: imageData"></save-attachments>

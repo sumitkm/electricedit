@@ -1,4 +1,4 @@
-/// <reference path="../../model/currentFile.ts" />
+/// <reference path="../../model/eeJson.ts" />
 
 /// <amd-dependency path="text!./quill-editor.html"/>
 /// <amd-dependency path="quill" />
@@ -7,12 +7,13 @@
 var ko = <KnockoutStatic>require("knockout");
 export var Quill = require("quill");
 export var template = require("text!./quill-editor.html");
-import currentFile = require("../../model/currentFile");
+import eeJson = require("../../model/eeJson");
+import attachmentFile = require("../../model/attachmentFile");
 
 export class viewModel {
     private editor: QuillStatic;
     private currentLocation: KnockoutObservable<number> = ko.observable<number>(0);
-    private file: KnockoutObservable<currentFile> = ko.observable<currentFile>(new currentFile());
+    private file: KnockoutObservable<eeJson> = ko.observable<eeJson>(new eeJson());
     subscriptions = [];
 
     constructor(params: any) {
@@ -65,10 +66,16 @@ export class viewModel {
         this.editor.updateContents({ ops: [ { retain: range.end }, { insert: data }]});
     }
 
-    private onAttachmentCreated = (event, data) =>
+    private onAttachmentCreated = (event, data: any) =>
     {
+        var newAttachment = attachmentFile.fromJS(data);
         console.log(JSON.stringify(data));
-        this.file().media().push(data.fileName);
+        var existing = ko.utils.arrayFirst(this.file().media(), attach => attach.fileName == data.fileName);
+        if(existing != null)
+        {
+            this.file().media.remove(existing);
+        }
+        this.file().media().push(newAttachment);
         this.editor.insertEmbed(this.currentLocation(), "image", data.fileName);
     }
 
