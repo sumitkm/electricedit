@@ -59,11 +59,10 @@ export module wordpress.api.posts {
             var request = require('request');
             var formData = {};
 
-
             for (let i = 0; i < req.media.length; i++) {
-                formData['media[' + i + ']'] = fs.createReadStream(req.media[i]);
-                formData['attrs[' + i + '][caption]'] = "Leaves",
-                formData['attrs[' + i + '][title]'] = "Leaves"
+                formData['media[' + i + ']'] = fs.createReadStream(req.media[i].fileName);
+                formData['attrs[' + i + '][caption]'] = req.media[i].caption,
+                formData['attrs[' + i + '][title]'] = req.media[i].title
             }
 
             request.post(
@@ -79,11 +78,11 @@ export module wordpress.api.posts {
                     {
                         return console.error('upload failed:', err);
                     }
-                    console.log('Media uploaded successfully!  Server responded with:', body);
+                    console.log('Media uploaded successfully!  Server responded with:', httpResponse);
                     var media = JSON.parse(body).media;
                     for (let i = 0; i < media.length; i++)
-                    {                        
-                        req.content = req.content.replace(req.media[i], media[i].URL);
+                    {
+                        req.content = req.content.replace(req.media[i].fileName, media[i].URL);
                     }
                     super.execute(query, req, callback);
                 }

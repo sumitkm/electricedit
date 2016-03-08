@@ -9,6 +9,7 @@ module wordpress.api.base
         public url: string = "";
         public requestType: string= "";
         public header: any;
+        public contentType: string = "application/x-www-form-urlencoded";
 
         constructor(apiKey: string, requestType: string, url: string)
         {
@@ -17,7 +18,7 @@ module wordpress.api.base
             this.requestType = requestType;
             this.header  = <any>{
                 'Accept': 'application/json',
-                'Content-Type': 'multipart/form-data',//'application/x-www-form-urlencoded',
+                'Content-Type': this.contentType,
                 'Authorization': 'Bearer ' + this.apiKey
             };
         }

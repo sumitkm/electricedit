@@ -60,7 +60,7 @@ export class viewModel {
         this.currentLocation(position);
     }
 
-    private onPasteHtml = (event, data)=>
+    private onPasteHtml = (event, data) =>
     {
         var range = this.editor.getSelection();
         this.editor.updateContents({ ops: [ { retain: range.end }, { insert: data }]});
@@ -69,6 +69,7 @@ export class viewModel {
     private onAttachmentCreated = (event, data: any) =>
     {
         var newAttachment = attachmentFile.fromJS(data);
+
         console.log(JSON.stringify(data));
         var existing = ko.utils.arrayFirst(this.file().media(), attach => attach.fileName == data.fileName);
         if(existing != null)

@@ -134,8 +134,23 @@ class Files {
     private WriteToFile = (filename: string) => {
         if (filename != null)
         {
+            console.log(this.file, null, 2);
             var fs = require('fs');
             this.file.fileName = filename;
+            if(this.file.media!=null && this.file.media.length > 0)
+            {
+                for (let i = 0; i < this.file.media.length; i++) {
+                    let currentMedia = this.file.media[i];
+                    if(currentMedia.fileName == null)
+                    {
+                        this.file.media.splice(i);
+                    }
+                    else
+                    {
+                        currentMedia.rawContent = "";
+                    }
+                }
+            }
             if(filename.lastIndexOf('.eejson') > 0)
             {
                 fs.writeFile(filename, JSON.stringify(this.file), (err) =>

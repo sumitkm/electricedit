@@ -1,4 +1,5 @@
 import ko = require("knockout");
+import attachmentFile = require("./attachmentFile");
 
 class eeJson
 {
@@ -11,7 +12,6 @@ class eeJson
     modified: KnockoutObservable<boolean>=ko.observable<boolean>(false);
     type: KnockoutObservable<string>=ko.observable<string>("");
     media : KnockoutObservableArray<any>=ko.observableArray<any>([]);
-    media_attrs: KnockoutObservableArray<any>=ko.observableArray<any>([]);
 
     public static fromJS(data : any)
     {
@@ -26,11 +26,11 @@ class eeJson
         newJson.type(data.type);
         if(data.media!=null)
         {
+            var mediaArray = [];
+            for (let i = 0; i < data.media.length; i++) {
+                mediaArray.push(attachmentFile.fromJS(data.media[i]));
+            }
             ko.utils.arrayPushAll(newJson.media(), data.media);
-        }
-        if(data.media_attrs !=null)
-        {
-            ko.utils.arrayPushAll(newJson.media_attrs(), data.media_attrs);
         }
         return newJson;
     }
