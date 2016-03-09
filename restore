@@ -1,10 +1,11 @@
+cd app
 tsd install
 echo TypeScript definitions for services installed
 
-cd app/ui
+cd ui
 tsd install
 echo TypeScript definitions for UI installed
-cd ../..
+cd ..
 
 cd app
 npm install

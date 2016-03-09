@@ -1,5 +1,5 @@
 /// <reference path="../../interop.ts"/>
-/// <reference path="../../../typings/tsd.d.ts"/>
+/// <reference path="../../typings/tsd.d.ts"/>
 
 var Jimp = require("jimp");
 import eeJson = require("./model/eeJson");

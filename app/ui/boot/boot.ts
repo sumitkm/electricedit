@@ -8,7 +8,7 @@
 
 requirejs.config(
   {
-    baseUrl: __dirname + '/',
+    baseUrl: __dirname + '/ui/',
     paths:
     {
         "jquery": "libs/jquery/dist/jquery.min",
@@ -29,7 +29,7 @@ requirejs.config(
 
 // Start loading the main app file. Put all of
 // your application logic in there.
-requirejs(["jquery", "knockout", "text", "bootstrap", "ui/boot/config"], ($, ko, text, bootstrap, config)=>
+requirejs(["jquery", "knockout", "text", "bootstrap", "boot/config"], ($, ko, text, bootstrap, config)=>
 {
   var spaApp = new config.Spa();
 });

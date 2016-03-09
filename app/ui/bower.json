@@ -19,6 +19,7 @@
   "private": true,
   "ignore": [
     "**/.*",
+    "libs",
     "node_modules",
     "bower_components",
     "test",

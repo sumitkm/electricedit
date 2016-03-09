@@ -9,12 +9,12 @@ export class Spa {
   }
 
   public registerComponents() {
-    this.registerComponent("home-page", "ui/pages/home-page/home-page")
-    this.registerComponent("quill-editor", "ui/components/quill-editor/quill-editor");
-    this.registerComponent("settings-editor", "ui/components/settings-editor/settings-editor");
-    this.registerComponent("post-blog", "ui/components/post-blog/post-blog");
-    this.registerComponent("tab-strip", "ui/components/tab-strip/tab-strip");
-    this.registerComponent("save-attachments", "ui/components/save-attachments/save-attachments");
+    this.registerComponent("home-page", "pages/home-page/home-page")
+    this.registerComponent("quill-editor", "components/quill-editor/quill-editor");
+    this.registerComponent("settings-editor", "components/settings-editor/settings-editor");
+    this.registerComponent("post-blog", "components/post-blog/post-blog");
+    this.registerComponent("tab-strip", "components/tab-strip/tab-strip");
+    this.registerComponent("save-attachments", "components/save-attachments/save-attachments");
   }
 
   public registerComponent(name: string, location: string) {

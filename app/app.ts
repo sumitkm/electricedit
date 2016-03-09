@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts"/>
+/// <reference path="./typings/tsd.d.ts"/>
 /// <reference path="./services/settings/settings" />
 import settingsService = require("./services/settings/settings");
 import eventHandler = require('./event-handler');
@@ -13,7 +13,6 @@ export class app {
     ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
     currentApp = this.electron.app;  // Module to control application life.
     BrowserWindow = this.electron.BrowserWindow;  // Module to create native browser window.
-
 
     // Keep a global reference of the window object, if you don't, the window will
     // be closed automatically when the JavaScript object is garbage collected.
@@ -92,8 +91,6 @@ export class app {
         this.mainWindow.on('closed', () => {
             this.quitApp();
         });
-
-
     }
 
     private quitApp = () => {

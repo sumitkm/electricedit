@@ -3,17 +3,17 @@
 /// <reference path="../../model/eeJson.ts" />
 
 ///<amd-dependency path="text!./home-page.html" />
-///<amd-dependency path="ui/components/quill-editor/quill-editor-params"/>
-///<amd-dependency path="ui/menus/menus"/>
-///<amd-dependency path="ui/components/settings-editor/settings-editor-model"/>
+///<amd-dependency path="components/quill-editor/quill-editor-params"/>
+///<amd-dependency path="menus/menus"/>
+///<amd-dependency path="components/settings-editor/settings-editor-model"/>
 import MySite = require("../../model/mySite");
 import MyPost = require("../../model/myPost");
 
-var editorSettings = require("ui/components/settings-editor/settings-editor-model").editorSettings;
-var quillEditor = require("ui/components/quill-editor/quill-editor-params");
+var editorSettings = require("components/settings-editor/settings-editor-model").editorSettings;
+var quillEditor = require("components/quill-editor/quill-editor-params");
 import ko = require("knockout");
 import eeJson = require("../../model/eeJson");
-var menuUi = require("ui/menus/menus");
+var menuUi = require("menus/menus");
 var menu = remote.Menu;
 
 export var template = require("text!./home-page.html");
