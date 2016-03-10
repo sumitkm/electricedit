@@ -28,7 +28,7 @@ module wordpress.api.base
             this.url = url;
         }
 
-        public execute(query: Q, request: R, callback: (S)=>void)
+        public execute(query: Q, request: R, callback: (response: S)=>void)
         {
             try
             {
@@ -37,9 +37,9 @@ module wordpress.api.base
                     method: this.requestType,
                     headers: this.header,
                     body: queryString.stringify(request)
-                }).then(res => {
+                }).then((res: any) => {
                     return res.json();
-                }).then((json: Array<S>) =>{
+                }).then((json: S) =>{
                     callback(json);
                 });
             }

@@ -38,13 +38,13 @@ Usability
 8. Warn before Exit/New/Open  
 9. Save As  
 10. Recently opened files list  
-11. Save copy pasted images as attachments
+11. Save copy pasted images as attachments &#10003;
 
 Functionality  
 1. Configuration Settings &#10003;  
 2. Configuration Settings editor &#10003;  
 3. Insert code snippets gracefully  
-4. Save image embeds  
+4. Save image embeds &#10003;  
 6. Save images and videos as attachments to local file  
 7. Correct default folders in each environment  
 8. Custom context menus  

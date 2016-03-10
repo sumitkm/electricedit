@@ -9,7 +9,7 @@ export module wordpress.api.posts {
     export class createNewPost extends
         base.query<wmq.wordpress.model.query.postNew,
         wmr.wordpress.model.request.postNew,
-        wms.wordpress.model.response.newPost>
+        Array<wms.wordpress.model.response.newPost>>
     {
         static endPoint = "https://public-api.wordpress.com/rest/v1.1/sites/$site/posts/new";
         constructor(apiKey: string, siteId: string) {
@@ -19,7 +19,7 @@ export module wordpress.api.posts {
 
         execute(
             query: wmq.wordpress.model.query.postNew,
-            request: any,
+            request: wmr.wordpress.model.request.postNew,
             callback: (json: Array<wms.wordpress.model.response.newPost>) => void) {
             super.execute(query, request, callback);
         }
@@ -57,12 +57,12 @@ export module wordpress.api.posts {
             var FormData = require('form-data');
             var fs = require('fs');
             var request = require('request');
-            var formData = {};
+            var formData = <any>{};
 
             for (let i = 0; i < req.media.length; i++) {
-                formData['media[' + i + ']'] = fs.createReadStream(req.media[i].fileName);
-                formData['attrs[' + i + '][caption]'] = req.media[i].caption,
-                formData['attrs[' + i + '][title]'] = req.media[i].title
+                formData['media[' + i + ']'] = <any>fs.createReadStream(req.media[i].fileName);
+                formData['attrs[' + i + '][caption]'] = <any>req.media[i].caption,
+                formData['attrs[' + i + '][title]'] = <any>req.media[i].title
             }
 
             request.post(
@@ -72,7 +72,7 @@ export module wordpress.api.posts {
                     headers: this.header,
                     formData: formData
                 },
-                (err, httpResponse, body) =>
+                (err: any, httpResponse: any, body: any) =>
                 {
                     if (err)
                     {

@@ -109,11 +109,11 @@ class Files {
         });
     }
 
-    public Load = (event, fileNames: Array<string>) =>
+    public Load = (event: GitHubElectron.IPCMainEvent, fileNames: Array<string>) =>
     {
         var fs = require('fs');
         if (fileNames != null && fileNames.length > 0) {
-            fs.readFile(fileNames[0], { encoding: 'utf8', flag: 'r' }, (err, data) => {
+            fs.readFile(fileNames[0], { encoding: 'utf8', flag: 'r' }, (err: any, data: any) => {
                 if (err) {
                     throw err;
                 }
@@ -153,7 +153,7 @@ class Files {
             }
             if(filename.lastIndexOf('.eejson') > 0)
             {
-                fs.writeFile(filename, JSON.stringify(this.file), (err) =>
+                fs.writeFile(filename, JSON.stringify(this.file), (err: any) =>
                 {
                     if (err)
                     {
@@ -172,7 +172,7 @@ class Files {
                 this.attachment = <attachmentFile>this.file;
                 var response = this.convertBase64Image(this.attachment.rawContent);
 
-                fs.writeFile("temp", response.data, (err) =>
+                fs.writeFile("temp", response.data, (err: any) =>
                 {
                     if(err)
                     {
@@ -181,7 +181,7 @@ class Files {
                     }
                     else
                     {
-                        Jimp.read("temp", (err, lenna)  => {
+                        Jimp.read("temp", (err: any, lenna: any)  => {
                             if (err)
                             {
                                 console.error("JIMP ERROR: ", err);
@@ -216,7 +216,7 @@ class Files {
     private convertBase64Image = (datastring: string) =>
     {
         let matches = datastring.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-        let response = { type: '', data: null };
+        let response = { type: '', data: <any>null };
         if(matches!=null && matches.length !== 3)
         {
             throw new Error('Invalid input string');

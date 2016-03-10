@@ -11,12 +11,12 @@ class oAuth2 {
     currentConfig: any;
     currentWindowParams: any;
 
-    constructor(config, windowParams) {
+    constructor(config: any, windowParams: any) {
         this.currentConfig = config;
         this.currentWindowParams = windowParams;
     }
 
-    public getAuthorizationCode = (opts) => {
+    public getAuthorizationCode = (opts: any) => {
         opts = opts || {};
         var urlParams = {
             response_type: 'code',
@@ -27,7 +27,7 @@ class oAuth2 {
 
         var url = this.currentConfig.authorizationUrl + '?' + queryString.stringify(urlParams);
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: any, reject: any) => {
             const authWindow = new BrowserWindow(this.currentWindowParams || { 'use-content-size': true });
 
             authWindow.loadURL(url);
@@ -37,7 +37,7 @@ class oAuth2 {
                 reject(new Error('window was closed by user'));
             });
 
-            authWindow.webContents.on('did-get-redirect-request', (event, oldUrl: string, newUrl: string) => {
+            authWindow.webContents.on('did-get-redirect-request', (event: any, oldUrl: string, newUrl: string) => {
                 if (newUrl.indexOf(urlParams.redirect_uri) == 0) {
                     var rawCode = /\?code=(.+)\&\b/.exec(newUrl) || /authorize\/([^&]*)/.exec(newUrl);
                     var code = (rawCode && rawCode.length > 1) ? rawCode[1] : null;
@@ -60,7 +60,7 @@ class oAuth2 {
         });
     }
 
-    public tokenRequest = (data) => {
+    public tokenRequest = (data: any) => {
         const header = <any>{
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -79,20 +79,23 @@ class oAuth2 {
             method: 'POST',
             headers: header,
             body: queryString.stringify(data)
-        }).then(res => {
+        }).then((res: any) => {
             return res.json();
         });
     }
 
-    public getAccessToken = (opts) => {
+    public getAccessToken = (opts: any) =>
+    {
         return this.getAuthorizationCode(opts)
-            .then(authorizationCode => {
-            return this.tokenRequest({
-                code: authorizationCode,
-                grant_type: 'authorization_code',
-                redirect_uri: this.currentConfig.redirectUrl
+            .then((authorizationCode: any) =>
+            {
+                return this.tokenRequest(
+                    {
+                        code: authorizationCode,
+                        grant_type: 'authorization_code',
+                        redirect_uri: this.currentConfig.redirectUrl
+                    });
             });
-        });
     }
 
     //

@@ -32,7 +32,7 @@ class settings{
     public set(name: string, value: any)
     {
         nconf.set(name, value);
-        this.currentSettings[name] = value;
+        (<any>this.currentSettings)[name] = <any>value;
     }
 
     public get()
@@ -50,7 +50,7 @@ class settings{
 
     public save()
     {
-        nconf.save((err) => {
+        nconf.save((err: any) => {
             fs.readFile('./config.json', (err, data) => {
                 console.dir(JSON.parse(data.toString()))
             });

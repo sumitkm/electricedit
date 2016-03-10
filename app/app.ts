@@ -16,7 +16,7 @@ export class app {
 
     // Keep a global reference of the window object, if you don't, the window will
     // be closed automatically when the JavaScript object is garbage collected.
-    mainWindow = null;
+    mainWindow : GitHubElectron.BrowserWindow = null;
     settingsService = new settingsService();
     eventHandler = new eventHandler();
     currentAppSettings: settingsModel.appSettings;
@@ -72,7 +72,7 @@ export class app {
             const myAuthenticator = new oAuth2(config, windowParams);
 
             myAuthenticator.getAccessToken(options)
-            .then(token => {
+            .then((token: any)=> {
                 try
                 {
                     console.log("SUCCESS: accessToken retrieved");

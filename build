@@ -2,11 +2,6 @@ cd app
 tsc
 echo app Built
 
-cd services
-tsc
-cd ..
-echo services Built
-
 cd ui
 tsc
 cd ..

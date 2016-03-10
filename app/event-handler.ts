@@ -13,7 +13,6 @@ import settingsModel = require("./services/settings/model/appSettings");
 import settingsService = require("./services/settings/settings");
 
 class eventHandler {
-    private postsQuery;
     private ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
@@ -93,7 +92,7 @@ class eventHandler {
             var postNew = new wmmp.wordpress.model.query.myPosts();
             postNew.pretty = true;
             this.wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(this.currentAppSettings.oAuth2Groups[0].accessToken);
-            this.wpGetAllPostsSvc.execute(postNew, null, (data) =>
+            this.wpGetAllPostsSvc.execute(postNew, null, (data: any) =>
             {
                 console.log("Recent Posts (count): " + data.posts.length);
                 event.sender.send("app.view.myPosts", data.posts);

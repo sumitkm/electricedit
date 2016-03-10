@@ -23,9 +23,9 @@ export module wordpress.api.sites
             request: any,
             callback: (json: Array<wmr.wordpress.model.response.mySite>)=> void)
         {
-            super.execute(query, request, (data)=>
+            super.execute(query, request, (data: any)=>
             {
-                callback(data.sites);
+                callback(<Array<wmr.wordpress.model.response.mySite>>data.sites);
             });
         }
     }
