@@ -5,13 +5,12 @@ echo TypeScript definitions for services installed
 cd ui
 tsd install
 echo TypeScript definitions for UI installed
-cd ..
-
-cd app
-npm install
-echo Node Packages installed
 
 bower install
 echo Bower dependencies installed
+
+cd ..
+npm install
+echo Node Packages installed
 
 cd ..
