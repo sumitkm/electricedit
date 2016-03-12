@@ -5,7 +5,6 @@ echo TypeScript definitions for services installed
 cd ui
 tsd install
 echo TypeScript definitions for UI installed
-
 bower install
 echo Bower dependencies installed
 

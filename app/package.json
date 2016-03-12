@@ -26,7 +26,6 @@
   "homepage": "https://github.com/sumitkm/electricedit#readme",
   "dependencies": {
     "jimp": "^0.2.21",
-    "knockout": "^3.4.0",
     "nconf": "^0.8.2",
     "node-fetch": "^1.3.3",
     "object-assign": "^4.0.1",
@@ -36,6 +35,5 @@
     "restler": "^3.4.0"
   },
   "devDependencies": {
-    "require": "^2.4.20"
   }
 }
