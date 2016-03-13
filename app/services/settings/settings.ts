@@ -11,7 +11,7 @@ class settings{
     {
     }
 
-    public load()
+    public load(callback: (currentSettings: model.appSettings) => void = null)
     {
         try
         {
@@ -21,6 +21,10 @@ class settings{
                 this.currentSettings.autoReopen = nconf.get('autoReopen');
                 this.currentSettings.lastOpenFile = nconf.get('lastOpenFile');
                 this.currentSettings.oAuth2Groups = nconf.get('oAuth2Groups');
+                if(callback!=null)
+                {
+                    callback(this.currentSettings);
+                }
             });
         }
         catch(error)

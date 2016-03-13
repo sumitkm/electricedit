@@ -1,13 +1,12 @@
 /// <reference path="./services/wordpress/api/sites" />
 
 import files = require("./services/files/files");
-import settings = require("./services/settings/settings");
 import wpSites = require("./services/wordpress/api/sites");
 import wpPosts = require("./services/wordpress/api/posts");
-import wmq = require('./services/wordpress/model/query/mySites');
-import wmpm = require('./services/wordpress/model/query/postNew');
-import wmmp = require('./services/wordpress/model/query/myPosts');
-import wmr = require('./services/wordpress/model/request/postNew');
+import queries = require('./services/wordpress/model/query/query');
+import requets = require('./services/wordpress/model/request/request');
+import responses = require('./services/wordpress/model/response/response');
+
 import model = require("./services/settings/model/appSettings");
 import settingsModel = require("./services/settings/model/appSettings");
 import settingsService = require("./services/settings/settings");
@@ -16,19 +15,21 @@ class eventHandler {
     private ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
-    currentSettingsSvc: settings;
+    currentSettingsSvc: settingsService;
     wpGetMySitesSvc: wpSites.wordpress.api.sites.getMySites;
-    wpCreatePostSvc: wpPosts.wordpress.api.posts.createNewPost;
-    wpUpdatePostSvc: wpPosts.wordpress.api.posts.updatePost;
-    wpGetAllPostsSvc: wpPosts.wordpress.api.posts.getAllPosts;
+    // wpUpdatePostSvc: wpPosts.wordpress.api.posts.updatePost;
+    // wpGetAllPostsSvc: wpPosts.wordpress.api.posts.getAllPosts;
     currentFiles: files;
     currentSettings = new model.appSettings();
     currentAppSettings: settingsModel.appSettings;
     settingsService = new settingsService();
 
     constructor() {
-        this.currentSettingsSvc = new settings();
-        this.settingsService.load();
+        this.currentSettingsSvc = new settingsService();
+        this.settingsService.load((newSettings: settingsModel.appSettings)=>{
+            this.currentAppSettings = newSettings;
+            this.wpGetMySitesSvc = new wpSites.wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
+        });
     }
 
     public attach = (mainWindow: GitHubElectron.BrowserWindow) => {
@@ -76,66 +77,69 @@ class eventHandler {
 
         this.ipcMain.on("menu.View.GetMySites", (event, arg) => {
             this.currentAppSettings = this.settingsService.currentSettings;
-            this.wpGetMySitesSvc = new wpSites.wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
-            var query = new wmq.wordpress.model.query.mySites();
-            query.pretty = true;
-            query.site_visibility = "all";
-            query.fields = "ID,name,description,url,visible,is_private";
-            var sites = new Array<any>();
-            this.wpGetMySitesSvc.execute(query, null, (json) => {
+
+            let mySitesQuery = new queries.wordpress.model.query.mySites();
+            mySitesQuery.pretty = true;
+            mySitesQuery.site_visibility = "all";
+            mySitesQuery.fields = "ID,name,description,url,visible,is_private";
+            let sites = new Array<any>();
+            this.wpGetMySitesSvc.execute(mySitesQuery, null, (json) => {
                 console.log("My Sites (count) : " + json.length)
                 sites = json;
                 event.sender.send("app.View.ShowPostBlog", sites);
             });
 
 
-            var postNew = new wmmp.wordpress.model.query.myPosts();
-            postNew.pretty = true;
-            this.wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(this.currentAppSettings.oAuth2Groups[0].accessToken);
-            this.wpGetAllPostsSvc.execute(postNew, null, (data: any) =>
+            let myPostsQuery = new queries.wordpress.model.query.myPosts();
+            myPostsQuery.pretty = true;
+            let wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(this.currentAppSettings.oAuth2Groups[0].accessToken);
+            wpGetAllPostsSvc.execute(myPostsQuery, null, (data: any) =>
             {
                 console.log("Recent Posts (count): " + data.posts.length);
                 event.sender.send("app.view.myPosts", data.posts);
             });
+
+            let myTagsQuery = new queries.wordpress.model.query.baseQuery();
+
         });
 
         this.ipcMain.on("app.View.PostBlog", (event, arg)=>
         {
-            var selectedSiteId = arg.selectedSiteId;
+            let selectedSiteId = arg.selectedSiteId;
             console.log("Site ID: " + selectedSiteId);
 
             if(arg.selectedPostId!=null && arg.selectedPostId != '')
             {
-                this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.updatePost
+                let wpCreatePostSvc = new wpPosts.wordpress.api.posts.updatePost
                     (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId, arg.selectedPostId);
 
                 console.log("Updating post (ID): " + JSON.stringify(arg,null,3));//.selectedPostId);
 
-                var postQuery = new wmpm.wordpress.model.query.postNew();
+                let postQuery = new queries.wordpress.model.query.postNew();
                 postQuery.pretty = true;
-                var postUpdate = new wmr.wordpress.model.request.postNew();
+                let postUpdate = new requets.wordpress.model.request.postNew();
                 postUpdate.title = arg.title;
                 postUpdate.content = arg.content;
                 postUpdate.media = arg.media;
 
-                this.wpCreatePostSvc.execute(postQuery, postUpdate, (data) => {
+                wpCreatePostSvc.execute(postQuery, postUpdate, (data) => {
                     console.log("Updated post successfully.");
                     event.sender.send("app.View.UpdatedSuccessfully", data);
                 });
             }
             else
             {
-                this.wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
+                let wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
                     (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
 
-                var postQuery = new wmpm.wordpress.model.query.postNew();
+                let postQuery = new queries.wordpress.model.query.postNew();
                 postQuery.pretty = true;
-                var postNew = new wmr.wordpress.model.request.postNew();
+                let postNew = new requets.wordpress.model.request.postNew();
                 postNew.title = arg.title;
                 postNew.content = arg.content;
                 postNew.media = arg.media;
 
-                this.wpCreatePostSvc.execute(postQuery, postNew, (data) => {
+                wpCreatePostSvc.execute(postQuery, postNew, (data) => {
                     console.log("Created post successfully." + JSON.stringify(data));
                     event.sender.send("app.View.PostedSuccessfully", data);
                 });
