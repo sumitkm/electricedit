@@ -26,11 +26,53 @@ export class viewModel
     mySites: KnockoutObservableArray<MySite> = ko.observableArray<MySite>([]);
     myRecentPosts: KnockoutObservableArray<MyPost> = ko.observableArray<MyPost>([]);
     imageData: KnockoutObservable<string> = ko.observable("");
+    separatorElement : any;
+    isDragging: KnockoutObservable<boolean> = ko.observable<boolean>(false);
 
     constructor()
     {
         this.editorParams = new quillEditor.QuillEditorParams();
+        this.setupEventHandlers();
+        ipcRenderer.send('app.Settings.Load');
+        ipcRenderer.send('asynchronous-message', "Renderer loaded!");
 
+        var menus = new menuUi.menus();
+        var currentMenuTemplate = menu.buildFromTemplate(menuUi.menuTemplate);
+        menu.setApplicationMenu(currentMenuTemplate);
+
+        $(document).ready(this.initJquery);
+    }
+
+    private initJquery = () =>
+    {
+        $("#separator").on("mousedown", (event) =>
+        {
+            this.isDragging(true);
+            console.log("x:" + event.pageX + ",y:" + event.pageY);
+        });
+
+        $(document).on("mouseup", (event) =>{
+            this.isDragging(false);
+        });
+
+        $(document).on("click", (event) =>{
+            this.isDragging(false);
+        });
+
+        $(document).on("mousemove", (event) =>
+        {
+            if(this.isDragging() == true)
+            {
+                console.log("x:" + event.pageX + ",y:" + event.pageY);
+                $(".side-panel").css("width", event.pageX);
+                $(".separator").css("left", event.pageX);
+                $(".editor-container").css("left", event.pageX);
+            }
+        });
+    }
+
+    private setupEventHandlers = () =>
+    {
         ipcRenderer.on('app.Settings.Loaded', (event, data) =>
         {
             this.settingsEditorModel(editorSettings.fromJS(data));
@@ -39,14 +81,6 @@ export class viewModel
                 ipcRenderer.send('app.File.Load', this.settingsEditorModel().lastOpenFile());
             }
         });
-
-        ipcRenderer.send('app.Settings.Load');
-        ipcRenderer.send('asynchronous-message', "Renderer loaded!");
-
-        var menus = new menuUi.menus();
-        var currentMenuTemplate = menu.buildFromTemplate(menuUi.menuTemplate);
-        menu.setApplicationMenu(currentMenuTemplate);
-
         ipcRenderer.on('menu.View.Settings', (event, data) =>
         {
             $('#settings').modal('show');
@@ -93,7 +127,6 @@ export class viewModel
         ipcRenderer.on('app.View.ShowPostBlog', (event, data)=>
         {
             ko.utils.arrayPushAll<MySite>(this.mySites, data);
-            $('#postBlog').modal('show');
         });
 
         ipcRenderer.on("app.view.myPosts", (event, data) => {

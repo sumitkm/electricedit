@@ -1,56 +1,45 @@
-<div data-bind="attr: { id: id }" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content" style="min-width: 75%">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Post to blog</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Select a blog</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" data-bind="options: mySites,
+<div data-bind="attr: { id: id }">
+    <nav class="navbar navbar-default">
+        <div class="toolbar">
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Post to blog</h4>
+        </div>
+
+    </nav>
+    <div class="modal-body">
+        <div class="form">
+            <div class="form-group">
+                <label class="control-label">Select a blog</label>
+                    <select class="form-control" data-bind="options: mySites,
                             optionsText: 'name',
                             optionsValue: 'ID',
                             value: selectedSiteId">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Select an article</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" data-bind="options: recentPostsInSelectedSite,
+                    </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Select an article</label>
+                    <select class="form-control" data-bind="options: recentPostsInSelectedSite,
                             optionsText: 'title',
                             optionsValue: 'ID',
                             value: selectedPostId,
                             optionsCaption: 'Please select a post to update...'">
-                        </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Post title</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" data-bind="textInput: eeJsonVm().title" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">URL slug</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" data-bind="textInput: slug" />
-                        </div>
-                    </div>
-                </div>
+                    </select>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bind="click: publish">Publish</button>
+            <div class="form-group">
+                <label class="control-label">Post title</label>
+                    <input class="form-control" type="text" data-bind="textInput: eeJsonVm().title" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">URL slug</label>
+                <input class="form-control" type="text" data-bind="textInput: slug" />
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bind="click: publish">Publish</button>
+    </div>
 </div>
-<!-- /.modal -->
+<!-- /.modal-content -->

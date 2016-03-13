@@ -1,13 +1,18 @@
-
-<quill-editor params="file: eeJsonVm"></quill-editor>
+<div class="side-panel">
+    <post-blog params="id: 'postBlog',
+        file: eeJsonVm,
+        mySites: mySites,
+        myRecentPosts: myRecentPosts"></post-blog>
+</div>
 
 <settings-editor params="id:'settings',
     settings: settingsEditorModel">
 </settings-editor>
 
-<post-blog params="id: 'postBlog',
-    file: eeJsonVm,
-    mySites: mySites,
-    myRecentPosts: myRecentPosts"></post-blog>
+<div class="separator" id="separator">
+</div>
+<quill-editor params="file: eeJsonVm"></quill-editor>
+
+
 
 <save-attachments params="id: 'saveAttachments', file: eeJsonVm, imageData: imageData"></save-attachments>

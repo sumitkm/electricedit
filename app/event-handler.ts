@@ -89,7 +89,6 @@ class eventHandler {
                 event.sender.send("app.View.ShowPostBlog", sites);
             });
 
-
             let myPostsQuery = new queries.wordpress.model.query.myPosts();
             myPostsQuery.pretty = true;
             let wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(this.currentAppSettings.oAuth2Groups[0].accessToken);
@@ -99,7 +98,6 @@ class eventHandler {
                 event.sender.send("app.view.myPosts", data.posts);
             });
 
-            let myTagsQuery = new queries.wordpress.model.query.baseQuery();
 
         });
 
