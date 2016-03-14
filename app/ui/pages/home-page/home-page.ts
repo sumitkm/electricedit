@@ -79,6 +79,8 @@ export class viewModel
             if (this.settingsEditorModel().autoReopen() == true && this.settingsEditorModel().lastOpenFile() != "")
             {
                 ipcRenderer.send('app.File.Load', this.settingsEditorModel().lastOpenFile());
+                ipcRenderer.send('menu.View.GetMySites');
+
             }
         });
         ipcRenderer.on('menu.View.Settings', (event, data) =>

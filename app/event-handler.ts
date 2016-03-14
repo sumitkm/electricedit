@@ -6,7 +6,7 @@ import wpPosts = require("./services/wordpress/api/posts");
 import queries = require('./services/wordpress/model/query/query');
 import requets = require('./services/wordpress/model/request/request');
 import responses = require('./services/wordpress/model/response/response');
-
+import wpapi = require('./services/wordpress/wordpress');
 import model = require("./services/settings/model/appSettings");
 import settingsModel = require("./services/settings/model/appSettings");
 import settingsService = require("./services/settings/settings");
@@ -76,29 +76,9 @@ class eventHandler {
         })
 
         this.ipcMain.on("menu.View.GetMySites", (event, arg) => {
-            this.currentAppSettings = this.settingsService.currentSettings;
-
-            let mySitesQuery = new queries.wordpress.model.query.mySites();
-            mySitesQuery.pretty = true;
-            mySitesQuery.site_visibility = "all";
-            mySitesQuery.fields = "ID,name,description,url,visible,is_private";
-            let sites = new Array<any>();
-            this.wpGetMySitesSvc.execute(mySitesQuery, null, (json) => {
-                console.log("My Sites (count) : " + json.length)
-                sites = json;
-                event.sender.send("app.View.ShowPostBlog", sites);
-            });
-
-            let myPostsQuery = new queries.wordpress.model.query.myPosts();
-            myPostsQuery.pretty = true;
-            let wpGetAllPostsSvc = new wpPosts.wordpress.api.posts.getAllPosts(this.currentAppSettings.oAuth2Groups[0].accessToken);
-            wpGetAllPostsSvc.execute(myPostsQuery, null, (data: any) =>
-            {
-                console.log("Recent Posts (count): " + data.posts.length);
-                event.sender.send("app.view.myPosts", data.posts);
-            });
-
-
+            //this.currentAppSettings = this.settingsService.currentSettings;
+            var connector = new wpapi.wordpress(this.currentAppSettings.oAuth2Groups[0].accessToken);
+            connector.getAccountDetails(event, this.currentAppSettings);
         });
 
         this.ipcMain.on("app.View.PostBlog", (event, arg)=>
