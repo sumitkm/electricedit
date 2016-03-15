@@ -28,6 +28,8 @@ export class viewModel
     imageData: KnockoutObservable<string> = ko.observable("");
     separatorElement : any;
     isDragging: KnockoutObservable<boolean> = ko.observable<boolean>(false);
+    separatorVisible: KnockoutObservable<boolean> = ko.observable<boolean>(true);
+    previousSidePanelWidth: KnockoutObservable<number> = ko.observable<number>(0);
 
     constructor()
     {
@@ -48,7 +50,7 @@ export class viewModel
         $("#separator").on("mousedown", (event) =>
         {
             this.isDragging(true);
-            console.log("x:" + event.pageX + ",y:" + event.pageY);
+            //console.log("x:" + event.pageX + ",y:" + event.pageY);
         });
 
         $(document).on("mouseup", (event) =>{
@@ -64,11 +66,21 @@ export class viewModel
             if(this.isDragging() == true)
             {
                 console.log("x:" + event.pageX + ",y:" + event.pageY);
-                $(".side-panel").css("width", event.pageX);
-                $(".separator").css("left", event.pageX);
-                $(".editor-container").css("left", event.pageX);
+                this.setSidePanelWidth(event.pageX);
+
             }
         });
+    }
+
+    private setSidePanelWidth = (width: number) =>
+    {
+        $(".side-panel").css("width", width);
+        $(".separator").css("left", width);
+        $(".editor-container").css("left", width);
+        if(width != 0)
+        {
+            this.previousSidePanelWidth(width);
+        }
     }
 
     private setupEventHandlers = () =>
@@ -80,9 +92,13 @@ export class viewModel
             {
                 ipcRenderer.send('app.File.Load', this.settingsEditorModel().lastOpenFile());
                 ipcRenderer.send('menu.View.GetMySites');
-
             }
         });
+
+        ipcRenderer.on('app.side-panel.hide', (event, data) =>{
+            this.hideSidePanel();
+        });
+
         ipcRenderer.on('menu.View.Settings', (event, data) =>
         {
             $('#settings').modal('show');
@@ -93,7 +109,6 @@ export class viewModel
             this.settingsEditorModel().lastOpenFile(data.fileName);
             this.eeJsonVm(eeJson.fromJS(data));
             console.log("EEJSON LOADED: \r\n" + JSON.stringify(data));
-            // this.eeJsonVm(newFile);
         });
 
         ipcRenderer.on('menu.File.Save', (event, data) =>
@@ -129,6 +144,7 @@ export class viewModel
         ipcRenderer.on('app.View.ShowPostBlog', (event, data)=>
         {
             ko.utils.arrayPushAll<MySite>(this.mySites, data);
+            this.showSidePanel();
         });
 
         ipcRenderer.on("app.view.myPosts", (event, data) => {
@@ -163,6 +179,17 @@ export class viewModel
         });
     }
 
+    private hideSidePanel = () =>
+    {
+        this.setSidePanelWidth(0);
+        this.separatorVisible(false);
+    }
+
+    private showSidePanel = () =>
+    {
+        this.setSidePanelWidth(this.previousSidePanelWidth());
+        this.separatorVisible(true);
+    }
     public saveFile = () =>
     {
         ipcRenderer.send('app.File.Save', ko.toJS(this.eeJsonVm));

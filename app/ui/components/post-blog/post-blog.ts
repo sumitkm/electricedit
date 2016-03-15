@@ -44,4 +44,9 @@ export class viewModel {
             media: this.eeJsonVm().media()
         });
     }
+
+    closePanel = () => {
+        console.log("Raising event");
+        ipcRenderer.send("app.side-panel.onhide");
+    }
 }

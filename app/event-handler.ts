@@ -81,6 +81,10 @@ class eventHandler {
             connector.getAccountDetails(event, this.currentAppSettings);
         });
 
+        this.ipcMain.on("app.side-panel.onhide", (event: GitHubElectron.IPCMainEvent, arg: any)=>{
+            event.sender.send("app.side-panel.hide");
+        });
+
         this.ipcMain.on("app.View.PostBlog", (event, arg)=>
         {
             let selectedSiteId = arg.selectedSiteId;

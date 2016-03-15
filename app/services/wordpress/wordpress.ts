@@ -23,10 +23,11 @@ import settingsModel = require("../settings/model/appSettings");
             mySitesQuery.site_visibility = "all";
             mySitesQuery.fields = "ID,name,description,url,visible,is_private";
             let sites = new Array<any>();
+            event.sender.send("app.View.ShowPostBlog", sites);
+            
             this.wpGetMySitesSvc.execute(mySitesQuery, null, (json) => {
                 console.log("My Sites (count) : " + json.length)
                 sites = json;
-                event.sender.send("app.View.ShowPostBlog", sites);
             });
 
             let myPostsQuery = new queries.wordpress.model.query.myPosts();

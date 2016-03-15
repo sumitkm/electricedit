@@ -1,7 +1,7 @@
 <div data-bind="attr: { id: id }">
     <nav class="navbar navbar-default">
         <div style="padding: 10px">
-            <button type="button" class="close" aria-label="Close">
+            <button type="button" class="close">
                 <span aria-hidden="true">&times;</span>
             </button>
             <h4 class="modal-title">Post to blog</h4>
@@ -14,7 +14,8 @@
                     <select class="form-control" data-bind="options: mySites,
                             optionsText: 'name',
                             optionsValue: 'ID',
-                            value: selectedSiteId">
+                            value: selectedSiteId,
+                            optionsCaption: 'Select a Site to post...'">
                     </select>
             </div>
             <div class="form-group">
@@ -23,12 +24,8 @@
                             optionsText: 'title',
                             optionsValue: 'ID',
                             value: selectedPostId,
-                            optionsCaption: 'Please select a post to update...'">
+                            optionsCaption: 'Select a post to update...'">
                     </select>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Post title</label>
-                    <input class="form-control" type="text" data-bind="textInput: eeJsonVm().title" />
             </div>
             <div class="form-group">
                 <label class="control-label">URL slug</label>
@@ -37,7 +34,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-bind="click: closePanel">Close</button>
         <button type="button" class="btn btn-primary" data-bind="click: publish">Publish</button>
     </div>
 </div>

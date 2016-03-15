@@ -1,22 +1,19 @@
 /// <reference path="./typings/tsd.d.ts"/>
-/// <reference path="./services/settings/settings" />
 import settingsService = require("./services/settings/settings");
 import eventHandler = require('./event-handler');
 import oAuth2 = require("./services/oauth2/oauth2");
 import settingsModel = require("./services/settings/model/appSettings");
 
-var objectAssign = require('object-assign');
-
 export class app {
 
     electron: GitHubElectron.Electron = require('electron');
-    ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
     currentApp = this.electron.app;  // Module to control application life.
     BrowserWindow = this.electron.BrowserWindow;  // Module to create native browser window.
-
     // Keep a global reference of the window object, if you don't, the window will
     // be closed automatically when the JavaScript object is garbage collected.
     mainWindow : GitHubElectron.BrowserWindow = null;
+
+    ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
     settingsService = new settingsService();
     eventHandler = new eventHandler();
     currentAppSettings: settingsModel.appSettings;
