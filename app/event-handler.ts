@@ -81,6 +81,12 @@ class eventHandler {
             connector.getAccountDetails(event, this.currentAppSettings);
         });
 
+        this.ipcMain.on("app.View.GetCategories", (event: GitHubElectron.IPCMainEvent, arg: string)=>
+        {
+            var connector = new wpapi.wordpress(this.currentAppSettings.oAuth2Groups[0].accessToken);
+            connector.getSiteCategories(event, arg);
+        });
+
         this.ipcMain.on("app.side-panel.onhide", (event: GitHubElectron.IPCMainEvent, arg: any)=>{
             event.sender.send("app.side-panel.hide");
         });

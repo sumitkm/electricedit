@@ -1,0 +1,10 @@
+<div data-bind="css: 'padding-left: ' + padding + 'px'">
+    <!-- ko if: showCheckBox -->
+    <input type="checkbox" />
+    <!-- /ko -->
+    <label data-bind="text: text" />
+</div>
+
+<!-- ko foreach: children -->
+<tree-node params="dataSource: $data"></tree-node>
+<!-- /ko -->
