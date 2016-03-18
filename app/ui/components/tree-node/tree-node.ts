@@ -2,16 +2,15 @@
 
 import ko = require("knockout");
 import treeNodeVm = require("./treeNodeVm");
+
 export var template = require("text!./tree-node.html");
 
-class viewModel
+export class viewModel
 {
-    node : KnockoutObservable<treeNodeVm> = ko.observable<treeNodeVm>();
-    constructor(params: any)
+    public dataSource : KnockoutObservable<treeNodeVm> = ko.observable<treeNodeVm>(new treeNodeVm());
+    constructor(params)
     {
-        if(params.node != null)
-        {
-            this.node(params.dataSource);
-        }
+        console.log(JSON.stringify(ko.toJS(params.dataSource), null, 2));
+        this.dataSource = params.dataSource;
     }
 }

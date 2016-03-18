@@ -15,6 +15,8 @@ export class Spa {
     this.registerComponent("post-blog", "components/post-blog/post-blog");
     this.registerComponent("tab-strip", "components/tab-strip/tab-strip");
     this.registerComponent("save-attachments", "components/save-attachments/save-attachments");
+    this.registerComponent("tree-node", "components/tree-node/tree-node");
+    this.registerComponent("tree-view", "components/tree-view/tree-view");
   }
 
   public registerComponent(name: string, location: string) {

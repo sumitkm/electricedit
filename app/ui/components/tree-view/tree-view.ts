@@ -1,4 +1,4 @@
-///<amd-dependency path="text!./tree-view.html" />
+/// <amd-dependency path="text!./tree-view.html" />
 
 import ko = require("knockout");
 import treeNodeVm = require("../tree-node/treeNodeVm");
@@ -9,7 +9,8 @@ export class viewModel
     dataSource : KnockoutObservableArray<treeNodeVm> = ko.observableArray<treeNodeVm>([]);
     constructor(params)
     {
-        ko.utils.arrayPushAll(this.dataSource(), params.dataSource);
+        console.log("DataSource"+ params.dataSource().length);
+        this.dataSource = params.dataSource;
     }
 
 
