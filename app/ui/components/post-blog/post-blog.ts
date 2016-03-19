@@ -43,6 +43,7 @@ export class viewModel {
 
     setupCategories = (event: any, categories: Array<any>) => {
         console.log(JSON.stringify(categories));
+        this.categoryNodes.removeAll();
         for (let i = 0; i < categories.length; i++) {
             var node = new treeNodeVm();
             node.text(categories[i].name);
