@@ -10,5 +10,6 @@ class eeJson
     urlSlug: string = "";
     type: string="";
     media : Array<attachmentFile> = [];
+    categories: Array<category> = [];
 }
 export = eeJson;

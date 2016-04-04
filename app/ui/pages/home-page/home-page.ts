@@ -13,6 +13,7 @@ var editorSettings = require("components/settings-editor/settings-editor-model")
 var quillEditor = require("components/quill-editor/quill-editor-params");
 import ko = require("knockout");
 import eeJson = require("../../model/eeJson");
+import category = require("../../model/category");
 var menuUi = require("menus/menus");
 var menu = remote.Menu;
 
@@ -156,7 +157,6 @@ export class viewModel
         {
             this.eeJsonVm().postId(data.ID);
             this.eeJsonVm().siteId(data.site_ID);
-            $('#postBlog').modal('hide');
             this.saveFile();
         });
 
@@ -164,7 +164,6 @@ export class viewModel
         {
             this.eeJsonVm().postId(data.ID);
             this.eeJsonVm().siteId(data.site_ID);
-            $('#postBlog').modal('hide');
             this.saveFile();
         });
 
@@ -176,6 +175,22 @@ export class viewModel
                 this.imageData(data);
                 $('#saveAttachments').modal('show');
             }
+        });
+
+        ipcRenderer.on("app.view.post.categoryadded", (event, data)=>{
+            console.log("app.view.post.categoryadded"  + JSON.stringify(data, null, 2));
+            if(data != null)
+            {
+                this.eeJsonVm().categories.push(category.fromJS(data));
+            }
+        });
+
+        ipcRenderer.on("app.view.post.categoryremoved", (event, data)=>{
+            console.log("app.view.post.categoryremoved" + JSON.stringify(data, null, 2));
+            // if(data != null)
+            // {
+            //     this.eeJsonVm().categories.push(category.fromJS(data));
+            // }
         });
     }
 

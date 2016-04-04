@@ -1,5 +1,6 @@
 import ko = require("knockout");
 import attachmentFile = require("./attachmentFile");
+import category = require("./category");
 
 class eeJson
 {
@@ -12,6 +13,7 @@ class eeJson
     modified: KnockoutObservable<boolean>=ko.observable<boolean>(false);
     type: KnockoutObservable<string>=ko.observable<string>("");
     media : KnockoutObservableArray<any>=ko.observableArray<any>([]);
+    categories: KnockoutObservableArray<category> = ko.observableArray<category>([]);
 
     public static fromJS(data : any)
     {

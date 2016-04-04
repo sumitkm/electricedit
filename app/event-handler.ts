@@ -91,6 +91,16 @@ class eventHandler {
             event.sender.send("app.side-panel.hide");
         });
 
+        this.ipcMain.on("app.view.post.treeview.nodecheckchanged", (event: GitHubElectron.IPCMainEvent, arg: any) => {
+            if(arg.checked == true)
+            {
+                event.sender.send("app.view.post.categoryadded", arg.dataSource);
+            }
+            else{
+                event.sender.send("app.view.post.categoryremoved", arg.dataSource);
+            }
+        });
+
         this.ipcMain.on("app.View.PostBlog", (event, arg)=>
         {
             let selectedSiteId = arg.selectedSiteId;

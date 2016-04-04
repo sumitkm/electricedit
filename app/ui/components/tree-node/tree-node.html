@@ -1,7 +1,7 @@
 
 <!-- ko with: dataSource -->
 <div data-bind="style: { 'padding-left': padding + 'px' }">
-    <input type="checkbox" data-bind="value: checked" />
+    <input type="checkbox" data-bind="event: { change: $parents[0].nodeChecked }, checked: checked" />
     <span data-bind="text: text"></span>
 </div>
 <!-- /ko -->

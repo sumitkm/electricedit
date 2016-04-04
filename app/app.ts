@@ -42,7 +42,7 @@ export class app {
 
         this.eventHandler.attach(this.mainWindow);
         // and load the index.html of the app.
-        this.mainWindow.loadURL('file://' + __dirname + '/index.html');
+        this.mainWindow.loadURL('file://' + __dirname + '/ui/index.html');
 
         // Open the DevTools.
         //mainWindow.webContents.openDevTools();

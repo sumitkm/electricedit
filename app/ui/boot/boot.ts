@@ -8,7 +8,7 @@
 
 requirejs.config(
   {
-    baseUrl: __dirname + '/ui/',
+    baseUrl: __dirname + '/',
     paths:
     {
         "jquery": "libs/jquery/dist/jquery.min",
