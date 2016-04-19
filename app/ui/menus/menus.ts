@@ -1,8 +1,7 @@
-export var menuTemplate: Array<any>;
-
-export class menus {
+class menus {
+    menuTemplate : Array<any> = []
     constructor() {
-        menuTemplate = [
+        this.menuTemplate = [
             {
                 label: 'File',
                 accelerator: 'Alt+F',
@@ -171,7 +170,7 @@ export class menus {
         ];
         if (process.platform == 'darwin') {
             var name = "Electric Edit";
-            menuTemplate.unshift({
+            this.menuTemplate.unshift({
                 label: name,
                 submenu: [
                     {
@@ -214,7 +213,7 @@ export class menus {
                 ]
             });
             // Window menu.
-            menuTemplate[3].submenu.push(
+            this.menuTemplate[3].submenu.push(
                 {
                     type: 'separator'
                 },
@@ -232,3 +231,5 @@ export class menus {
         return true;
     }
 }
+
+export { menus as Menus }

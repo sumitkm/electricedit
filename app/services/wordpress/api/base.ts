@@ -45,7 +45,7 @@ module wordpress.api.base
             }
             catch(err)
             {
-                console.log("FAILED: " + err);
+                console.error("FAILED: " + err);
             }
             return null;
         }

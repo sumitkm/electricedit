@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-export class QuillEditorParams
+class QuillEditorParams
 {
   content: KnockoutObservable<string>;
   showToolBar: KnockoutObservable<boolean>;
@@ -10,3 +10,5 @@ export class QuillEditorParams
     this.showToolBar = ko.observable(true);
   }
 }
+
+export { QuillEditorParams };

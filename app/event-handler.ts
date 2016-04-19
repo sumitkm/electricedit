@@ -92,6 +92,7 @@ class eventHandler {
         });
 
         this.ipcMain.on("app.view.post.treeview.nodecheckchanged", (event: GitHubElectron.IPCMainEvent, arg: any) => {
+            console.log("nodecheckchanged:" + arg.checked + " DataSource: "+ arg.dataSource);
             if(arg.checked == true)
             {
                 event.sender.send("app.view.post.categoryadded", arg.dataSource);

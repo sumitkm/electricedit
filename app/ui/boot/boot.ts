@@ -1,8 +1,3 @@
-// For any third party dependencies, like jQuery, place them in the libs folder.
-// Configure loading modules from the libs directory,
-// except for 'app' ones, which are in a sibling
-// directory.
-//
 /// <reference path="../typings/tsd.d.ts"/>
 /// <reference path="../interop.d.ts"/>
 

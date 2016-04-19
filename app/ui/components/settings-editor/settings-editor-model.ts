@@ -1,6 +1,6 @@
 
 import ko = require("knockout");
-export class editorSettings {
+class editorSettings {
     public autoReopen: KnockoutObservable<boolean> = ko.observable(true);
     public lastOpenFile: KnockoutObservable<string> = ko.observable("");
     public oAuth2Groups: KnockoutObservableArray<oAuth2Group> = ko.observableArray([]);
@@ -32,7 +32,7 @@ export class editorSettings {
     }
 }
 
-export class oAuth2Group {
+class oAuth2Group {
     public groupName: KnockoutObservable<string> = ko.observable("");
     public accessToken: KnockoutObservable<string> = ko.observable("");
     public oAuthClientId: KnockoutObservable<string> = ko.observable("");
@@ -56,3 +56,6 @@ export class oAuth2Group {
         };
     }
 }
+
+export { editorSettings as editorSettings };
+export { oAuth2Group as oAuth2Group };

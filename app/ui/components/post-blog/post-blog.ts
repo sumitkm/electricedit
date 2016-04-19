@@ -48,7 +48,7 @@ export class viewModel {
             var node = new treeNodeVm();
             node.text(categories[i].name);
             node.showCheckBox(true);
-            node.dataSource(category[i]);
+            node.dataSource(categories [i]);
             this.categoryNodes.push(node);
         }
     }

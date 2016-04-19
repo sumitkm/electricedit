@@ -1,20 +1,16 @@
 /// <reference path="../../interop.d.ts" />
-/// <reference path="../../typings/tsd.d.ts"/>
-/// <reference path="../../model/eeJson.ts" />
+/// <reference path="../../typings/tsd.d.ts"/>  
+/// <amd-dependency path="text!./home-page.html" />
 
-///<amd-dependency path="text!./home-page.html" />
-///<amd-dependency path="components/quill-editor/quill-editor-params"/>
-///<amd-dependency path="menus/menus"/>
-///<amd-dependency path="components/settings-editor/settings-editor-model"/>
+import { QuillEditorParams as QuillEditorParams } from "../../components/quill-editor/quill-editor-params";
+import { Menus as Menu } from "../../menus/menus";
+import * as SettingsEditorModel from "../../components/settings-editor/settings-editor-model";
 import MySite = require("../../model/mySite");
 import MyPost = require("../../model/myPost");
-
-var editorSettings = require("components/settings-editor/settings-editor-model").editorSettings;
-var quillEditor = require("components/quill-editor/quill-editor-params");
 import ko = require("knockout");
 import eeJson = require("../../model/eeJson");
 import category = require("../../model/category");
-var menuUi = require("menus/menus");
+
 var menu = remote.Menu;
 
 export var template = require("text!./home-page.html");
@@ -34,13 +30,13 @@ export class viewModel
 
     constructor()
     {
-        this.editorParams = new quillEditor.QuillEditorParams();
+        this.editorParams = new QuillEditorParams();
         this.setupEventHandlers();
         ipcRenderer.send('app.Settings.Load');
         ipcRenderer.send('asynchronous-message', "Renderer loaded!");
 
-        var menus = new menuUi.menus();
-        var currentMenuTemplate = menu.buildFromTemplate(menuUi.menuTemplate);
+        var menus = new Menu();
+        var currentMenuTemplate = menu.buildFromTemplate(menus.menuTemplate);
         menu.setApplicationMenu(currentMenuTemplate);
 
         $(document).ready(this.initJquery);
@@ -88,7 +84,7 @@ export class viewModel
     {
         ipcRenderer.on('app.Settings.Loaded', (event, data) =>
         {
-            this.settingsEditorModel(editorSettings.fromJS(data));
+            this.settingsEditorModel(SettingsEditorModel.editorSettings.fromJS(data));
             if (this.settingsEditorModel().autoReopen() == true && this.settingsEditorModel().lastOpenFile() != "")
             {
                 ipcRenderer.send('app.File.Load', this.settingsEditorModel().lastOpenFile());
