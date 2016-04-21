@@ -3,17 +3,18 @@ import settingsService = require("./services/settings/settings");
 import eventHandler = require('./event-handler');
 import oAuth2 = require("./services/oauth2/oauth2");
 import settingsModel = require("./services/settings/model/appSettings");
+var interop = require("./interop");
 
 export class app {
 
-    electron: GitHubElectron.Electron = require('electron');
-    currentApp = this.electron.app;  // Module to control application life.
-    BrowserWindow = this.electron.BrowserWindow;  // Module to create native browser window.
+    //electron: GitHubElectron.Electron = require('electron');
+    currentApp = interop.electron.app;  // Module to control application life.
+    BrowserWindow = interop.electron.BrowserWindow;  // Module to create native browser window.
     // Keep a global reference of the window object, if you don't, the window will
     // be closed automatically when the JavaScript object is garbage collected.
     mainWindow : GitHubElectron.BrowserWindow = null;
 
-    ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
+    //ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
     settingsService = new settingsService();
     eventHandler = new eventHandler();
     currentAppSettings: settingsModel.appSettings;
@@ -23,11 +24,11 @@ export class app {
         //electron.crashReporter.start({ companyName: "KalliopeXplorer"});
         this.settingsService.load();
 
-        this.ipcMain.on('app.Settings.Load', (event, args) => {
+        interop.ipcMain.on('app.Settings.Load', (event, args) => {
             event.sender.send('app.Settings.Loaded', this.settingsService.get());
         });
 
-        this.ipcMain.on('menu.App.Quit', (event, arg) => {
+        interop.ipcMain.on('menu.App.Quit', (event, arg) => {
             this.quitApp();
         });
 
@@ -47,7 +48,7 @@ export class app {
         // Open the DevTools.
         //mainWindow.webContents.openDevTools();
 
-        this.ipcMain.on('menu.View.ConnectWordPress', (event, arg) => {
+        interop.ipcMain.on('menu.View.ConnectWordPress', (event, arg) => {
             this.currentAppSettings = this.settingsService.currentSettings;
 
             const windowParams = {
