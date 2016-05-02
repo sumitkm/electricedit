@@ -1,6 +1,6 @@
 /// <amd-dependency path="text!./tree-node.html" />
 
-import ko = require("knockout");
+import * as ko from "knockout";
 import treeNodeVm = require("./treeNodeVm");
 
 export var template = require("text!./tree-node.html");

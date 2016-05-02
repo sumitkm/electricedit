@@ -1,6 +1,6 @@
 /// <amd-dependency path="text!./tree-view.html" />
 
-import ko = require("knockout");
+import * as ko from "knockout";
 import treeNodeVm = require("../tree-node/treeNodeVm");
 export var template = require("text!./tree-view.html");
 
@@ -12,6 +12,4 @@ export class viewModel
         console.log("DataSource"+ params.dataSource().length);
         this.dataSource = params.dataSource;
     }
-
-
 }

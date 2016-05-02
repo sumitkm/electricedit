@@ -1,7 +1,7 @@
 /// <amd-dependency path="text!./save-attachments.html" />
 
 import attachmentFile = require("../../model/attachmentFile");
-import ko  = require("knockout");
+import * as ko from "knockout";
 export var template = require("text!./save-attachments.html");
 
 export class viewModel

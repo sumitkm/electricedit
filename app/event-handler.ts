@@ -10,9 +10,10 @@ import wpapi = require('./services/wordpress/wordpress');
 import model = require("./services/settings/model/appSettings");
 import settingsModel = require("./services/settings/model/appSettings");
 import settingsService = require("./services/settings/settings");
-import * as interop from "./interop";
 
 class eventHandler {
+    private ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
+
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
     currentSettingsSvc: settingsService;
@@ -36,62 +37,62 @@ class eventHandler {
         this.currentWindow = mainWindow;
         this.currentFiles = new files(mainWindow);
 
-        interop.ipcMain.on("menu.File.OnNew", (event, arg) => {
+        this.ipcMain.on("menu.File.OnNew", (event, arg) => {
             event.sender.send("menu.File.OnNew");
         });
 
-        interop.ipcMain.on("app.File.New", (event, arg) => {
+        this.ipcMain.on("app.File.New", (event, arg) => {
             this.currentFiles.New(event, arg);
         });
 
-        interop.ipcMain.on("menu.File.Open", (event, arg) => {
+        this.ipcMain.on("menu.File.Open", (event, arg) => {
             this.currentFiles.Open(event);
         });
 
-        interop.ipcMain.on("app.File.Load", (event, arg) => {
+        this.ipcMain.on("app.File.Load", (event, arg) => {
             this.currentFiles.Load(event, [arg]);
         });
 
-        interop.ipcMain.on("attachment.image.Save", (event, arg) => {
+        this.ipcMain.on("attachment.image.Save", (event, arg) => {
             this.currentFiles.Save(event, arg);
         });
 
-        interop.ipcMain.on("menu.File.OnSave", (event, arg) => {
+        this.ipcMain.on("menu.File.OnSave", (event, arg) => {
             event.sender.send("menu.File.Save");
         });
 
-        interop.ipcMain.on("menu.View.OnSettings", (event, arg) => {
+        this.ipcMain.on("menu.View.OnSettings", (event, arg) => {
             event.sender.send("menu.View.Settings", this.nconf);
         });
 
-        interop.ipcMain.on("app.File.Save", (event, arg) => {
+        this.ipcMain.on("app.File.Save", (event, arg) => {
             if (arg.fileName != '') {
                 this.currentSettingsSvc.set('lastOpenFile', arg.fileName);
             }
             this.currentFiles.Save(event, arg);
         });
 
-        interop.ipcMain.on('settings.App.Save', (event, arg) => {
+        this.ipcMain.on('settings.App.Save', (event, arg) => {
             this.currentSettingsSvc.saveSettings(arg);
         })
 
-        interop.ipcMain.on("menu.View.GetMySites", (event, arg) => {
+        this.ipcMain.on("menu.View.GetMySites", (event, arg) => {
             //this.currentAppSettings = this.settingsService.currentSettings;
             var connector = new wpapi.wordpress(this.currentAppSettings.oAuth2Groups[0].accessToken);
             connector.getAccountDetails(event, this.currentAppSettings);
         });
 
-        interop.ipcMain.on("app.View.GetCategories", (event: GitHubElectron.IPCMainEvent, arg: string)=>
+        this.ipcMain.on("app.View.GetCategories", (event: GitHubElectron.IPCMainEvent, arg: string)=>
         {
             var connector = new wpapi.wordpress(this.currentAppSettings.oAuth2Groups[0].accessToken);
             connector.getSiteCategories(event, arg);
         });
 
-        interop.ipcMain.on("app.side-panel.onhide", (event: GitHubElectron.IPCMainEvent, arg: any)=>{
+        this.ipcMain.on("app.side-panel.onhide", (event: GitHubElectron.IPCMainEvent, arg: any)=>{
             event.sender.send("app.side-panel.hide");
         });
 
-        interop.ipcMain.on("app.view.post.treeview.nodecheckchanged", (event: GitHubElectron.IPCMainEvent, arg: any) => {
+        this.ipcMain.on("app.view.post.treeview.nodecheckchanged", (event: GitHubElectron.IPCMainEvent, arg: any) => {
             console.log("nodecheckchanged:" + arg.checked + " DataSource: "+ arg.dataSource);
             if(arg.checked == true)
             {
@@ -102,7 +103,7 @@ class eventHandler {
             }
         });
 
-        interop.ipcMain.on("app.View.PostBlog", (event, arg)=>
+        this.ipcMain.on("app.View.PostBlog", (event, arg)=>
         {
             let selectedSiteId = arg.selectedSiteId;
             console.log("Site ID: " + selectedSiteId);
@@ -145,12 +146,12 @@ class eventHandler {
             }
         });
 
-        // this.ipcMain.on("app.View.GetRecentPosts", (event, arg) =>
+        // this.this.ipcMain.on("app.View.GetRecentPosts", (event, arg) =>
         // {
         //
         // });
 
-        interop.ipcMain.on("paste", (event, arg) =>
+        this.ipcMain.on("paste", (event, arg) =>
         {
             var clipboard = require('clipboard');
             var image = clipboard.readImage();
@@ -168,9 +169,27 @@ class eventHandler {
             }
         });
 
-        interop.ipcMain.on("attachment.get.fileName", (event, arg)=>
+        this.ipcMain.on("attachment.get.fileName", (event, arg)=>
         {
             this.currentFiles.NewFileName(event);
+        });
+
+        this.ipcMain.on("menu.File.OnPrint", (event, arg)=>
+        {
+            event.sender.send("menu.File.OnPrint", arg);
+        });
+
+        this.ipcMain.on("menu.File.PrintPreview", (event, arg) => {
+            let electron = require("electron");
+            let BrowserWindow = electron.BrowserWindow;
+            let printWindow = new BrowserWindow();
+            let ipcRenderer : GitHubElectron.IpcRenderer = electron.ipcRenderer;
+
+            printWindow.loadURL("file://" + __dirname + "/ui/print.html");
+            printWindow.show();
+
+            this.ipcMain.emit("app.File.PreviewOf", arg);
+
         });
     }
 

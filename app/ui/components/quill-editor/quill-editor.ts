@@ -2,9 +2,10 @@
 
 /// <amd-dependency path="text!./quill-editor.html"/>
 /// <amd-dependency path="quill" />
-/// <amd-dependency path="knockout" />
 
-var ko = <KnockoutStatic>require("knockout");
+import * as ko from "knockout";
+
+//var ko = <KnockoutStatic>require("knockout");
 export var Quill = require("quill");
 export var template = require("text!./quill-editor.html");
 import eeJson = require("../../model/eeJson");

@@ -1,9 +1,8 @@
 /// <amd-dependency path="text!./tab-strip.html" />
 /// <amd-dependency path="app/ui/components/tab-strip/tab-strip-model" />
 
-//import * as ko from "knockout";
+import * as ko from "knockout";
 
-var ko = <KnockoutStatic>require("knockout");
 export var template = require("text!./tab-strip.html");
 
 export class viewModel

@@ -12,7 +12,6 @@ import eeJson = require("../../model/eeJson");
 import category = require("../../model/category");
 
 var menu = remote.Menu;
-
 export var template = require("text!./home-page.html");
 
 export class viewModel
@@ -187,6 +186,11 @@ export class viewModel
             // {
             //     this.eeJsonVm().categories.push(category.fromJS(data));
             // }
+        });
+
+        ipcRenderer.on("menu.File.OnPrint", (event)=>{
+            console.log("menu.File.OnPrint");
+            ipcRenderer.send("menu.File.PrintPreview", ko.toJS(this.eeJsonVm()));
         });
     }
 

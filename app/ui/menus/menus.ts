@@ -24,12 +24,20 @@ class menus {
                         accelerator: 'CmdOrCtrl+S',
                         click: () => this.sendMessage("menu.File.OnSave")
                     },
-                    ,
                     {
                         label: 'Save As...',
                         accelerator: 'CmdOrCtrl+Shift+S',
                         click: () => this.sendMessage("menu.File.OnSaveAs")
                     },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: 'Print',
+                        accelerator: 'CmdOrCtrl+P',
+                        click: () => this.sendMessage("menu.File.OnPrint")
+                    },
+                    ,
                     {
                         type: 'separator'
                     },
