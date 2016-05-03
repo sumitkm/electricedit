@@ -35,7 +35,9 @@ class menus {
                     {
                         label: 'Print',
                         accelerator: 'CmdOrCtrl+P',
-                        click: () => this.sendMessage("menu.File.OnPrint")
+                        click: () => {
+                            this.sendMessage("menu.File.OnPrint");
+                        }
                     },
                     ,
                     {

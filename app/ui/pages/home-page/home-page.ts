@@ -5,9 +5,9 @@
 import { QuillEditorParams as QuillEditorParams } from "../../components/quill-editor/quill-editor-params";
 import { Menus as Menu } from "../../menus/menus";
 import * as SettingsEditorModel from "../../components/settings-editor/settings-editor-model";
+import * as ko from "knockout";
 import MySite = require("../../model/mySite");
 import MyPost = require("../../model/myPost");
-import ko = require("knockout");
 import eeJson = require("../../model/eeJson");
 import category = require("../../model/category");
 
@@ -16,6 +16,8 @@ export var template = require("text!./home-page.html");
 
 export class viewModel
 {
+    printPreview : KnockoutObservable<boolean> = ko.observable<boolean>(false);
+    previewHtml: KnockoutObservable<string> = ko.observable<string>("");
     editorParams: any;
     eeJsonVm: KnockoutObservable<eeJson> = ko.observable<eeJson>(new eeJson());
     settingsEditorModel = ko.observable<any>();
@@ -43,33 +45,33 @@ export class viewModel
 
     private initJquery = () =>
     {
-        $("#separator").on("mousedown", (event) =>
-        {
+        $("#separator").on("mousedown", (event) => {
             this.isDragging(true);
             //console.log("x:" + event.pageX + ",y:" + event.pageY);
         });
 
-        $(document).on("mouseup", (event) =>{
+        $(document).on("mouseup", (event) => {
             this.isDragging(false);
         });
 
-        $(document).on("click", (event) =>{
+        $(document).on("click", (event) => {
             this.isDragging(false);
         });
 
-        $(document).on("mousemove", (event) =>
-        {
+        $(document).on("mousemove", (event) => {
             if(this.isDragging() == true)
             {
                 console.log("x:" + event.pageX + ",y:" + event.pageY);
                 this.setSidePanelWidth(event.pageX);
-
             }
         });
     }
 
-    private setSidePanelWidth = (width: number) =>
-    {
+    onKeyPress = (event) => {
+        console.log(event);
+    }
+
+    private setSidePanelWidth = (width: number) => {
         $(".side-panel").css("width", width);
         $(".separator").css("left", width);
         $(".editor-container").css("left", width);
@@ -79,8 +81,7 @@ export class viewModel
         }
     }
 
-    private setupEventHandlers = () =>
-    {
+    private setupEventHandlers = () => {
         ipcRenderer.on('app.Settings.Loaded', (event, data) =>
         {
             this.settingsEditorModel(SettingsEditorModel.editorSettings.fromJS(data));
@@ -104,7 +105,7 @@ export class viewModel
         {
             this.settingsEditorModel().lastOpenFile(data.fileName);
             this.eeJsonVm(eeJson.fromJS(data));
-            console.log("EEJSON LOADED: \r\n" + JSON.stringify(data));
+            console.log("EEJSON LOADED! \r\n");
         });
 
         ipcRenderer.on('menu.File.Save', (event, data) =>
@@ -121,7 +122,7 @@ export class viewModel
             ipcRenderer.send("app.File.New", ko.toJS(this.eeJsonVm));
         });
 
-        ipcRenderer.on('menu.File.Newed', (event, data)=>
+        ipcRenderer.on('menu.File.Newed', (event, data) =>
         {
             this.eeJsonVm().fileName('');
             this.eeJsonVm().content('');
@@ -137,7 +138,7 @@ export class viewModel
             this.eeJsonVm().fileName = data.filename;
         });
 
-        ipcRenderer.on('app.View.ShowPostBlog', (event, data)=>
+        ipcRenderer.on('app.View.ShowPostBlog', (event, data) =>
         {
             ko.utils.arrayPushAll<MySite>(this.mySites, data);
             this.showSidePanel();
@@ -190,7 +191,16 @@ export class viewModel
 
         ipcRenderer.on("menu.File.OnPrint", (event)=>{
             console.log("menu.File.OnPrint");
-            ipcRenderer.send("menu.File.PrintPreview", ko.toJS(this.eeJsonVm()));
+            if(this.printPreview() != true)
+            {
+                this.printPreview(true);
+                this.previewHtml(this.eeJsonVm().content());
+                ipcRenderer.send("app.File.PrintPreview");
+            }
+            else
+            {
+                this.printPreview(false);
+            }
         });
     }
 

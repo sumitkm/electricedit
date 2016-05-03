@@ -1,16 +1,22 @@
-<div class="side-panel">
-    <post-blog params="id: 'postBlog',
-        file: eeJsonVm,
-        mySites: mySites,
-        myRecentPosts: myRecentPosts"></post-blog>
+<div data-bind="visible: printPreview() == false">
+    <div class="side-panel">
+        <post-blog params="id: 'postBlog',
+            file: eeJsonVm,
+            mySites: mySites,
+            myRecentPosts: myRecentPosts"></post-blog>
+    </div>
+
+    <settings-editor params="id:'settings',
+        settings: settingsEditorModel">
+    </settings-editor>
+
+    <div class="separator" id="separator" data-bind="visible: separatorVisible">
+    </div>
+    <quill-editor params="file: eeJsonVm"></quill-editor>
+
+    <save-attachments params="id: 'saveAttachments', file: eeJsonVm, imageData: imageData"></save-attachments>
 </div>
 
-<settings-editor params="id:'settings',
-    settings: settingsEditorModel">
-</settings-editor>
-
-<div class="separator" id="separator" data-bind="visible: separatorVisible">
+<div data-bind="visible: printPreview() == true, event: { 'keypress': onKeyPress }">
+    <print-preview params="previewHtml: previewHtml"></print-preview>
 </div>
-<quill-editor params="file: eeJsonVm"></quill-editor>
-
-<save-attachments params="id: 'saveAttachments', file: eeJsonVm, imageData: imageData"></save-attachments>

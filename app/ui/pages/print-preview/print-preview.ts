@@ -4,13 +4,9 @@ import * as ko from "knockout";
 export var template = require("text!./print-preview.html");
 export class viewModel
 {
-    previewHtml: KnockoutObservable<string> = ko.observable<string>("<h1> Print Preview </h1>   ");
-    constructor()
+    previewHtml: KnockoutObservable<string> = ko.observable<string>("<h1> Print Preview </h1>");
+    constructor(params)
     {
-        ipcRenderer.on("app.File.PreviewOf", (args)=>
-        {
-            console.log(args);
-            this.previewHtml(args.content);
-        });
+        this.previewHtml = params.previewHtml;
     }
 }

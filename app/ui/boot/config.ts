@@ -10,7 +10,7 @@ export class Spa {
 
   public registerComponents() {
     this.registerComponent("home-page", "pages/home-page/home-page")
-    this.registerComponent("print-preview", "pages/print-preview/print-preview");
+    this.registerComponent("print-preview", "components/print-preview/print-preview");
     this.registerComponent("quill-editor", "components/quill-editor/quill-editor");
     this.registerComponent("settings-editor", "components/settings-editor/settings-editor");
     this.registerComponent("post-blog", "components/post-blog/post-blog");

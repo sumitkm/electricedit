@@ -179,16 +179,17 @@ class eventHandler {
             event.sender.send("menu.File.OnPrint", arg);
         });
 
-        this.ipcMain.on("menu.File.PrintPreview", (event, arg) => {
-            let electron = require("electron");
-            let BrowserWindow = electron.BrowserWindow;
-            let printWindow = new BrowserWindow();
-            let ipcRenderer : GitHubElectron.IpcRenderer = electron.ipcRenderer;
-
-            printWindow.loadURL("file://" + __dirname + "/ui/print.html");
-            printWindow.show();
-
-            this.ipcMain.emit("app.File.PreviewOf", arg);
+        this.ipcMain.on("app.File.PrintPreview", (event, arg) => {
+            // let electron = require("electron");
+            // let BrowserWindow = electron.BrowserWindow;
+            // let printWindow = new BrowserWindow();
+            // let ipcRenderer : GitHubElectron.IpcRenderer = electron.ipcRenderer;
+            //
+            // printWindow.loadURL("file://" + __dirname + "/ui/print.html");
+            // printWindow.show();
+            console.log("Ready to print");
+            this.currentWindow.webContents.print();
+            //this.ipcMain.emit("app.File.PreviewOf", arg);
 
         });
     }

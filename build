@@ -4,5 +4,8 @@ echo app Built
 
 cd ui
 tsc
+
+lessc styles/electric.less styles/electric.css 
+
 cd ..
 echo ui Built
