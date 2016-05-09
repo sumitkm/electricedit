@@ -1,54 +1,50 @@
-module wordpress.api.base
+import * as queryString from "querystring";
+
+export class query<Q, R, S>
 {
-    const queryString = require('querystring');
-    const fetch = require('node-fetch');
+    public apiKey: string = "";
+    public url: string = "";
+    public requestType: string= "";
+    public header: any;
+    public contentType: string = "application/x-www-form-urlencoded";
 
-    export class query<Q, R, S>
+    constructor(apiKey: string, requestType: string, url: string)
     {
-        public apiKey: string = "";
-        public url: string = "";
-        public requestType: string= "";
-        public header: any;
-        public contentType: string = "application/x-www-form-urlencoded";
+        this.apiKey = apiKey;
+        this.url = url;
+        this.requestType = requestType;
+        this.header  = <any>{
+            'Accept': 'application/json',
+            'Content-Type': this.contentType,
+            'Authorization': 'Bearer ' + this.apiKey
+        };
+    }
 
-        constructor(apiKey: string, requestType: string, url: string)
-        {
-            this.apiKey = apiKey;
-            this.url = url;
-            this.requestType = requestType;
-            this.header  = <any>{
-                'Accept': 'application/json',
-                'Content-Type': this.contentType,
-                'Authorization': 'Bearer ' + this.apiKey
-            };
-        }
+    public setUrl(url: string)
+    {
+        this.url = url;
+    }
 
-        public setUrl(url: string)
+    public execute(query: Q, request: R, callback: (response: S)=>void)
+    {
+        try
         {
-            this.url = url;
+            console.log(this.url);
+            var fetch = require("node-fetch");
+            return fetch(this.url, {
+                method: this.requestType,
+                headers: this.header,
+                body: queryString.stringify(request)
+            }).then((res: any) => {
+                return res.json();
+            }).then((json: S) =>{
+                callback(json);
+            });
         }
-
-        public execute(query: Q, request: R, callback: (response: S)=>void)
+        catch(err)
         {
-            try
-            {
-                console.log(this.url);
-                return fetch(this.url, {
-                    method: this.requestType,
-                    headers: this.header,
-                    body: queryString.stringify(request)
-                }).then((res: any) => {
-                    return res.json();
-                }).then((json: S) =>{
-                    callback(json);
-                });
-            }
-            catch(err)
-            {
-                console.error("FAILED: " + err);
-            }
-            return null;
+            console.error("FAILED: " + err);
         }
+        return null;
     }
 }
-export = wordpress.api.base;

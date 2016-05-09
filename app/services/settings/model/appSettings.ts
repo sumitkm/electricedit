@@ -1,4 +1,4 @@
-module model {
+
     export class appSettings {
         public autoReopen: boolean = false;
         public lastOpenFile: string = "";
@@ -17,5 +17,3 @@ module model {
         public authenticateUrl: string = "";
         public clientSecret: any;
     }
-}
-export = model;

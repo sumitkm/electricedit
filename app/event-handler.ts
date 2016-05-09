@@ -1,60 +1,49 @@
 /// <reference path="./services/wordpress/api/sites" />
 
-import files = require("./services/files/files");
-import wpSites = require("./services/wordpress/api/sites");
-import wpPosts = require("./services/wordpress/api/posts");
-import queries = require('./services/wordpress/model/query/query');
-import requets = require('./services/wordpress/model/request/request');
-import responses = require('./services/wordpress/model/response/response');
-import wpapi = require('./services/wordpress/wordpress');
-import model = require("./services/settings/model/appSettings");
-import settingsModel = require("./services/settings/model/appSettings");
-import settingsService = require("./services/settings/settings");
+import * as wordpress  from "./services/wordpress/service";
+import * as settings from "./services/settings/service";
+import * as files  from "./services/files/service";
 
 class eventHandler {
     private ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
 
     private nconf = require('nconf');
     currentWindow: GitHubElectron.BrowserWindow;
-    currentSettingsSvc: settingsService;
-    wpGetMySitesSvc: wpSites.wordpress.api.sites.getMySites;
-    // wpUpdatePostSvc: wpPosts.wordpress.api.posts.updatePost;
-    // wpGetAllPostsSvc: wpPosts.wordpress.api.posts.getAllPosts;
-    currentFiles: files;
-    currentSettings = new model.appSettings();
-    currentAppSettings: settingsModel.appSettings;
-    settingsService = new settingsService();
+    currentSettingsSvc: settings.service;
+    getMySitesService: wordpress.api.sites.getMySites;
+    currentFileServices: files.service;
+    currentAppSettings: settings.model.appSettings;
 
     constructor() {
-        this.currentSettingsSvc = new settingsService();
-        this.settingsService.load((newSettings: settingsModel.appSettings)=>{
+        this.currentSettingsSvc = new settings.service();
+        this.currentSettingsSvc.load((newSettings: settings.model.appSettings)=>{
             this.currentAppSettings = newSettings;
-            this.wpGetMySitesSvc = new wpSites.wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
+            this.getMySitesService = new wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
         });
     }
 
     public attach = (mainWindow: GitHubElectron.BrowserWindow) => {
         this.currentWindow = mainWindow;
-        this.currentFiles = new files(mainWindow);
+        this.currentFileServices = new files.service(mainWindow);
 
         this.ipcMain.on("menu.File.OnNew", (event, arg) => {
             event.sender.send("menu.File.OnNew");
         });
 
         this.ipcMain.on("app.File.New", (event, arg) => {
-            this.currentFiles.New(event, arg);
+            this.currentFileServices.New(event, arg);
         });
 
         this.ipcMain.on("menu.File.Open", (event, arg) => {
-            this.currentFiles.Open(event);
+            this.currentFileServices.Open(event);
         });
 
         this.ipcMain.on("app.File.Load", (event, arg) => {
-            this.currentFiles.Load(event, [arg]);
+            this.currentFileServices.Load(event, [arg]);
         });
 
         this.ipcMain.on("attachment.image.Save", (event, arg) => {
-            this.currentFiles.Save(event, arg);
+            this.currentFileServices.Save(event, arg);
         });
 
         this.ipcMain.on("menu.File.OnSave", (event, arg) => {
@@ -69,7 +58,7 @@ class eventHandler {
             if (arg.fileName != '') {
                 this.currentSettingsSvc.set('lastOpenFile', arg.fileName);
             }
-            this.currentFiles.Save(event, arg);
+            this.currentFileServices.Save(event, arg);
         });
 
         this.ipcMain.on('settings.App.Save', (event, arg) => {
@@ -77,14 +66,13 @@ class eventHandler {
         })
 
         this.ipcMain.on("menu.View.GetMySites", (event, arg) => {
-            //this.currentAppSettings = this.settingsService.currentSettings;
-            var connector = new wpapi.wordpress(this.currentAppSettings.oAuth2Groups[0].accessToken);
+            var connector = new wordpress.service(this.currentAppSettings.oAuth2Groups[0].accessToken);
             connector.getAccountDetails(event, this.currentAppSettings);
         });
 
         this.ipcMain.on("app.View.GetCategories", (event: GitHubElectron.IPCMainEvent, arg: string)=>
         {
-            var connector = new wpapi.wordpress(this.currentAppSettings.oAuth2Groups[0].accessToken);
+            var connector = new wordpress.service(this.currentAppSettings.oAuth2Groups[0].accessToken);
             connector.getSiteCategories(event, arg);
         });
 
@@ -110,14 +98,14 @@ class eventHandler {
 
             if(arg.selectedPostId!=null && arg.selectedPostId != '')
             {
-                let wpCreatePostSvc = new wpPosts.wordpress.api.posts.updatePost
+                let wpCreatePostSvc = new wordpress.api.posts.updatePost
                     (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId, arg.selectedPostId);
 
                 console.log("Updating post (ID): " + JSON.stringify(arg,null,3));//.selectedPostId);
 
-                let postQuery = new queries.wordpress.model.query.postNew();
+                let postQuery = new wordpress.model.query.postNew();
                 postQuery.pretty = true;
-                let postUpdate = new requets.wordpress.model.request.postNew();
+                let postUpdate = new wordpress.model.request.postNew();
                 postUpdate.title = arg.title;
                 postUpdate.content = arg.content;
                 postUpdate.media = arg.media;
@@ -129,12 +117,12 @@ class eventHandler {
             }
             else
             {
-                let wpCreatePostSvc = new wpPosts.wordpress.api.posts.createNewPost
+                let wpCreatePostSvc = new wordpress.api.posts.createNewPost
                     (this.currentAppSettings.oAuth2Groups[0].accessToken, selectedSiteId);
 
-                let postQuery = new queries.wordpress.model.query.postNew();
+                let postQuery = new wordpress.model.query.postNew();
                 postQuery.pretty = true;
-                let postNew = new requets.wordpress.model.request.postNew();
+                let postNew = new wordpress.model.request.postNew();
                 postNew.title = arg.title;
                 postNew.content = arg.content;
                 postNew.media = arg.media;
@@ -145,11 +133,6 @@ class eventHandler {
                 });
             }
         });
-
-        // this.this.ipcMain.on("app.View.GetRecentPosts", (event, arg) =>
-        // {
-        //
-        // });
 
         this.ipcMain.on("paste", (event, arg) =>
         {
@@ -171,7 +154,7 @@ class eventHandler {
 
         this.ipcMain.on("attachment.get.fileName", (event, arg)=>
         {
-            this.currentFiles.NewFileName(event);
+            this.currentFileServices.NewFileName(event);
         });
 
         this.ipcMain.on("menu.File.OnPrint", (event, arg)=>
@@ -195,9 +178,9 @@ class eventHandler {
     }
 
     public detach() {
-        this.currentFiles = null;
+        this.currentFileServices = null;
         this.currentSettingsSvc = null;
     }
 }
 
-export = eventHandler;
+export {eventHandler};

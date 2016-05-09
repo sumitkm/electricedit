@@ -110,4 +110,4 @@ class oAuth2 {
     // }
 }
 
-export = oAuth2;
+export {oAuth2};

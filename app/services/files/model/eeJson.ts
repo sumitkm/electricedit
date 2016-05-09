@@ -1,15 +1,17 @@
-import attachmentFile = require("./attachmentFile");
+import { attachment } from "./attachment";
+import { electricEditFile } from "./electricedit-file";
 
-class eeJson
+class eeJson implements electricEditFile
 {
     fileName: string;
-    content: string = "";
+    contentString: string = "";
+    contentBinary: any = null;
     title: string = "";
     postId: string = "";
     siteId: string = "";
     urlSlug: string = "";
     type: string="";
-    media : Array<attachmentFile> = [];
+    media : Array<attachment> = [];
     categories: Array<category> = [];
 }
-export = eeJson;
+export { eeJson };

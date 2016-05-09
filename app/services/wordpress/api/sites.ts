@@ -1,83 +1,76 @@
-import base = require('./base');
-import queries = require('../model/query/query');
-import responses = require('../model/response/response');
+import * as api from "./api";
+import * as model from "../model/model";
 
-const fetch = require('node-fetch');
-const queryString = require('querystring');
-
-export module wordpress.api.sites
+export class getMySites extends api.base.query<
+    model.query.mySites,
+    any,
+    Array<model.response.mySite>>
 {
-    export class getMySites extends base.query<
-        queries.wordpress.model.query.mySites,
-        any,
-        Array<responses.wordpress.model.response.mySite>>
+    static endPoint: string = "https://public-api.wordpress.com/rest/v1.1/me/sites";
+
+    constructor(apiToken: string)
     {
-        static endPoint: string = "https://public-api.wordpress.com/rest/v1.1/me/sites";
-
-        constructor(apiToken: string)
-        {
-            super(apiToken, "GET", getMySites.endPoint);
-        }
-
-        execute(
-            query: queries.wordpress.model.query.mySites,
-            request: any,
-            callback: (json: Array<responses.wordpress.model.response.mySite>)=> void)
-        {
-            super.execute(query, request, (data: any)=>
-            {
-                callback(<Array<responses.wordpress.model.response.mySite>>data.sites);
-            });
-        }
+        super(apiToken, "GET", getMySites.endPoint);
     }
 
-    export class getCategories extends base.query<
-        any,
-        any,
-        Array<responses.wordpress.model.response.category>>
+    execute(
+        query: model.query.mySites,
+        request: any,
+        callback: (json: Array<model.response.mySite>)=> void)
     {
-        static endPoint: string = "https://public-api.wordpress.com/rest/v1.1/sites/$site/categories";
-
-        constructor(apiToken: string, siteId: string)
+        super.execute(query, request, (data: any)=>
         {
-            super(apiToken, "GET", getCategories.endPoint);
-            super.setUrl(getCategories.endPoint.replace('$site', siteId));
-        }
+            callback(<Array<model.response.mySite>>data.sites);
+        });
+    }
+}
 
-        execute(
-            query: any,
-            request: any,
-            callback: (results: Array<responses.wordpress.model.response.category>)=>void)
-        {
-            super.execute( query, request, (data: any) =>
-            {
-                callback(<Array<responses.wordpress.model.response.category>>data.categories);
-            });
-        }
+export class getCategories extends api.base.query<
+    any,
+    any,
+    Array<model.response.category>>
+{
+    static endPoint: string = "https://public-api.wordpress.com/rest/v1.1/sites/$site/categories";
+
+    constructor(apiToken: string, siteId: string)
+    {
+        super(apiToken, "GET", getCategories.endPoint);
+        super.setUrl(getCategories.endPoint.replace('$site', siteId));
     }
 
-    export class getTags extends base.query<
-        any,
-        any,
-        Array<responses.wordpress.model.response.tag>>
+    execute(
+        query: any,
+        request: any,
+        callback: (results: Array<model.response.category>)=>void)
     {
-        static endPoint: string = "https://public-api.wordpress.com/rest/v1.1/sites/$site/tags";
-
-        constructor(apiToken: string, siteId: string)
+        super.execute( query, request, (data: any) =>
         {
-            super(apiToken, "GET", getCategories.endPoint);
-            super.setUrl(getCategories.endPoint.replace('$site', siteId));
-        }
+            callback(<Array<model.response.category>>data.categories);
+        });
+    }
+}
 
-        execute(
-            query: any,
-            request: any,
-            callback: (results: Array<responses.wordpress.model.response.tag>)=>void)
+export class getTags extends api.base.query<
+    any,
+    any,
+    Array<model.response.tag>>
+{
+    static endPoint: string = "https://public-api.wordpress.com/rest/v1.1/sites/$site/tags";
+
+    constructor(apiToken: string, siteId: string)
+    {
+        super(apiToken, "GET", getCategories.endPoint);
+        super.setUrl(getCategories.endPoint.replace('$site', siteId));
+    }
+
+    execute(
+        query: any,
+        request: any,
+        callback: (results: Array<model.response.tag>)=>void)
+    {
+        super.execute( query, request, (data: any) =>
         {
-            super.execute( query, request, (data: any) =>
-            {
-                callback(<Array<responses   .wordpress.model.response.tag>>data.categories);
-            });
-        }
+            callback(<Array<model.response.tag>>data.categories);
+        });
     }
 }

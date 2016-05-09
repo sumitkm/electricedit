@@ -1,5 +1,4 @@
-export module wordpress.model.request
-{
+
     export class postNew
     {
         date: string;
@@ -29,4 +28,3 @@ export module wordpress.model.request
         menu_order: number;
         page_template: string;
     }
-}

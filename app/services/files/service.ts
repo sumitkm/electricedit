@@ -1,14 +1,14 @@
 /// <reference path="../../interop.ts"/>
 /// <reference path="../../typings/tsd.d.ts"/>
 
-var Jimp = require("jimp");
-import eeJson = require("./model/eeJson");
-import attachmentFile = require("./model/attachmentFile");
+import { electricEditFile } from "./model/electricedit-file";
+import { eeJson } from "./model/eeJson";
+import { attachment } from "./model/attachment";
 
-class Files {
+class service {
+    Jimp = require("jimp");
     mainWindow: any;
-    file: eeJson;
-    attachment: attachmentFile;
+    file: electricEditFile;
     currentEvent: GitHubElectron.IPCMainEvent;
     fileCreated: boolean = false;
 
@@ -89,8 +89,7 @@ class Files {
         }
     }
 
-    public NewFileName = (event: GitHubElectron.IPCMainEvent) =>
-    {
+    public NewFileName = (event: GitHubElectron.IPCMainEvent) => {
         this.currentEvent = event;
 
         var dialog = require('electron').dialog;
@@ -109,8 +108,7 @@ class Files {
         });
     }
 
-    public Load = (event: GitHubElectron.IPCMainEvent, fileNames: Array<string>) =>
-    {
+    public Load = (event: GitHubElectron.IPCMainEvent, fileNames: Array<string>) => {
         var fs = require('fs');
         if (fileNames != null && fileNames.length > 0) {
             fs.readFile(fileNames[0], { encoding: 'utf8', flag: 'r' }, (err: any, data: any) => {
@@ -137,22 +135,24 @@ class Files {
             console.log(this.file, null, 2);
             var fs = require('fs');
             this.file.fileName = filename;
-            if(this.file.media!=null && this.file.media.length > 0)
-            {
-                for (let i = 0; i < this.file.media.length; i++) {
-                    let currentMedia = this.file.media[i];
-                    if(currentMedia.fileName == null)
-                    {
-                        this.file.media.splice(i);
-                    }
-                    else
-                    {
-                        currentMedia.rawContent = "";
-                    }
-                }
-            }
+
             if(filename.lastIndexOf('.eejson') > 0)
             {
+                var eeJsonFile = <eeJson>this.file
+                if(eeJsonFile.media!=null && eeJsonFile.media.length > 0)
+                {
+                    for (let i = 0; i < eeJsonFile.media.length; i++) {
+                        let currentMedia = eeJsonFile.media[i];
+                        if(currentMedia.fileName == null)
+                        {
+                            eeJsonFile.media.splice(i);
+                        }
+                        else
+                        {
+                            eeJsonFile.contentBinary = "";
+                        }
+                    }
+                }
                 fs.writeFile(filename, JSON.stringify(this.file), (err: any) =>
                 {
                     if (err)
@@ -169,8 +169,8 @@ class Files {
             }
             else
             {
-                this.attachment = <attachmentFile>this.file;
-                var response = this.convertBase64Image(this.attachment.rawContent);
+                var attachment = <attachment>this.file;
+                var response = this.convertBase64Image(attachment.contentBinary);
 
                 fs.writeFile("temp", response.data, (err: any) =>
                 {
@@ -181,20 +181,20 @@ class Files {
                     }
                     else
                     {
-                        Jimp.read("temp", (err: any, lenna: any)  => {
+                        this.Jimp.read("temp", (err: any, lenna: any)  => {
                             if (err)
                             {
                                 console.error("JIMP ERROR: ", err);
                                 throw err;
                             }
-                            let scaleX = parseFloat(this.attachment.width);
+                            let scaleX = parseFloat(attachment.width);
                             console.log("JIMP READ: scaleX - " + scaleX);
 
                             if(scaleX >= 1)
                             {
                                 lenna.resize(
-                                    parseInt(this.attachment.width),
-                                    parseInt(this.attachment.height))
+                                    parseInt(attachment.width),
+                                    parseInt(attachment.height))
                                      .quality(90)
                                      .write(this.file.fileName);
                              }
@@ -227,4 +227,4 @@ class Files {
     }
 }
 
-export = Files;
+export { service };

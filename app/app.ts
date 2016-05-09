@@ -1,8 +1,11 @@
 /// <reference path="./typings/tsd.d.ts"/>
-import settingsService = require("./services/settings/settings");
-import eventHandler = require('./event-handler');
-import oAuth2 = require("./services/oauth2/oauth2");
-import settingsModel = require("./services/settings/model/appSettings");
+
+import * as wordpress  from "./services/wordpress/service";
+import * as settings from "./services/settings/service";
+import * as files  from "./services/files/service";
+import { eventHandler } from './event-handler';
+import { oAuth2 } from "./services/oauth2/oauth2";
+
 import electron = require('electron');
 
 export class app {
@@ -13,9 +16,9 @@ export class app {
     mainWindow : GitHubElectron.BrowserWindow = null;
 
     ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
-    settingsService = new settingsService();
+    settingsService = new settings.service();
     eventHandler = new eventHandler();
-    currentAppSettings: settingsModel.appSettings;
+    currentAppSettings: settings.model.appSettings;
 
     constructor() {
         // Report crashes to our server.

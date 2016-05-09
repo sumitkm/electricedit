@@ -33,8 +33,8 @@ class menus {
                         type: 'separator'
                     },
                     {
-                        label: 'Print',
-                        accelerator: 'CmdOrCtrl+P',
+                        label: 'Print Preview',
+                        accelerator: 'CmdOrCtrl+Shift+P',
                         click: () => {
                             this.sendMessage("menu.File.OnPrint");
                         }

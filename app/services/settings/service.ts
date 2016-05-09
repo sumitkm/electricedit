@@ -1,9 +1,9 @@
 ///<reference path="./model/appSettings" />
-import model = require("./model/appSettings");
+import * as model from "./model/appSettings";
 import nconf = require('nconf');
 import fs = require('fs');
 
-class settings{
+class service {
 
     public currentSettings = new model.appSettings();
 
@@ -62,4 +62,5 @@ class settings{
     }
 }
 
-export = settings;
+export { service };
+export { model };
