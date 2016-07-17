@@ -1,7 +1,7 @@
 import { attachment } from "./attachment";
 import { electricEditFile } from "./electricedit-file";
 
-class eeJson implements electricEditFile
+class electricEditJson implements electricEditFile
 {
     fileName: string;
     contentString: string = "";
@@ -13,5 +13,6 @@ class eeJson implements electricEditFile
     type: string="";
     media : Array<attachment> = [];
     categories: Array<category> = [];
+    isModified: boolean = false;
 }
-export { eeJson };
+export { electricEditJson };

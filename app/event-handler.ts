@@ -136,7 +136,7 @@ class eventHandler {
 
         this.ipcMain.on("paste", (event, arg) =>
         {
-            var clipboard = require('clipboard');
+            var clipboard = require('electron').clipboard;
             var image = clipboard.readImage();
             if(image.isEmpty())
             {

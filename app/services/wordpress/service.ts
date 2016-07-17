@@ -1,7 +1,7 @@
 import * as api from "./api/api";
 import * as model from "./model/model";
 
-import settingsModel = require("../settings/model/appSettings");
+import * as settingsModel from "../settings/model/appSettings";
 
 class service
 {

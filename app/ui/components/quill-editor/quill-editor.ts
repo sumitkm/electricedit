@@ -1,15 +1,10 @@
-/// <reference path="../../model/eeJson.ts" />
-
 /// <amd-dependency path="text!./quill-editor.html"/>
-/// <amd-dependency path="quill" />
 
 import * as ko from "knockout";
-
-//var ko = <KnockoutStatic>require("knockout");
-export var Quill = require("quill");
-export var template = require("text!./quill-editor.html");
+import * as Quill from "quill";
 import eeJson = require("../../model/eeJson");
 import attachmentFile = require("../../model/attachmentFile");
+export var template = require("text!./quill-editor.html");
 
 export class viewModel {
     private editor: QuillStatic;
@@ -69,16 +64,23 @@ export class viewModel {
 
     private onAttachmentCreated = (event, data: any) =>
     {
-        var newAttachment = attachmentFile.fromJS(data);
-
-        console.log(JSON.stringify(data));
-        var existing = ko.utils.arrayFirst(this.file().media(), attach => attach.fileName == data.fileName);
-        if(existing != null)
+        try
         {
-            this.file().media.remove(existing);
+            var newAttachment = attachmentFile.fromJS(data);
+
+            console.log("Attachment created, currentLocation = " + JSON.stringify(this.currentLocation()));
+            var existing = ko.utils.arrayFirst(this.file().media(), attach => attach.fileName == data.fileName);
+            if(existing != null)
+            {
+                this.file().media.remove(existing);
+            }
+            this.file().media().push(newAttachment);
+            this.editor.insertEmbed(this.currentLocation(), "image", data.contentBinary);
         }
-        this.file().media().push(newAttachment);
-        this.editor.insertEmbed(this.currentLocation(), "image", data.fileName);
+        catch (error)
+        {
+            console.log(error);
+        }
     }
 
     public tabChangedEvent = (data: App.Ui.Components.TabStrip.Model) => {

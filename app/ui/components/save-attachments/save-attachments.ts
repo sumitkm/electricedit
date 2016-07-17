@@ -17,6 +17,7 @@ export class viewModel
     originalWidth: KnockoutObservable<number> = ko.observable<number>(0);
 
     subscriptions: Array<KnockoutSubscription> = [];
+    
     constructor(params)
     {
         if(params.id !=null)
@@ -56,7 +57,7 @@ export class viewModel
             }
         }));
 
-        this.currentFile().rawContent = params.imageData;
+        this.currentFile().contentBinary = params.imageData;
 
         var imageElement = <any>document.getElementById("previewImage");
         imageElement.onload = this.imageLoaded;

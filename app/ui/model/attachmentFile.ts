@@ -9,7 +9,7 @@ class attachmentFile
     serverUrl: KnockoutObservable<string>=ko.observable<string>("");
     width: KnockoutObservable<string>= ko.observable<string>("");
     height: KnockoutObservable<string>= ko.observable<string>("");
-    rawContent: KnockoutObservable<any> = ko.observable<any>("");
+    contentBinary: KnockoutObservable<any> = ko.observable<any>("");
 
     public static fromJS = (data) : attachmentFile =>
     {
@@ -21,7 +21,7 @@ class attachmentFile
         newAttachment.serverUrl(data.serverUrl != null ? data.serverUrl : "");
         newAttachment.width (data.width !=null ? data.width : "");
         newAttachment.height(data.height != null? data.height: "");
-        newAttachment.rawContent(data.rawContent != null? data.rawContent : "");
+        newAttachment.contentBinary(data.rawContent != null? data.rawContent : "");
         return newAttachment;
     }
 }

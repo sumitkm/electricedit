@@ -22,7 +22,8 @@ class service {
         if (this.file.fileName == '') {
             this.fileCreated = true;
             var dialog = require('electron').dialog;
-            var defaultPath = "/usr";
+            var os = require("os");
+            var defaultPath = os.homedir();
             if(process.platform == 'darwin')
             {
                 defaultPath = "/user"

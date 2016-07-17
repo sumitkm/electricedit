@@ -1,7 +1,7 @@
 ///<reference path="./model/appSettings" />
 import * as model from "./model/appSettings";
-import nconf = require('nconf');
-import fs = require('fs');
+import * as nconf from 'nconf';
+import * as fs from 'fs';
 
 class service {
 

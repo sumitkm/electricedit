@@ -1,6 +1,7 @@
 libs/
 node_modules/
 typings/
+out/
 
 *.js
 config.json

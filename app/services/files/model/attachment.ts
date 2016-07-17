@@ -11,6 +11,7 @@ class attachment implements electricEditFile
     serverUrl: string = "";
     width: string = "";
     height: string = "";
+    isModified: boolean = false;
 }
 
 export { attachment };

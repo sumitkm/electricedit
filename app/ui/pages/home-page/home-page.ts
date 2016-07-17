@@ -1,5 +1,3 @@
-/// <reference path="../../interop.d.ts" />
-/// <reference path="../../typings/tsd.d.ts"/>
 /// <amd-dependency path="text!./home-page.html" />
 
 import { QuillEditorParams as QuillEditorParams } from "../../components/quill-editor/quill-editor-params";

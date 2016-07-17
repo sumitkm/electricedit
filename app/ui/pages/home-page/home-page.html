@@ -17,6 +17,6 @@
     <save-attachments params="id: 'saveAttachments', file: eeJsonVm, imageData: imageData"></save-attachments>
 </div>
 
-<div data-bind="visible: printPreview() == true, event: { 'keypress': onKeyPress }">
+<div data-bind="visible: printPreview() == true">
     <print-preview params="previewHtml: previewHtml"></print-preview>
 </div>

@@ -1,6 +1,7 @@
 {
-  "name": "elecedit",
-  "version": "0.0.1",
+  "name": "app",
+  "productName": "Electric Edit",
+  "version": "1.0.0",
   "description": "Electric Edit - The awesome blog editor",
   "main": "app.js",
   "scripts": {
@@ -35,5 +36,7 @@
     "request": "^2.69.0",
     "restler": "^3.4.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "electron-prebuilt": "^1.0.2"
+  }
 }
