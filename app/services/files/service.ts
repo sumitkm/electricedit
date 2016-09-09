@@ -1,22 +1,22 @@
 /// <reference path="../../interop.ts"/>
-/// <reference path="../../typings/tsd.d.ts"/>
+/// <reference path="../../typings/index.d.ts"/>
 
 import { electricEditFile } from "./model/electricedit-file";
-import { eeJson } from "./model/eeJson";
+import { electricEditJson } from "./model/eeJson";
 import { attachment } from "./model/attachment";
 
 class service {
     Jimp = require("jimp");
     mainWindow: any;
     file: electricEditFile;
-    currentEvent: GitHubElectron.IPCMainEvent;
+    currentEvent: Electron.IpcMainEvent;
     fileCreated: boolean = false;
 
     constructor(window: any) {
         this.mainWindow = window;
     }
 
-    public Save = (event: GitHubElectron.IPCMainEvent, content: eeJson) => {
+    public Save = (event: Electron.IpcMainEvent, content: electricEditJson) => {
         this.currentEvent = event;
         this.file = content;
         if (this.file.fileName == '') {
@@ -45,7 +45,7 @@ class service {
         }
     }
 
-    public Open = (event: GitHubElectron.IPCMainEvent) => {
+    public Open = (event: Electron.IpcMainEvent) => {
         this.currentEvent = event;
         var dialog = require('electron').dialog;
         dialog.showOpenDialog(this.mainWindow,
@@ -59,7 +59,7 @@ class service {
             }, this.OpenFile);
     }
 
-    public New = (event: GitHubElectron.IPCMainEvent, content: any) => {
+    public New = (event: Electron.IpcMainEvent, content: any) => {
         this.currentEvent = event;
         var dialog = require('electron').dialog;
         if(content.modified==true)
@@ -90,7 +90,7 @@ class service {
         }
     }
 
-    public NewFileName = (event: GitHubElectron.IPCMainEvent) => {
+    public NewFileName = (event: Electron.IpcMainEvent) => {
         this.currentEvent = event;
 
         var dialog = require('electron').dialog;
@@ -109,7 +109,7 @@ class service {
         });
     }
 
-    public Load = (event: GitHubElectron.IPCMainEvent, fileNames: Array<string>) => {
+    public Load = (event: Electron.IpcMainEvent, fileNames: Array<string>) => {
         var fs = require('fs');
         if (fileNames != null && fileNames.length > 0) {
             fs.readFile(fileNames[0], { encoding: 'utf8', flag: 'r' }, (err: any, data: any) => {
@@ -139,7 +139,7 @@ class service {
 
             if(filename.lastIndexOf('.eejson') > 0)
             {
-                var eeJsonFile = <eeJson>this.file
+                var eeJsonFile = <electricEditJson>this.file
                 if(eeJsonFile.media!=null && eeJsonFile.media.length > 0)
                 {
                     for (let i = 0; i < eeJsonFile.media.length; i++) {

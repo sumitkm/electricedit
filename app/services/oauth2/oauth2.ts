@@ -1,11 +1,15 @@
+/// <reference path="../../typings/index.d.ts"/>
 // TypeScript version of electron-oauth2 from https://github.com/mawie81/electron-oauth2/blob/master/index.js
 
-import { Promise } from  'pinkie-promise';
+
 import * as fetch from 'node-fetch';
-import * as objectAssign from 'object-assign';
 import * as electron from 'electron';
 import * as queryString from 'querystring';
+var Promise = require('pinkie-promise');
+var objectAssign = require('object-assign');
+
 const BrowserWindow = electron.BrowserWindow;
+
 
 class oAuth2 {
 

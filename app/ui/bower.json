@@ -1,4 +1,4 @@
-                                                                                                              {
+{
   "name": "elecedit",
   "description": "Electric Blog Editor",
   "main": "app.js",
@@ -33,5 +33,8 @@
     "knockout": "knockoutjs#~3.4.0",
     "text": "~2.0.14",
     "quill": "~0.20.1"
+  },
+  "resolutions": {
+    "quill": "^1.0.3"
   }
 }

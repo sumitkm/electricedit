@@ -16,7 +16,7 @@ class service
 
     }
 
-    public getSiteCategories = (event: GitHubElectron.IPCMainEvent, siteId: string) =>
+    public getSiteCategories = (event: Electron.IpcMainEvent, siteId: string) =>
     {
         this.wpGetSiteCategoriesSvc = new api.sites.getCategories(this._apiKey, siteId);
         let mySitesQuery = new model.query.mySites();
@@ -28,7 +28,7 @@ class service
         });
     }
 
-    public getAccountDetails = (event: GitHubElectron.IPCMainEvent, appSettings: settingsModel.appSettings) =>
+    public getAccountDetails = (event: Electron.IpcMainEvent, appSettings: settingsModel.appSettings) =>
     {
         let mySitesQuery = new model.query.mySites();
         mySitesQuery.pretty = true;

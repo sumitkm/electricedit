@@ -1,9 +1,8 @@
-/// <reference path="typings/tsd.d.ts"/>
+/// <reference path="./typings/index.d.ts"/>
 
-const electron  : GitHubElectron.Electron = require('electron');
-const app : GitHubElectron.App = electron.app;
-const ipcMain : GitHubElectron.IPCMain = require('electron').ipcMain;
-const ipcRenderer : GitHubElectron.IpcRenderer = require('electron').ipcRenderer;
-const dialog : GitHubElectron.Dialog = require('electron').dialog;
-const remote : GitHubElectron.Remote = require('electron').remote;
-var Promise: any;
+const electron  = require('electron');
+const app : Electron.App = electron.app;
+const ipcMain : Electron.IpcMain = require('electron').ipcMain;
+const ipcRenderer : Electron.IpcRenderer = require('electron').ipcRenderer;
+const dialog : Electron.Dialog = require('electron').dialog;
+const remote : Electron.Remote = require('electron').remote;

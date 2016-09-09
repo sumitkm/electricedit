@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 /// <reference path="../interop.d.ts"/>
 
 requirejs.config(
@@ -11,7 +11,7 @@ requirejs.config(
         "js-signals": "libs/js-signals/dist/signals",
         "knockout": "libs/knockout/dist/knockout",
         "text" : "libs/text/text",
-        "quill" : "libs/quill/dist/quill",
+        "Quill" : "libs/quill/dist/quill",
         "bootstrap":"libs/bootstrap/dist/js/bootstrap"
     },
     shim:

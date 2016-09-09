@@ -1,4 +1,4 @@
-/// <reference path="./typings/tsd.d.ts"/>
+/// <reference path="./typings/index.d.ts"/>
 
 import * as wordpress  from "./services/wordpress/service";
 import * as settings from "./services/settings/service";
@@ -9,13 +9,13 @@ import { oAuth2 } from "./services/oauth2/oauth2";
 
 
 export class app {
-    currentApp :GitHubElectron.App = electron.app;  // Module to control application life.
+    currentApp :Electron.App = electron.app;  // Module to control application life.
     BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
     // Keep a global reference of the window object, if you don't, the window will
     // be closed automatically when the JavaScript object is garbage collected.
-    mainWindow : GitHubElectron.BrowserWindow = null;
+    mainWindow : Electron.BrowserWindow = null;
 
-    ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
+    ipcMain: Electron.IpcMain = require('electron').ipcMain;
     settingsService = new settings.service();
     eventHandler = new eventHandler();
     currentAppSettings: settings.model.appSettings;

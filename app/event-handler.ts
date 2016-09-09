@@ -5,10 +5,10 @@ import * as settings from "./services/settings/service";
 import * as files  from "./services/files/service";
 
 class eventHandler {
-    private ipcMain: GitHubElectron.IPCMain = require('electron').ipcMain;
+    private ipcMain: Electron.IpcMain = require('electron').ipcMain;
 
     private nconf = require('nconf');
-    currentWindow: GitHubElectron.BrowserWindow;
+    currentWindow: Electron.BrowserWindow;
     currentSettingsSvc: settings.service;
     getMySitesService: wordpress.api.sites.getMySites;
     currentFileServices: files.service;
@@ -22,7 +22,7 @@ class eventHandler {
         });
     }
 
-    public attach = (mainWindow: GitHubElectron.BrowserWindow) => {
+    public attach = (mainWindow: Electron.BrowserWindow) => {
         this.currentWindow = mainWindow;
         this.currentFileServices = new files.service(mainWindow);
 
@@ -70,17 +70,17 @@ class eventHandler {
             connector.getAccountDetails(event, this.currentAppSettings);
         });
 
-        this.ipcMain.on("app.View.GetCategories", (event: GitHubElectron.IPCMainEvent, arg: string)=>
+        this.ipcMain.on("app.View.GetCategories", (event: Electron.IpcMainEvent, arg: string)=>
         {
             var connector = new wordpress.service(this.currentAppSettings.oAuth2Groups[0].accessToken);
             connector.getSiteCategories(event, arg);
         });
 
-        this.ipcMain.on("app.side-panel.onhide", (event: GitHubElectron.IPCMainEvent, arg: any)=>{
+        this.ipcMain.on("app.side-panel.onhide", (event: Electron.IpcMainEvent, arg: any)=>{
             event.sender.send("app.side-panel.hide");
         });
 
-        this.ipcMain.on("app.view.post.treeview.nodecheckchanged", (event: GitHubElectron.IPCMainEvent, arg: any) => {
+        this.ipcMain.on("app.view.post.treeview.nodecheckchanged", (event: Electron.IpcMainEvent, arg: any) => {
             console.log("nodecheckchanged:" + arg.checked + " DataSource: "+ arg.dataSource);
             if(arg.checked == true)
             {
@@ -166,7 +166,7 @@ class eventHandler {
             // let electron = require("electron");
             // let BrowserWindow = electron.BrowserWindow;
             // let printWindow = new BrowserWindow();
-            // let ipcRenderer : GitHubElectron.IpcRenderer = electron.ipcRenderer;
+            // let ipcRenderer : Electron.IpcRenderer = electron.ipcRenderer;
             //
             // printWindow.loadURL("file://" + __dirname + "/ui/print.html");
             // printWindow.show();
