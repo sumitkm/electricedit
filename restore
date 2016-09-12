@@ -8,7 +8,11 @@ echo TypeScript definitions for UI installed
 bower install
 echo Bower dependencies installed
 
-cd ..
+echo Building Quill Distributable
+cd libs\quill
+npm build
+
+cd ..\..
 npm install
 echo Node Packages installed
 

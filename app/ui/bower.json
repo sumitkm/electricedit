@@ -32,9 +32,6 @@
     "js-signals": "~1.0.0",
     "knockout": "knockoutjs#~3.4.0",
     "text": "~2.0.14",
-    "quill": "~0.20.1"
-  },
-  "resolutions": {
-    "quill": "^1.0.3"
+    "quill": "https://github.com/quilljs/quill/releases/download/v1.0.3/quill.tar.gz"
   }
 }

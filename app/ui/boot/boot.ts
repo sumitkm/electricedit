@@ -11,7 +11,7 @@ requirejs.config(
         "js-signals": "libs/js-signals/dist/signals",
         "knockout": "libs/knockout/dist/knockout",
         "text" : "libs/text/text",
-        "Quill" : "libs/quill/dist/quill",
+        "Quill" : "libs/quill/quill",
         "bootstrap":"libs/bootstrap/dist/js/bootstrap"
     },
     shim:

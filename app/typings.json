@@ -7,7 +7,6 @@
     "nconf": "registry:dt/nconf#0.0.0+20160724073144",
     "node": "registry:dt/node#6.0.0+20160909174046",
     "node-fetch": "registry:dt/node-fetch#0.0.0+20160711094047",
-    "object-assign": "registry:dt/object-assign#4.0.1+20160819193737",
-    "quill": "registry:dt/quill#1.0.0+20160907064040"
+    "object-assign": "registry:dt/object-assign#4.0.1+20160819193737"
   }
 }
