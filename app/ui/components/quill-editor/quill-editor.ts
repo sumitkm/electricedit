@@ -38,10 +38,6 @@ export class viewModel {
             this.file = params.file;
         }
 
-        this.subscriptions.push(this.file.subscribe((newValue) => {
-            this.editor.setContents(this.file().content());
-        }));
-
         this.editor = new Quill('#editor', {
           modules: {
             toolbar: this.toolbarOptions
@@ -52,35 +48,34 @@ export class viewModel {
         this.editor.on('text-change', this.textChanged);
         ipcRenderer.on("paste.html", this.onPasteHtml);
         ipcRenderer.on('app.File.Attachment.Created', this.onAttachmentCreated);
+        this.editor.pasteHTML(this.file().content(), "silent");
 
-        this.editor.pasteHTML(this.file().content());
+        this.subscriptions.push(this.file.subscribe((newValue) => {
+            this.editor.pasteHTML(this.file().content(), "silent");
+        }));
     }
 
     private initTabs() {
         //this.tabs.push(new App.Ui.Components.TabStrip.Model( "HTML Preview", false ));
     }
 
-    private textChanged = (delta, source) =>
-    {
-        this.file().content ((<any>this.editor).innerHTML);
-        this.file().modified (true);
-        var range = this.editor.getSelection();
-        var position = this.editor.getLength();
-        if(range !=null)
+    private textChanged = (delta, oldDelta, source) => {
+        console.log("source:" + JSON.stringify(source));
+        if(source != "silent")
         {
-            position = range.length;
+            this.file().content(document.querySelector(".ql-editor").innerHTML);
+            this.file().modified (true);
         }
-        this.currentLocation(position);
     }
 
-    private onPasteHtml = (event, data) =>
-    {
+    private onPasteHtml = (event, data) => {
         var range = this.editor.getSelection();
-        this.editor.updateContents({ ops: [ { retain: range.length }, { insert: data }]});
+        if(range != null){
+            this.editor.updateContents({ ops: [ { retain: range.length }, { insert: data }]});
+        }
     }
 
-    private onAttachmentCreated = (event, data: any) =>
-    {
+    private onAttachmentCreated = (event, data: any) => {
         try
         {
             var newAttachment = attachmentFile.fromJS(data);
