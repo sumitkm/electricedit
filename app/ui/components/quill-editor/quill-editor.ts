@@ -28,6 +28,10 @@ export class viewModel {
       [{ 'font': [] }],
       [{ 'align': [] }],
 
+      ['link'],
+      ['image'],
+      ['save'],
+
       ['clean']                                         // remove formatting button
     ];
     constructor(params: any) {
@@ -53,6 +57,10 @@ export class viewModel {
         this.subscriptions.push(this.file.subscribe((newValue) => {
             this.editor.pasteHTML(this.file().content(), "silent");
         }));
+
+        document.querySelector('.ql-save').className += ' glyphicon glyphicon-floppy-disk';
+        var saveButton = document.querySelector('.ql-save');
+        saveButton.addEventListener('click', this.saveFile);
     }
 
     private initTabs() {
@@ -104,6 +112,7 @@ export class viewModel {
     }
 
     public saveFile = () => {
+        console.log("Saving File");
         ipcRenderer.send('app.File.Save', this.file());
     }
 
