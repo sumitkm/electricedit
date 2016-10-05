@@ -20,3 +20,40 @@
     </div>
 </div>
 <!-- </div> -->
+<div class="modal fade" tabindex="-1" role="dialog" id="link-editor-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add/Edit Link</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group">
+                        <label for="text-preview">Text</label>
+                        <input class="form-control" id="text-preview" data-bind="textInput: $component.selectedLinkText" />
+                    </div>
+                    <div class="form-group">
+                        <label for="text-href">Hyperlink</label>
+                        <input class="form-control" id="text-href" data-bind="textInput: $component.selectedLinkHref" />
+                    </div>
+                    <div class="form-group">
+                        <label for="text-title">Title</label>
+                        <input class="form-control" id="text-title" data-bind="textInput: $component.selectedLinkTitle" />
+                    </div>
+                    <div class="form-group">
+                        <label for="text-target">Target</label>
+                        <input class="form-control" id="text-target" data-bind="textInput: $component.selectedLinkTarget" placeholder="(optional) e.g. _blank" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bind="click: $component.saveLinkChanges">Set Link</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

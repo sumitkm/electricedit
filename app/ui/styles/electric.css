@@ -17,6 +17,9 @@
 .editor-h .editor-toolbar {
   padding-top: 5px;
 }
+.editor .ql-video-border {
+  border: solid 1px red;
+}
 .editor .side-panel {
   position: absolute;
   width: auto;
