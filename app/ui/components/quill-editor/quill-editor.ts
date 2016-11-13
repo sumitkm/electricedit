@@ -54,10 +54,9 @@ class VimeoVideoBlot extends BlockEmbed {
 
 
 class AddLinkBlot extends Inline {
-  constructor(){
-    super();
-    console.log("Add link blot: Constructor");
-  }
+    public static blotName = "add-link";
+    public static tagName = "a";
+
     static create(value) {
         let node = super.create(value);
         // Sanitize url value if desired
@@ -74,21 +73,22 @@ class AddLinkBlot extends Inline {
         // not need to check ourselves
         return node.getAttribute('href');
     }
-    static value(node) {
-        return node.getAttribute('src');
+    static sanitize(url) {
+        return this.sanitizeInstance(url, ['http', 'https', 'mailto']) ? url : "about:blank";
     }
 
     format(name, value) {
-        // Handle unregistered embed formats
-        if (name === 'height' || name === 'width') {
-            if (value) {
-                this.domNode.setAttribute(name, value);
-            } else {
-                this.domNode.removeAttribute(name, value);
-            }
-        } else {
-            super.format(name, value);
-        }
+        if (name !== this.blotName || !value) return super.format(name, value);
+        value = AddLinkBlot.sanitize(value);
+        this.domNode.setAttribute('href', value);
+    }
+
+
+    static sanitizeInstance(url, protocols: Array<string>): boolean {
+        let anchor = document.createElement('a');
+        anchor.href = url;
+        let protocol = anchor.href.slice(0, anchor.href.indexOf(':'));
+        return protocols.indexOf(protocol) > -1;
     }
 }
 
@@ -135,11 +135,11 @@ export class viewModel {
         }
         VimeoVideoBlot.blotName = 'vimeo-video';
         VimeoVideoBlot.tagName = 'video';
-        // AddLinkBlot.blotName = 'link';
-        // AddLinkBlot.tagName = 'a';
+        AddLinkBlot.blotName = 'link';
+        AddLinkBlot.tagName = 'a';
 
         //uill.register(VimeoVideoBlot);
-        // Quill.register(AddLinkBlot);
+        Quill.register(AddLinkBlot);
 
         this.editor = new Quill('#editor', {
             modules: {
@@ -159,7 +159,8 @@ export class viewModel {
         this.linkEditorDialog = <any>$("#link-editor-modal");
 
         var toolbar = this.editor.getModule('toolbar');
-        toolbar.addHandler('link', this.showLinkEditor);
+
+        toolbar.addHandler('link', this.setLink);
 
         document.querySelector('.ql-save').className += ' glyphicon glyphicon-floppy-disk';
         toolbar.addHandler('save', this.saveFile);
@@ -167,6 +168,11 @@ export class viewModel {
         document.querySelector('.ql-vimeo-video').className += ' glyphicon glyphicon-vimeo';
         toolbar.addHandler('save', this.showVimeoVideo);
 
+    }
+
+    private setLink = (value) => {
+        let newValue = "https://www.google.com";
+        this.editor.format('link', newValue);
     }
 
     private showLinkEditor = (value) => {

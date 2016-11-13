@@ -1,4 +1,7 @@
 cd app
-lessc ui/styles/electric.less ui/styles/electric.css 
+lessc ui/styles/electric.less ui/styles/electric.css
+
+cd ui
+cd ..
 electron .
 cd ..

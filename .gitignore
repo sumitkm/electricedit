@@ -2,6 +2,7 @@ libs/
 node_modules/
 typings/
 out/
+ui-built/
 
 *.js
 config.json

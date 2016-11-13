@@ -6,5 +6,7 @@
         "sourceMap": false,
         "rootDir": "./"
     },
-    "exclude": []
+    "exclude": [
+      "ui-built"
+    ]
 }

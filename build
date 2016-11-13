@@ -5,7 +5,8 @@ echo app Built
 cd ui
 tsc
 
-lessc styles/electric.less styles/electric.css 
+lessc styles/electric.less styles/electric.css
+node r.js -o build.js
 
 cd ..
 echo ui Built
