@@ -101,6 +101,7 @@ export class viewModel {
     private selectedLinkTitle: KnockoutObservable<string> = ko.observable<string>("");
     private selectedLinkTarget: KnockoutObservable<string> = ko.observable<string>("");
     private linkEditorDialog: any;
+    private range: QuillJS.RangeStatic;
     subscriptions = [];
     private toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -170,6 +171,8 @@ export class viewModel {
 
     }
 
+
+
     private setLink = (value) => {
         let newValue = "https://www.google.com";
         this.editor.format('link', newValue);
@@ -224,11 +227,21 @@ export class viewModel {
         //this.tabs.push(new App.Ui.Components.TabStrip.Model( "HTML Preview", false ));
     }
 
-    private selectionChanged = (delta, oldDelta, source) => {
-        //console.log(this.editor.getFormat());
+    private selectionChanged = (range: QuillJS.RangeStatic, oldRange, source) => {
+        if (range) {
+            this.range = range;
+            if (range.length == 0) {
+                console.log('User cursor is on', range.index);
+            } else {
+                var text = this.editor.getText(range.index, range.length);
+                console.log('User has highlighted', text);
+            }
+        } else {
+            console.log('Cursor not in the editor');
+        }
     }
 
-    private textChanged = (delta, oldDelta, source) => {
+    private textChanged = (delta: QuillJS.DeltaStatic, oldContents: QuillJS.DeltaStatic, source: String) => {
         console.log("source:" + JSON.stringify(source));
         if (source != "silent") {
             this.file().content(document.querySelector(".ql-editor").innerHTML);
@@ -237,9 +250,16 @@ export class viewModel {
     }
 
     private onPasteHtml = (event, data) => {
-        var range = this.editor.getSelection();
-        if (range != null) {
-            this.editor.updateContents({ ops: [{ retain: range.length }, { insert: data }] });
+        //var range = this.editor.getSelection();
+        if (this.range != null) {
+            console.log("Current Range: " + JSON.stringify(this.range))
+            if(this.range.length = 0)
+            {
+                this.editor.insertText(this.range.index, data, 'api');
+            }
+            else{
+                this.editor.updateContents({ ops: [{ retain: this.range.index },{ delete: this.range.length }, { insert: data }] });
+            }
         }
     }
 
