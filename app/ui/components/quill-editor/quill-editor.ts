@@ -253,11 +253,11 @@ export class viewModel {
         //var range = this.editor.getSelection();
         if (this.range != null) {
             console.log("Current Range: " + JSON.stringify(this.range))
-            if(this.range.length = 0)
+            if(this.range.length == 0)
             {
                 this.editor.insertText(this.range.index, data, 'api');
             }
-            else{
+            else {
                 this.editor.updateContents({ ops: [{ retain: this.range.index },{ delete: this.range.length }, { insert: data }] });
             }
         }

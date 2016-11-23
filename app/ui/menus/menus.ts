@@ -1,5 +1,5 @@
 class menus {
-    menuTemplate : Array<any> = []
+    menuTemplate: Array<any> = []
     constructor() {
         this.menuTemplate = [
             {
@@ -45,7 +45,7 @@ class menus {
                     },
                     {
                         label: 'Exit',
-                        accelerator: (function() {
+                        accelerator: (() => {
                             if (process.platform == 'darwin')
                                 return 'Command+Q';
                             else
@@ -85,7 +85,7 @@ class menus {
                         label: 'Paste',
                         accelerator: 'CmdOrCtrl+V',
                         //role: 'paste',
-                        click: () =>  this.sendMessage("paste")
+                        click: () => this.sendMessage("paste")
                     },
                     {
                         label: 'Select All',
@@ -118,33 +118,33 @@ class menus {
                     {
                         label: 'Reload',
                         accelerator: 'CmdOrCtrl+R',
-                        click: function(item, focusedWindow) {
+                        click: (item, focusedWindow) => {
                             if (focusedWindow)
                                 focusedWindow.reload();
                         }
                     },
                     {
                         label: 'Toggle Full Screen',
-                        accelerator: (function() {
+                        accelerator: (() => {
                             if (process.platform == 'darwin')
                                 return 'Ctrl+Command+F';
                             else
                                 return 'F11';
                         })(),
-                        click: function(item, focusedWindow) {
+                        click: (item, focusedWindow) => {
                             if (focusedWindow)
                                 focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
                         }
                     },
                     {
                         label: 'Toggle Developer Tools',
-                        accelerator: (function() {
+                        accelerator: (() => {
                             if (process.platform == 'darwin')
                                 return 'Alt+Command+I';
                             else
                                 return 'Ctrl+Shift+I';
                         })(),
-                        click: function(item, focusedWindow) {
+                        click: (item, focusedWindow) => {
                             if (focusedWindow)
                                 focusedWindow.toggleDevTools();
                         }
@@ -166,17 +166,20 @@ class menus {
                         role: 'close'
                     },
                 ]
-            },
-            {
-                label: 'Help',
-                role: 'help',
-                submenu: [
-                    {
-                        label: 'Learn More',
-                        click: function() { require('electron').shell.openExternal('http://electron.atom.io') }
-                    },
-                ]
-            },
+            }
+            // ,
+            // {
+            //     label: 'Help',
+            //     role: 'help',
+            //     submenu: [
+            //         {
+            //             label: 'Learn More',
+            //             click: () => {
+            //                 require('electron').shell.openExternal('http://electron.atom.io')
+            //             }
+            //         },
+            //     ]
+            // },
         ];
         if (process.platform == 'darwin') {
             var name = "Electric Edit";
