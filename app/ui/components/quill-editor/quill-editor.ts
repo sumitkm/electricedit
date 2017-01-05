@@ -273,7 +273,7 @@ export class viewModel {
                 this.file().media.remove(existing);
             }
             this.file().media().push(newAttachment);
-            this.editor.insertEmbed(this.currentLocation(), "image", data.contentBinary);
+            this.editor.insertEmbed(this.range.index, "image", data.contentBinary);
         }
         catch (error) {
             console.log(error);
