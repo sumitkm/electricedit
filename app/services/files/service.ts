@@ -1,6 +1,6 @@
 /// <reference path="../../interop.ts"/>
 /// <reference path="../../typings/index.d.ts"/>
-
+import "../../interop";
 import { electricEditFile } from "./model/electricedit-file";
 import { electricEditJson } from "./model/eeJson";
 import { attachment } from "./model/attachment";

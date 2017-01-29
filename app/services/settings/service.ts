@@ -2,20 +2,23 @@
 import * as model from "./model/appSettings";
 import * as nconf from 'nconf';
 import * as fs from 'fs';
+import * as electron from "electron";
 
-class service {
+class Service {
 
     public currentSettings = new model.appSettings();
+    private app : Electron.App = electron.app;
 
-    constructor()
+    constructor(currentApp: Electron.App)
     {
+        this.app = currentApp;
     }
 
     public load(callback: (currentSettings: model.appSettings) => void = null)
     {
         try
         {
-            nconf.file('./config.json');
+            nconf.file( this.app.getAppPath() + '/config.json');
             nconf.load((data) =>
             {
                 this.currentSettings.autoReopen = nconf.get('autoReopen');
@@ -55,12 +58,12 @@ class service {
     public save()
     {
         nconf.save((err: any) => {
-            fs.readFile('./config.json', (err, data) => {
+            fs.readFile(this.app.getAppPath() + '/config.json', (err, data) => {
                 console.dir(JSON.parse(data.toString()))
             });
         });
     }
 }
 
-export { service };
+export { Service };
 export { model };

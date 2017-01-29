@@ -4,18 +4,18 @@ import * as wordpress  from "./services/wordpress/service";
 import * as settings from "./services/settings/service";
 import * as files  from "./services/files/service";
 
-class eventHandler {
+class EventHandler {
     private ipcMain: Electron.IpcMain = require('electron').ipcMain;
 
     private nconf = require('nconf');
     currentWindow: Electron.BrowserWindow;
-    currentSettingsSvc: settings.service;
+    currentSettingsSvc: settings.Service;
     getMySitesService: wordpress.api.sites.getMySites;
     currentFileServices: files.service;
     currentAppSettings: settings.model.appSettings;
 
-    constructor() {
-        this.currentSettingsSvc = new settings.service();
+    constructor(currentApp: Electron.App) {
+        this.currentSettingsSvc = new settings.Service(currentApp);
         this.currentSettingsSvc.load((newSettings: settings.model.appSettings)=>{
             this.currentAppSettings = newSettings;
             this.getMySitesService = new wordpress.api.sites.getMySites(this.currentAppSettings.oAuth2Groups[0].accessToken);
@@ -183,4 +183,4 @@ class eventHandler {
     }
 }
 
-export {eventHandler};
+export { EventHandler };

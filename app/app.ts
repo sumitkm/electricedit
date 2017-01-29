@@ -4,7 +4,7 @@ import * as wordpress  from "./services/wordpress/service";
 import * as settings from "./services/settings/service";
 import * as files  from "./services/files/service";
 import * as electron from "electron";
-import { eventHandler } from './event-handler';
+import { EventHandler } from './event-handler';
 import { oAuth2 } from "./services/oauth2/oauth2";
 
 
@@ -16,8 +16,8 @@ export class app {
     mainWindow : Electron.BrowserWindow = null;
 
     ipcMain: Electron.IpcMain = require('electron').ipcMain;
-    settingsService = new settings.service();
-    eventHandler = new eventHandler();
+    settingsService = new settings.Service(this.currentApp);
+    eventHandler = new EventHandler(this.currentApp);
     currentAppSettings: settings.model.appSettings;
 
     constructor() {

@@ -6,92 +6,6 @@ import eeJson = require("../../model/eeJson");
 import attachmentFile = require("../../model/attachmentFile");
 export var template = require("text!./quill-editor.html");
 
-let BlockEmbed: QuillJS.BlockEmbedStatic = Quill.import('blots/block/embed');
-let Inline: QuillJS.InlineStatic = Quill.import('blots/inline');
-
-class VimeoVideoBlot extends BlockEmbed {
-    static create(url) {
-        let node = super.create(url);
-
-        // Set non-format related attributes with static values
-        node.setAttribute('class', 'ql-video-border');
-        node.setAttribute('allowfullscreen', true);
-
-        return node;
-    }
-
-    static formats(node) {
-        // We still need to report unregistered embed formats
-        let format = { width: '', height: '' };
-        if (node.hasAttribute('height')) {
-            format.height = node.getAttribute('height');
-        }
-        if (node.hasAttribute('width')) {
-            format.width = node.getAttribute('width');
-        } else {
-            format.height = '100%';
-        }
-        return format;
-    }
-
-    static value(node) {
-        return node.getAttribute('src');
-    }
-
-    format(name, value) {
-        // Handle unregistered embed formats
-        if (name === 'height' || name === 'width') {
-            if (value) {
-                this.domNode.setAttribute(name, value);
-            } else {
-                this.domNode.removeAttribute(name, value);
-            }
-        } else {
-            super.format(name, value);
-        }
-    }
-}
-
-
-class AddLinkBlot extends Inline {
-    public static blotName = "add-link";
-    public static tagName = "a";
-
-    static create(value) {
-        let node = super.create(value);
-        // Sanitize url value if desired
-        node.setAttribute('href', value);
-        // Okay to set other non-format related attributes
-        // These are invisible to Parchment so must be static
-        //node.setAttribute('target', '_blanky');
-        return node;
-    }
-
-    static formats(node) {
-        // We will only be called with a node already
-        // determined to be a Link blot, so we do
-        // not need to check ourselves
-        return node.getAttribute('href');
-    }
-    static sanitize(url) {
-        return this.sanitizeInstance(url, ['http', 'https', 'mailto']) ? url : "about:blank";
-    }
-
-    format(name, value) {
-        if (name !== this.blotName || !value) return super.format(name, value);
-        value = AddLinkBlot.sanitize(value);
-        this.domNode.setAttribute('href', value);
-    }
-
-
-    static sanitizeInstance(url, protocols: Array<string>): boolean {
-        let anchor = document.createElement('a');
-        anchor.href = url;
-        let protocol = anchor.href.slice(0, anchor.href.indexOf(':'));
-        return protocols.indexOf(protocol) > -1;
-    }
-}
-
 export class viewModel {
     private editor: QuillJS.QuillStatic;
     private currentLocation: KnockoutObservable<number> = ko.observable<number>(0);
@@ -122,7 +36,6 @@ export class viewModel {
 
         ['link'],
         ['video'],
-        ['vimeo-video'],
         ['save'],
 
         ['clean']                                         // remove formatting button
@@ -134,13 +47,6 @@ export class viewModel {
             console.log('File loaded');
             this.file = params.file;
         }
-        VimeoVideoBlot.blotName = 'vimeo-video';
-        VimeoVideoBlot.tagName = 'video';
-        AddLinkBlot.blotName = 'link';
-        AddLinkBlot.tagName = 'a';
-
-        //uill.register(VimeoVideoBlot);
-        Quill.register(AddLinkBlot);
 
         this.editor = new Quill('#editor', {
             modules: {
@@ -157,18 +63,10 @@ export class viewModel {
         this.subscriptions.push(this.file.subscribe((newValue) => {
             this.editor.pasteHTML(this.file().content(), "silent");
         }));
-        this.linkEditorDialog = <any>$("#link-editor-modal");
-
         var toolbar = this.editor.getModule('toolbar');
-
-        toolbar.addHandler('link', this.setLink);
 
         document.querySelector('.ql-save').className += ' glyphicon glyphicon-floppy-disk';
         toolbar.addHandler('save', this.saveFile);
-
-        document.querySelector('.ql-vimeo-video').className += ' glyphicon glyphicon-vimeo';
-        toolbar.addHandler('save', this.showVimeoVideo);
-
     }
 
 
@@ -196,25 +94,6 @@ export class viewModel {
     }
 
     private saveLinkChanges = (value) => {
-        // let scrollTop = this.editor.root.scrollTop;
-        // let range = this.editor.getSelection();
-        // if (range) {
-        //     //this.editor.formatText(range, 'link',  this.selectedLinkHref(), "user");
-        //     this.editor.format('link', this.selectedLinkHref());
-        //     //this.editor.format('link', this.selectedLinkHref());
-        //
-        //     //delete this.linkRange;
-        // } else {
-        //     //this.restoreFocus();
-        //     let options = {
-        //       href: this.selectedLinkHref(),
-        //       text: this.selectedLinkText(),
-        //       title: this.selectedLinkTitle(),
-        //       target: this.selectedLinkTarget()
-        //   };
-        //     this.editor.format('link', this.selectedLinkHref());
-        // }
-        // this.editor.root.scrollTop = scrollTop;
         this.linkEditorDialog.modal('hide');
         this.editor.format('link', this.selectedLinkHref());
     }

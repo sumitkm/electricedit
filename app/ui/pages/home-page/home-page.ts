@@ -163,9 +163,10 @@ export class viewModel
 
         ipcRenderer.on("paste.image", (event, data)=>
         {
-            console.log(data);
             if(data!=null)
             {
+                console.log(data.length);
+                
                 this.imageData(data);
                 $('#saveAttachments').modal('show');
             }
